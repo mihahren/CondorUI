@@ -1,0 +1,70 @@
+<?php
+include_once 'functions.php';
+
+session_start();	//start new or continue current session
+
+$access = "";
+
+if (isset($_POST['username']))	//check for username credentials
+{
+	$_SESSION['username'] = $_POST['username'];
+} 
+
+if (isset($_POST['password']))	//check for password credentials
+{
+	$_SESSION['password'] = $_POST['password'];
+} 
+
+if (!isset($_SESSION['username']))
+{
+	$access = "login";
+}
+else
+{
+	$username = $_SESSION['username'];
+	$password = $_SESSION['password'];
+	
+	dbConnect('condor_users');
+
+	$query = "SELECT * FROM users WHERE username = '$username' AND password = PASSWORD('$password')";
+
+	$result = mysql_query($query);
+
+	if (!$result)
+	{
+		error('Error 5.\\nA database error occurred while checking your login details.\\nIf this error persists, please contact miha.hren88@gmail.com.');
+	}
+
+	if (mysql_num_rows($result) == 0)
+	{
+		$access = "no_access";
+	}
+	else
+	{
+		$access = "access";
+	}
+
+
+	if ($_POST["logout"] == "logout")
+	{
+		unset($_SESSION['username']);
+		unset($_SESSION['password']);
+		unset($_POST["logout"]);
+		
+		$access = "login";
+	}
+}
+
+if($_SERVER['REQUEST_METHOD'] == "POST")
+{ 
+header('Location: '.$_SERVER['PHP_SELF']); 
+}
+else
+{
+	if ($access == "no_access" || $access == "login")
+	{
+		unset($_SESSION['username']);
+		unset($_SESSION['password']);
+	}
+}
+?>
