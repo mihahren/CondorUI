@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	$("#queue_button").click(function(){
 		$.ajax({
-			url: "php/condor.php",
+			url: "php/main_content.php",
 			type: "GET",
 			data: {podatek: "queue"},
 			success: function(result){$("#output_box").html(result);}
@@ -10,7 +10,7 @@ $(document).ready(function(){
 	
 	$("#status_button").click(function(){
 		$.ajax({
-			url: "php/condor.php",
+			url: "php/main_content.php",
 			type: "GET",
 			data: {podatek: "status"},
 			success: function(result){$("#output_box").html(result);}
@@ -19,7 +19,7 @@ $(document).ready(function(){
 	
 	$("#submit_button").click(function(){
 		$.ajax({
-			url: "php/condor.php",
+			url: "php/main_content.php",
 			type: "GET",
 			data: {podatek: "submit"},
 			success: function(result){$("#output_box").html(result);}
@@ -28,7 +28,7 @@ $(document).ready(function(){
 	
 	$("#remove_button").click(function(){
 		$.ajax({
-			url: "php/condor.php",
+			url: "php/main_content.php",
 			type: "GET",
 			data: {podatek: "remove"},
 			success: function(result){$("#output_box").html(result);}

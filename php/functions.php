@@ -22,7 +22,7 @@ function error($msg)
 exit;
 }
 
-//set database host, username, password
+//vstavi database host, username, password
 $dbhost='127.0.0.1';
 $dbuser='root';
 $dbpass='mihius88';
@@ -69,5 +69,14 @@ function condor_submit($input, &$output)
 function condor_remove($input, &$output)
 {
 	exec('condor_rm '.$input.' 2>&1', $output);
+}
+
+//sprinta ukaze cmd konzole vrstico za vrstico
+function print_cmd($input)
+{
+	for ($i=0; $i<=(count($input)-1); $i++)
+	{
+		echo "<pre>$input[$i]<pre>";
+	}
 }
 ?>

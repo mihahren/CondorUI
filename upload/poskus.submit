@@ -1,5 +1,5 @@
 Universe=vanilla
-Executable=upload\poskus.bat
+Executable=..\upload\poskus.bat
 Output=poskus.output
 Error=poskus.error
 Log=poskus.log

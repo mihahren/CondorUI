@@ -55,7 +55,7 @@ include "php\functions.php";
 			switch ($access)
 			{
 			case "login":
-				echo "Prosim vpisi svoje uporabnisko ime in geslo";
+				echo "Prosim vpisite svoje uporabnisko ime in geslo";
 				break;
 			case "no_access":
 				echo "Prislo je do napake!";
