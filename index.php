@@ -1,5 +1,6 @@
 <?php
 include "php\access_control.php";
+include "php\functions.php";
 //$content = "default";
 ?>
 
@@ -60,10 +61,28 @@ include "php\access_control.php";
 				echo "Prislo je do napake!";
 				break;
 			case "access":
-				include "php\main_content.php";
+			?>
+				<div id="input_box">
+					<div class="button_wrapper" id="queue_button">
+						<img src="..\images\menu_button.png" />
+						<span class="button_text">Condor Queue</span>
+					</div>
+					<div class="button_wrapper" id="status_button">
+						<img src="..\images\menu_button.png" />
+						<span class="button_text">Condor Status</span>
+					</div>
+					<div class="button_wrapper" id="submit_button">
+						<img src="..\images\menu_button.png" />
+						<span class="button_text">Submit...</span>
+					</div>
+				</div>
+				<div id="output_box">
+				</div>
+			<?php
 				break;
 			}
 		?>
+		
 		</div>
 	</body>
 </html>

@@ -49,4 +49,25 @@ function dbConnect($db="")
 	
 	return $db_link;
 }
+
+//definirane condor funkcije
+function condor_status(&$output)
+{
+	exec('condor_status 2>&1', $output);
+}
+
+function condor_q(&$output)
+{
+	exec('condor_q 2>&1', $output);
+}
+
+function condor_submit($input, &$output)
+{
+	exec('condor_submit -n miha '.$input.' 2>&1', $output);
+}
+
+function condor_remove($input, &$output)
+{
+	exec('condor_rm '.$input.' 2>&1', $output);
+}
 ?>
