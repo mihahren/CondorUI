@@ -37,7 +37,7 @@ if (!isset($_POST['submit_entry'])) //check if anything was already submitted
 }
 else //check if the entry was valid and put it into the database
 {
-	dbConnect('condor_users');
+	$database_link = dbConnect('condor_users');
 	
 	if ($_POST['new_username']=='' || $_POST['new_email']=='' || $_POST['new_password']=='') //check if any fields are blank
 	{
@@ -59,13 +59,10 @@ else //check if the entry was valid and put it into the database
 		error('Error 3.\\nA user already exists with your chosen username.\\nPlease try another.');
 	}
 	
-	//$hashed_password = "PASSWORD('$_POST[new_password]')";
-	
 	//insert into database
 	$query = "INSERT INTO users VALUES (NULL,'$_POST[new_username]','$_POST[new_email]',PASSWORD('$_POST[new_password]'))";
-	//$query = "INSERT INTO users SET username = '$_POST[new_username]', email = '$_POST[new_email]', password = PASSWORD('$_POST[new_password]')";
 	
-	$result = mysql_query($query);
+	$result = mysql_query($query, $database_link);
 
 	if (!$result)
 	{

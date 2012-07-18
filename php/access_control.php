@@ -24,11 +24,11 @@ else
 	$username = $_SESSION['username'];
 	$password = $_SESSION['password'];
 	
-	dbConnect('condor_users');
+	$database_link = dbConnect('condor_users');
 
 	$query = "SELECT * FROM users WHERE username = '$username' AND password = PASSWORD('$password')";
 
-	$result = mysql_query($query);
+	$result = mysql_query($query, $database_link);
 
 	if (!$result)
 	{
@@ -42,6 +42,7 @@ else
 	else
 	{
 		$access = "access";
+		$login_id = mysql_result($result,0,'userid');
 	}
 
 

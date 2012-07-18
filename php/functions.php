@@ -71,7 +71,7 @@ function condor_remove($input, &$output)
 	exec('condor_rm '.$input.' 2>&1', $output);
 }
 
-//sprinta ukaze cmd konzole vrstico za vrstico
+//sprinta izpise cmd konzole vrstico za vrstico
 function print_cmd($input)
 {
 	for ($i=0; $i<=(count($input)-1); $i++)
