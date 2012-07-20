@@ -4,8 +4,46 @@ include_once "access_control.php";
 
 $database_link = dbConnect('condor_users');
 
-$query="SELECT * FROM files WHERE userid=$login_id";
+if($_SERVER['REQUEST_METHOD'] == "POST")
+{	
+	if (!empty($_FILES["file"]["tmp_name"]))
+	{
+		if (!is_dir("../upload/".$login_id))
+		{
+			mkdir("../upload/".$login_id);
+		}
+		
+		if (file_exists("../upload/".$login_id."/".$_FILES["file"]["name"]))
+		{
+			error('Error 11! File already exists');
+		}
+		else
+		{
+			move_uploaded_file($_FILES["file"]["tmp_name"],"../upload/".$login_id."/".$_FILES["file"]["name"]);
+			echo "File ".$_FILES["file"]["name"]."successfully uploaded.";
+			
+			$query="INSERT INTO files VALUES (NULL, $login_id, '".$_FILES["file"]["name"]."', '".$_FILES["file"]["type"]."', '".$_FILES["file"]["size"]."')";
+			$result = mysql_query($query, $database_link);
+		}
+	}
+	
+	for ($i=0; $i<(count($_POST["delete_file"])); $i++)
+	{
+		$query = "SELECT * FROM files WHERE fileid=".$_POST["delete_file"][$i];
+		$result = mysql_query($query, $database_link);
+		
+		unlink("../upload/$login_id/".mysql_result($result,0,'filename'));
+		
+		$query = "DELETE FROM files WHERE fileid=".$_POST["delete_file"][$i];
+		$result = mysql_query($query, $database_link);		
+	}
+	
+	unset($_FILES["file"]);
+	unset($_POST["submit_file"]);
+	unset($_POST["delete_file"]);
+}
 
+$query="SELECT * FROM files WHERE userid=$login_id";
 $result = mysql_query($query, $database_link);
 
 if (!$result)
@@ -13,11 +51,14 @@ if (!$result)
 	error('Error 10.\\nA database error occurred while checking file details.\\nIf this error persists, please contact miha.hren88@gmail.com.');
 }
 ?>
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>" id="file_form" enctype="multipart/form-data">
 <table style=>
 	<tr>
 		<td>filename</td>
 		<td>filetype</td>
 		<td>filesize</td>
+		<td>submit</td>
+		<td>delete</td>
 	</tr>
 <?php
 	for ($i=0; $i<(mysql_num_rows($result)); $i++)
@@ -27,11 +68,16 @@ if (!$result)
 			<td><?php echo mysql_result($result,$i,'filename'); ?></td>
 			<td><?php echo mysql_result($result,$i,'filetype'); ?></td>
 			<td><?php echo mysql_result($result,$i,'filesize'); ?></td>
+			<td><input type="radio" name="submit_file" value="<?php echo mysql_result($result,$i,'fileid'); ?>" /></td>
+			<td><input type="checkbox" name="delete_file[]" value="<?php echo mysql_result($result,$i,'fileid'); ?>" /></td>
 		</tr>
 <?php
 	}
 ?>
 </table>
+<input type="file" name="file" id="file" />
+<input type="submit" value="submit" />
+</form>
 <?php
 
 /*if ((($_FILES["file"]["type"] == "image/gif")|| ($_FILES["file"]["type"] == "image/jpeg")|| ($_FILES["file"]["type"] == "image/pjpeg"))&& ($_FILES["file"]["size"] < 20000))

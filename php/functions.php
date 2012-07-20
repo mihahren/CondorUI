@@ -2,6 +2,7 @@
 //Error funkcija
 function error($msg)
 {
+header_remove('Location');
 ?>
 
 <html>

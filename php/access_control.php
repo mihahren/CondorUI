@@ -27,7 +27,6 @@ else
 	$database_link = dbConnect('condor_users');
 
 	$query = "SELECT * FROM users WHERE username = '$username' AND password = PASSWORD('$password')";
-
 	$result = mysql_query($query, $database_link);
 
 	if (!$result)

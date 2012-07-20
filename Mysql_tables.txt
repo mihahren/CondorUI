@@ -14,3 +14,7 @@ CREATE TABLE files (
   filetype varchar(100) not null,
   filesize varchar(100) not null
 );
+
+CREATE TABLE test (
+  something int not null
+);
