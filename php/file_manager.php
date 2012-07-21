@@ -15,7 +15,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 		
 		if (file_exists("../upload/".$login_id."/".$_FILES["file"]["name"]))
 		{
-			error('Error 11! File already exists');
+			error('Error 11! File already exists.');
 		}
 		else
 		{
@@ -27,15 +27,34 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 		}
 	}
 	
-	for ($i=0; $i<(count($_POST["delete_file"])); $i++)
+	if (!empty($_POST["delete_file"]))
 	{
-		$query = "SELECT * FROM files WHERE fileid=".$_POST["delete_file"][$i];
+		for ($i=0; $i<(count($_POST["delete_file"])); $i++)
+		{
+			$query = "SELECT * FROM files WHERE fileid=".$_POST["delete_file"][$i];
+			$result = mysql_query($query, $database_link);
+			
+			unlink("../upload/".$login_id."/".mysql_result($result,0,'filename'));
+			
+			$query = "DELETE FROM files WHERE fileid=".$_POST["delete_file"][$i];
+			$result = mysql_query($query, $database_link);		
+		}
+	}
+	
+	if (!empty($_POST["submit_file"]))
+	{
+		$query = "SELECT * FROM files WHERE fileid=".$_POST["submit_file"];
 		$result = mysql_query($query, $database_link);
 		
-		unlink("../upload/$login_id/".mysql_result($result,0,'filename'));
-		
-		$query = "DELETE FROM files WHERE fileid=".$_POST["delete_file"][$i];
-		$result = mysql_query($query, $database_link);		
+		if(mysql_num_rows($result) == 0)
+		{
+			error('Error 12! You just deleted this file.');
+		}
+		else
+		{
+			condor_submit("../upload/".$login_id."/".mysql_result($result,0,'filename'), $out);
+			$_SESSION['temp'] = $out;
+		}
 	}
 	
 	unset($_FILES["file"]);
@@ -79,7 +98,12 @@ if (!$result)
 <input type="submit" value="submit" />
 </form>
 <?php
+print_cmd($_SESSION['temp']);
 
+if(!($_SERVER['REQUEST_METHOD'] == "POST"))
+{
+	unset($_SESSION['temp']);
+}
 /*if ((($_FILES["file"]["type"] == "image/gif")|| ($_FILES["file"]["type"] == "image/jpeg")|| ($_FILES["file"]["type"] == "image/pjpeg"))&& ($_FILES["file"]["size"] < 20000))
 {
 	if ($_FILES["file"]["error"] > 0)
