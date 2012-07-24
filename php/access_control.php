@@ -1,16 +1,16 @@
 <?php
 include_once 'functions.php';
 
-session_start();	//start new or continue current session
+session_start();	//zacne nov ali nadaljuje obstojec session
 
 $access = "";
 
-if (isset($_POST['username']))	//check for username credentials
+if (isset($_POST['username']))	//preveri vnesen username
 {
 	$_SESSION['username'] = $_POST['username'];
 } 
 
-if (isset($_POST['password']))	//check for password credentials
+if (isset($_POST['password']))	//preveri vnesen password
 {
 	$_SESSION['password'] = $_POST['password'];
 } 

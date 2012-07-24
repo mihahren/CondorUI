@@ -44,7 +44,7 @@ else //check if the entry was valid and put it into the database
 		error('Error 1.\\nOne or more required fields were left blank.\\nPlease fill them in and try again.');
 	}
 	
-	// Check for existing user with the new id
+	//Check for existing user with the new id
 	$query = "SELECT COUNT(*) FROM users WHERE username = '$_POST[new_username]'";
 	
 	$result = mysql_query($query);
@@ -69,7 +69,7 @@ else //check if the entry was valid and put it into the database
 	error('Error 4.\\nA database error occurred in processing your submission.\\nIf this error persists, please contact miha.hren88@gmail.com.');
 	}
 	
-	// Email the new password to the person.
+	//Email the new password to the person.
 	$message = "Good Day!
  
 	Your personal account for the Project Web Site

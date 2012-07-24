@@ -1,5 +1,5 @@
 <?php
-//Error funkcija
+//Error funkcija --> potrebno izboljsati
 function error($msg)
 {
 header_remove('Location');

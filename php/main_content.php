@@ -2,8 +2,7 @@
 include_once "functions.php";
 include_once "access_control.php";
 
-//switch stavek
-$in = "";
+//glavni switch stavek za izbiro menuja
 $out = Array("");
 switch($_GET["podatek"])
 {

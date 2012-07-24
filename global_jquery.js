@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function (){
 	$("#queue_button").click(function(){
 		$.ajax({
 			url: "php/main_content.php",
@@ -26,18 +26,14 @@ $(document).ready(function(){
 		});
 	});
 	
-	$("#remove_button").click(function(){
+	/*$("#remove_button").click(function(){
 		$.ajax({
 			url: "php/main_content.php",
 			type: "GET",
 			data: {podatek: "remove"},
 			success: function(result){$("#output_box").html(result);}
 		});
-	});
-	
-	$("#file").change(function(){
-		$("#upload_form").submit();
-	});
+	});*/
 	
 	$("#login_button").click(function(){
 		$("#login_form").submit();
@@ -45,5 +41,11 @@ $(document).ready(function(){
 	
 	$("#logout_button").click(function(){
 		$("#logout_form").submit();
+	});
+});
+
+$(document).on("click", "#confirm_submit", function (){
+	$("#file_form").ajaxSubmit({
+		success: function(result){$("#output_box").html(result);}
 	});
 });

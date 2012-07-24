@@ -6,7 +6,7 @@ $database_link = dbConnect('condor_users');
 
 if($_SERVER['REQUEST_METHOD'] == "POST")
 {	
-	if (!empty($_FILES["file"]["tmp_name"]))
+	if (!empty($_FILES["file"]["tmp_name"]))	//preveri, ali je bil uploadan file in ga prenese v ustrezno mapo ter doda v bazo podatkov
 	{
 		if (!is_dir("../upload/".$login_id))
 		{
@@ -27,7 +27,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 		}
 	}
 	
-	if (!empty($_POST["delete_file"]))
+	if (!empty($_POST["delete_file"]))	//preveri, ce je potrebno kaksno datoteko zbrisati
 	{
 		for ($i=0; $i<(count($_POST["delete_file"])); $i++)
 		{
@@ -41,14 +41,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 		}
 	}
 	
-	if (!empty($_POST["submit_file"]))
+	if (!empty($_POST["submit_file"]))	//preveri, ce je potrebno kaksen file submitat
 	{
 		$query = "SELECT * FROM files WHERE fileid=".$_POST["submit_file"];
 		$result = mysql_query($query, $database_link);
 		
 		if(mysql_num_rows($result) == 0)
 		{
-			error('Error 12! You just deleted this file.');
+			error('Error 12! This file does not exist.');
 		}
 		else
 		{
@@ -62,6 +62,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 	unset($_POST["delete_file"]);
 }
 
+//pregleda in izpise vse datoteke, ki ustrezajo dolocenemu uporabniku
 $query="SELECT * FROM files WHERE userid=$login_id";
 $result = mysql_query($query, $database_link);
 
@@ -70,7 +71,7 @@ if (!$result)
 	error('Error 10.\\nA database error occurred while checking file details.\\nIf this error persists, please contact miha.hren88@gmail.com.');
 }
 ?>
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>" id="file_form" enctype="multipart/form-data">
+<form method="post" action="php/file_manager.php" id="file_form" enctype="multipart/form-data">
 <table style=>
 	<tr>
 		<td>filename</td>
@@ -95,8 +96,8 @@ if (!$result)
 ?>
 </table>
 <input type="file" name="file" id="file" />
-<input type="submit" value="submit" />
 </form>
+<button id="confirm_submit">Submit</button>
 <?php
 print_cmd($_SESSION['temp']);
 

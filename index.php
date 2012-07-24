@@ -1,7 +1,6 @@
 <?php
 include "php\access_control.php";
 include "php\functions.php";
-//$content = "default";
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -11,7 +10,9 @@ include "php\functions.php";
 		<title>index</title>
 		<link rel="stylesheet" type="text/css" href="global_css.css" />
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+		<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
 		<script type="text/javascript" src="global_jquery.js"></script>
+		
 	</head>
 	<body>
 		<div id="main_panel">
