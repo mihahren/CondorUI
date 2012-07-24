@@ -1,28 +1,4 @@
 <?php
-//Error funkcija --> potrebno izboljsati
-function error($msg)
-{
-header_remove('Location');
-?>
-
-<html>
-<head>
-	<title>Error</title>
-	<script language="JavaScript">
-	<!--
-	alert("<?php echo $msg?>");
-	history.back();
-	//-->
-	</script>
-</head>
-<body>
-</body>
-</html>
-
-<?php
-exit;
-}
-
 //vstavi database host, username, password
 $dbhost='127.0.0.1';
 $dbuser='root';
@@ -75,9 +51,16 @@ function condor_remove($input, &$output)
 //sprinta izpise cmd konzole vrstico za vrstico
 function print_cmd($input)
 {
-	for ($i=0; $i<=(count($input)-1); $i++)
+	if (is_array($input))
 	{
-		echo "<pre>$input[$i]<pre>";
+		for ($i=0; $i<=(count($input)-1); $i++)
+		{
+			echo "<pre>$input[$i]<pre>";
+		}
+	}
+	else
+	{
+		echo $input;
 	}
 }
 ?>

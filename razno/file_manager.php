@@ -4,6 +4,8 @@ include_once "access_control.php";
 
 $database_link = dbConnect('condor_users');
 
+$login_id = $_SESSION['login_id'];
+
 if($_SERVER['REQUEST_METHOD'] == "POST")
 {	
 	if (!empty($_FILES["file"]["tmp_name"]))	//preveri, ali je bil uploadan file in ga prenese v ustrezno mapo ter doda v bazo podatkov
@@ -15,7 +17,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 		
 		if (file_exists("../upload/".$login_id."/".$_FILES["file"]["name"]))
 		{
-			error('Error 11! File already exists.');
+			$_SESSION['custom_error'] = 'Error 10! File already exists.';
 		}
 		else
 		{
@@ -48,12 +50,12 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 		
 		if(mysql_num_rows($result) == 0)
 		{
-			error('Error 12! This file does not exist.');
+			$_SESSION['custom_error'] = 'Error 11! This file does not exist.';
 		}
 		else
 		{
 			condor_submit("../upload/".$login_id."/".mysql_result($result,0,'filename'), $out);
-			$_SESSION['temp'] = $out;
+			$_SESSION['custom_error'] = $out;
 		}
 	}
 	
@@ -68,7 +70,7 @@ $result = mysql_query($query, $database_link);
 
 if (!$result)
 {
-	error('Error 10.\\nA database error occurred while checking file details.\\nIf this error persists, please contact miha.hren88@gmail.com.');
+	$_SESSION['custom_error'] = 'Error 12.\\nA database error occurred while checking file details.\\nIf this error persists, please contact miha.hren88@gmail.com.';
 }
 ?>
 <form method="post" action="php/file_manager.php" id="file_form" enctype="multipart/form-data">
@@ -97,14 +99,11 @@ if (!$result)
 </table>
 <input type="file" name="file" id="file" />
 </form>
-<button id="confirm_submit">Submit</button>
+<button id="confirm_submit">Submit</button><br />
 <?php
-print_cmd($_SESSION['temp']);
+mysql_close($database_link);
+error();
 
-if(!($_SERVER['REQUEST_METHOD'] == "POST"))
-{
-	unset($_SESSION['temp']);
-}
 /*if ((($_FILES["file"]["type"] == "image/gif")|| ($_FILES["file"]["type"] == "image/jpeg")|| ($_FILES["file"]["type"] == "image/pjpeg"))&& ($_FILES["file"]["size"] < 20000))
 {
 	if ($_FILES["file"]["error"] > 0)

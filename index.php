@@ -16,10 +16,10 @@ include "php\functions.php";
 	</head>
 	<body>
 		<div id="main_panel">
-			<?php
+<?php
 			if ($access == "access")
 			{
-			?>
+?>
 				<div id="logout_box" class="login_section">
 					<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>" id="logout_form">
 						<input type="hidden" name="logout" value="logout" />
@@ -27,11 +27,11 @@ include "php\functions.php";
 						<span id="logout_button">Logout</span></div>
 					</form>
 				</div>
-			<?php
+<?php
 			}
 			else
 			{
-			?>			
+?>			
 				<div id="login_box" class="login_section">
 					<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>" id="login_form">
 						<input type="text" name="username" size="8" value="username" onFocus="this.value=''"/>
@@ -40,29 +40,27 @@ include "php\functions.php";
 						<a href="php\signup.php" id="signup_button"><span>Register</span></a>
 					</form>
 				</div>
-			<?php
+<?php
 			}
-			
-			if ($access == "no_access")
-			{
-			?>
-				<div id="login_prompt" style="background-color:#F05456;">Napacni podatki!</div>
-			<?php
-			}
-			?>
+?>
+			<div id="error_prompt" style="background-color:#F05456;"></div>
 		</div>
 		<div id="content_panel">
-		<?php
+<?php
 			switch ($access)
 			{
 			case "login":
+			
 				echo "Prosim vpisite svoje uporabnisko ime in geslo";
 				break;
+				
 			case "no_access":
+			
 				echo "Prislo je do napake!";
 				break;
+				
 			case "access":
-			?>
+?>
 				<div id="input_box">
 					<div class="button_wrapper" id="queue_button">
 						<img src="..\images\menu_button.png" />
@@ -79,10 +77,10 @@ include "php\functions.php";
 				</div>
 				<div id="output_box">
 				</div>
-			<?php
+<?php
 				break;
 			}
-		?>
+?>
 		
 		</div>
 	</body>
