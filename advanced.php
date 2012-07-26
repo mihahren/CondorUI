@@ -106,7 +106,7 @@ include_once "access_control.php";
 
 		if (!$result)
 		{
-			$_SESSION['custom_error'] = 'Error 12.\\nA database error occurred while checking file details.\\nIf this error persists, please contact miha.hren88@gmail.com.';
+			$_SESSION['custom_error'] = 'Error 12. A database error occurred while checking file details. If this error persists, please contact miha.hren88@gmail.com.';
 		}
 ?>
 		<form method="post" id="file_form" enctype="multipart/form-data">

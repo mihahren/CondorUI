@@ -20,7 +20,8 @@ case "login":
 	
 case "no_access":
 
-	echo "Prislo je do napake!";
+	echo "Prosim vpisite svoje uporabnisko ime in geslo";
+	$_SESSION['custom_error'] = "Prislo je do napake!";
 	break;
 	
 case "access":
@@ -45,7 +46,17 @@ case "access":
 if (!empty($_SESSION['custom_error']))
 {
 	echo "<div id='custom_error'>";
-	print_cmd($_SESSION['custom_error']);
+	if (is_array($_SESSION['custom_error']))
+	{
+		for ($i=0; $i<(count($_SESSION['custom_error'])); $i++)
+		{
+			echo $_SESSION['custom_error'][$i]."<br />";
+		}
+	}
+	else
+	{
+		echo $_SESSION['custom_error'];
+	}
 	echo "</div>";
 }
 

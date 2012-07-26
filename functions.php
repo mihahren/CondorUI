@@ -53,7 +53,7 @@ function print_cmd($input)
 {
 	if (is_array($input))
 	{
-		for ($i=0; $i<=(count($input)-1); $i++)
+		for ($i=0; $i<(count($input)); $i++)
 		{
 			echo "<pre>$input[$i]<pre>";
 		}

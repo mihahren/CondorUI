@@ -37,8 +37,8 @@ $_SESSION['menu_2'] = "status";
 ?>			
 				<div id="login_box" class="login_section">
 					<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" id="login_form">
-						<input type="text" name="username" size="8" value="username" onFocus="this.value=''"/>
-						<input type="password" name="password" SIZE="8" value="password" onFocus="this.value=''"/><br />
+						<input id="username_input" type="text" name="username" size="8" value="username" onFocus="this.value=''"/>
+						<input id="password_input" type="password" name="password" SIZE="8" value="password" onFocus="this.value=''"/><br />
 						<span id="login_button">Login</span>
 						<a href="razno\signup.php" id="signup_button"><span>Register</span></a>
 					</form>
