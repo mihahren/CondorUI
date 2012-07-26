@@ -16,38 +16,39 @@ $(document).ready(function (){
 	});
 	
 	//ajax funkcije
-	$("#queue_button").click(function(){
+	$(document).on("click", "#queue_button", function (){
 		$.ajax({
-			url: "php/main_content.php",
+			url: "content_control.php",
 			type: "POST",
-			data: {podatek: "queue"},
-			success: function(result){$("#output_box").html(result);}
+			data: {menu_1: "advanced", menu_2: "queue"},
+			success: function(result){$("#content_panel").html(result);}
 		});
 	});
 	
-	$("#status_button").click(function(){
+	$(document).on("click", "#status_button", function (){
 		$.ajax({
-			url: "php/main_content.php",
+			url: "content_control.php",
 			type: "POST",
-			data: {podatek: "status"},
-			success: function(result){$("#output_box").html(result);}
+			data: {menu_1: "advanced", menu_2: "status"},
+			success: function(result){$("#content_panel").html(result);}
 		});
 	});
 	
-	$("#submit_button").click(function(){
+	$(document).on("click", "#submit_button", function (){
 		$.ajax({
-			url: "php/main_content.php",
+			url: "content_control.php",
 			type: "POST",
-			data: {podatek: "submit"},
-			success: function(result){$("#output_box").html(result);}
+			data: {menu_1: "advanced", menu_2: "submit"},
+			success: function(result){$("#content_panel").html(result);}
 		});
 	});
 	
 	$(document).on("click", "#confirm_submit", function (){
 		$("#file_form").ajaxSubmit({
+			url: "content_control.php",
 			type: "POST",
-			data: {podatek: "submit"},
-			success: function(result){$("#output_box").html(result);}
+			data: {menu_1: "advanced", menu_2: "submit"},
+			success: function(result){$("#content_panel").html(result);}
 		});
 	});
 	
