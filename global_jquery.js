@@ -1,5 +1,7 @@
 //funkcija za hendlanje error sporocil
 function errorHandler(delay, fade){
+	
+	//default vrednosti
 	delay = typeof delay !== 'undefined' ? delay : 2000;
 	fade = typeof fade !== 'undefined' ? fade : 1000;
 	
@@ -14,50 +16,80 @@ function errorHandler(delay, fade){
 	}
 }
 
+//ajax funkcije
+function queue_ajax(){
+	$.ajax({
+		url: "content_control.php",
+		type: "POST",
+		data: {menu_1: "advanced", menu_2: "queue"},
+		success: function(result){$("#content_panel").html(result);}
+	});
+}
+
+function status_ajax(){
+	$.ajax({
+		url: "content_control.php",
+		type: "POST",
+		data: {menu_1: "advanced", menu_2: "status"},
+		success: function(result){$("#content_panel").html(result);}
+	});
+}
+
+function submit_ajax(){
+	$.ajax({
+		url: "content_control.php",
+		type: "POST",
+		data: {menu_1: "advanced", menu_2: "submit"},
+		success: function(result){$("#content_panel").html(result);}
+	});
+}
+
+function submit_form_ajax(){
+	$("#file_form").ajaxSubmit({
+		url: "content_control.php",
+		type: "POST",
+		data: {menu_1: "advanced", menu_2: "submit"},
+		success: function(result){$("#content_panel").html(result);}
+	});
+}
+
 //izvede se po celotno zgeneriranem html dokumentu
 $(document).ready(function (){
+	
+	//globalne spremenljivke in dogodki - izvedejo na zacetku
+	var refreshIntervalId;
+	
 	errorHandler();
-
-	//globalni dogodki, ki lahko sprozijo error sporocilo
+	
 	$("#error_prompt").ajaxComplete(function() {
-		errorHandler(2500);
+		errorHandler(3500);
 	});
 	
-	//ajax funkcije
+	//ajax event funkcije
 	$(document).on("click", "#queue_button", function (){
-		$.ajax({
-			url: "content_control.php",
-			type: "POST",
-			data: {menu_1: "advanced", menu_2: "queue"},
-			success: function(result){$("#content_panel").html(result);}
-		});
+		clearInterval(refreshIntervalId);
+		queue_ajax();
+		refreshIntervalId = setInterval(function(){
+			queue_ajax();
+		},2000);
 	});
 	
 	$(document).on("click", "#status_button", function (){
-		$.ajax({
-			url: "content_control.php",
-			type: "POST",
-			data: {menu_1: "advanced", menu_2: "status"},
-			success: function(result){$("#content_panel").html(result);}
-		});
+		clearInterval(refreshIntervalId);
+		status_ajax();
+		refreshIntervalId = setInterval(function(){
+			status_ajax();
+		},2000);
 	});
 	
 	$(document).on("click", "#submit_button", function (){
-		$.ajax({
-			url: "content_control.php",
-			type: "POST",
-			data: {menu_1: "advanced", menu_2: "submit"},
-			success: function(result){$("#content_panel").html(result);}
-		});
+		clearInterval(refreshIntervalId);
+		submit_ajax();
 	});
 	
 	$(document).on("click", "#confirm_submit", function (){
-		$("#file_form").ajaxSubmit({
-			url: "content_control.php",
-			type: "POST",
-			data: {menu_1: "advanced", menu_2: "submit"},
-			success: function(result){$("#content_panel").html(result);}
-		});
+		clearInterval(refreshIntervalId);
+		submit_form_ajax();
 	});
 	
 	//upravljanje z login predelom
@@ -75,5 +107,8 @@ $(document).ready(function (){
 			$("#login_button").click();
 		}
 	});
+	
+	//globalne spremenljivke in dogodki - izvedejo na zacetku
+	$("#status_button").click();
 });
 

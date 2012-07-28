@@ -4,15 +4,15 @@ include_once "access_control.php";
 ?>
 <div id="input_box">
 	<div class="button_wrapper" id="queue_button">
-		<img src="..\images\menu_button.png" />
+		<img src="images/menu_button.png" />
 		<span class="button_text">Condor Queue</span>
 	</div>
 	<div class="button_wrapper" id="status_button">
-		<img src="..\images\menu_button.png" />
+		<img src="images/menu_button.png" />
 		<span class="button_text">Condor Status</span>
 	</div>
 	<div class="button_wrapper" id="submit_button">
-		<img src="..\images\menu_button.png" />
+		<img src="images/menu_button.png" />
 		<span class="button_text">Submit...</span>
 	</div>
 </div>
@@ -26,12 +26,14 @@ include_once "access_control.php";
 
 		condor_q($out);
 		print_cmd($out);
+		echo date(DATE_COOKIE);
 		break;
 
 	case "status":
 
 		condor_status($out);
 		print_cmd($out);
+		echo date(DATE_COOKIE);
 		break;
 
 	case "submit":
@@ -42,24 +44,25 @@ include_once "access_control.php";
 		if($_SERVER['REQUEST_METHOD'] == "POST")
 		{	
 			//preveri, ali je bil uploadan file in ga prenese v ustrezno mapo ter doda v bazo podatkov
-			if (!empty($_FILES['file']['tmp_name']))
+			if (!empty($_FILES['file']['tmp_name'][0]))
 			{
-				if (!is_dir("../upload/".$login_id))
+				if (!is_dir("upload/".$login_id))
 				{
-					mkdir("../upload/".$login_id);
+					mkdir("upload/".$login_id);
 				}
-				
-				if (file_exists("../upload/".$login_id."/".$_FILES['file']['name']))
+				for ($i=0; $i<count($_FILES['file']['tmp_name']); $i++)
 				{
-					$_SESSION['custom_error'] = 'Error 10! File already exists.';
-				}
-				else
-				{
-					move_uploaded_file($_FILES['file']['tmp_name'],"../upload/".$login_id."/".$_FILES['file']['name']);
-					echo "File ".$_FILES['file']['name']."successfully uploaded.";
-					
-					$query="INSERT INTO files VALUES (NULL, $login_id, '".$_FILES['file']['name']."', '".$_FILES['file']['type']."', '".$_FILES['file']['size']."')";
-					$result = mysql_query($query, $database_link);
+					if (file_exists("upload/".$login_id."/".$_FILES['file']['name'][$i]))
+					{
+						$_SESSION['custom_error'][2] = 'Datoteka ze obstaja.';
+					}
+					else
+					{
+						move_uploaded_file($_FILES['file']['tmp_name'][$i],"upload/".$login_id."/".$_FILES['file']['name'][$i]);
+						
+						$query="INSERT INTO files VALUES (NULL, $login_id, '".$_FILES['file']['name'][$i]."', '".$_FILES['file']['type'][$i]."', '".$_FILES['file']['size'][$i]."')";
+						$result = mysql_query($query, $database_link);
+					}
 				}
 			}
 			
@@ -71,7 +74,7 @@ include_once "access_control.php";
 					$query = "SELECT * FROM files WHERE fileid=".$_POST['delete_file'][$i];
 					$result = mysql_query($query, $database_link);
 					
-					unlink("../upload/".$login_id."/".mysql_result($result,0,'filename'));
+					unlink("upload/".$login_id."/".mysql_result($result,0,'filename'));
 					
 					$query = "DELETE FROM files WHERE fileid=".$_POST['delete_file'][$i];
 					$result = mysql_query($query, $database_link);		
@@ -86,12 +89,12 @@ include_once "access_control.php";
 				
 				if(mysql_num_rows($result) == 0)
 				{
-					$_SESSION['custom_error'] = 'Error 11! This file does not exist anymore.';
+					$_SESSION['custom_error'][3] = 'Datoteka vec ne obstaja!';
 				}
 				else
 				{
-					condor_submit("../upload/".$login_id."/".mysql_result($result,0,'filename'), $out);
-					$_SESSION['custom_error'] = $out;
+					condor_submit("upload/".$login_id."/".mysql_result($result,0,'filename'), $out);
+					$_SESSION['custom_error'][4] = $out;
 				}
 			}
 			
@@ -106,7 +109,7 @@ include_once "access_control.php";
 
 		if (!$result)
 		{
-			$_SESSION['custom_error'] = 'Error 12. A database error occurred while checking file details. If this error persists, please contact miha.hren88@gmail.com.';
+			$_SESSION['custom_error'][5] = 'Napaka na podatkovni bazi.';
 		}
 ?>
 		<form method="post" id="file_form" enctype="multipart/form-data">
@@ -133,11 +136,12 @@ include_once "access_control.php";
 			}
 ?>
 		</table>
-		<input type="file" name="file" id="file" />
+		<input type="file" name="file[]" id="file" multiple/>
 		</form>
 		<button id="confirm_submit">Submit</button><br />
 <?php
 		mysql_close($database_link);
+		echo date(DATE_COOKIE);
 		break;
 	}
 ?>

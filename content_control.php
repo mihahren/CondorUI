@@ -21,7 +21,7 @@ case "login":
 case "no_access":
 
 	echo "Prosim vpisite svoje uporabnisko ime in geslo";
-	$_SESSION['custom_error'] = "Prislo je do napake!";
+	$_SESSION['custom_error'][1] = "Napacni podatki!";
 	break;
 	
 case "access":
@@ -46,16 +46,24 @@ case "access":
 if (!empty($_SESSION['custom_error']))
 {
 	echo "<div id='custom_error'>";
-	if (is_array($_SESSION['custom_error']))
+	for ($i=1; $i<=5; $i++)
 	{
-		for ($i=0; $i<(count($_SESSION['custom_error'])); $i++)
+		if (!empty($_SESSION['custom_error'][$i]))
 		{
-			echo $_SESSION['custom_error'][$i]."<br />";
+			if (is_array($_SESSION['custom_error'][$i]))
+			{
+				echo "<p>";
+				for ($j=1; $j<(count($_SESSION['custom_error'][$i])); $j++)
+				{
+					echo $_SESSION['custom_error'][$i][$j]."<br />";
+				}
+				echo "</p>";
+			}
+			else
+			{
+				echo "<p>".$_SESSION['custom_error'][$i]."</p>";
+			}
 		}
-	}
-	else
-	{
-		echo $_SESSION['custom_error'];
 	}
 	echo "</div>";
 }

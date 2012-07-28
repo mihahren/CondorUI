@@ -8,17 +8,17 @@ function dbConnect($db="")
 {
 	global $dbhost, $dbuser, $dbpass;
 	
-	$db_link = mysql_connect($dbhost,$dbuser,$dbpass); //create a mysql server link
+	$db_link = mysql_connect($dbhost,$dbuser,$dbpass);
 
-	if (!$db_link) //check if the database connection failed
+	if (!$db_link)
 	{
 		echo 'Database connection failed.';
 		exit;
 	}
 	
-	$db_handle = mysql_select_db($db, $db_link); //select the provided database through the link
+	$db_handle = mysql_select_db($db, $db_link);
 	
-	if(!$db_handle) //check if selection failed
+	if(!$db_handle)
 	{
 		echo 'Error selecting database.';
 		exit;
@@ -55,7 +55,7 @@ function print_cmd($input)
 	{
 		for ($i=0; $i<(count($input)); $i++)
 		{
-			echo "<pre>$input[$i]<pre>";
+			echo "<pre>$input[$i]</pre>";
 		}
 	}
 	else

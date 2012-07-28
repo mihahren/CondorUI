@@ -1,7 +1,6 @@
 /* global */
 
 body {
-/*border:1px solid #ff0000;*/
 margin:0px;
 }
 
@@ -27,7 +26,6 @@ margin-right:auto;
 width:1000px;
 position:relative;
 padding:8px;
-min-height:64px;
 overflow:hidden;
 }
 
@@ -54,14 +52,12 @@ min-height:48px;
 
 #signup_button span{
 float:right;
-/*padding-top:3px;*/
 padding-right:5px;
 text-decoration:underline;
 color:black;
 }
 
 #login_button{
-/*padding-top:3px;*/
 padding-left:4px;
 text-decoration:underline;
 cursor:pointer;
@@ -69,7 +65,6 @@ color:black;
 }
 
 #logout_button{
-/*padding-top:3px;*/
 text-decoration:underline;
 cursor:pointer;
 color:black;

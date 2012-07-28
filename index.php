@@ -12,7 +12,7 @@ $_SESSION['menu_2'] = "status";
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>index</title>
 		<link rel="stylesheet" type="text/css" href="global_css.css" />
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 		<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
 		<script type="text/javascript" src="global_jquery.js"></script>
 	</head>
@@ -48,7 +48,7 @@ $_SESSION['menu_2'] = "status";
 ?>
 			<div id="error_prompt" style="background-color:#F05456;"></div>
 		</div>
-		<!-- content panel, ki prikazuje glavni del aplikacije //-->
+		<!-- content panel, ki prikazuje glavni del aplikacije -->
 		<div id="content_panel">
 			<?php include "content_control.php";?>
 		</div>
