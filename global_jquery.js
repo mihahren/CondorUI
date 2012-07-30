@@ -1,3 +1,6 @@
+//globalne spremenljivke
+var refreshIntervalId;
+
 //funkcija za hendlanje error sporocil
 function errorHandler(delay, fade){
 	
@@ -17,7 +20,7 @@ function errorHandler(delay, fade){
 }
 
 //ajax funkcije
-function queue_ajax(){
+function queueAjax(){
 	$.ajax({
 		url: "content_control.php",
 		type: "POST",
@@ -26,7 +29,7 @@ function queue_ajax(){
 	});
 }
 
-function status_ajax(){
+function statusAjax(){
 	$.ajax({
 		url: "content_control.php",
 		type: "POST",
@@ -35,7 +38,7 @@ function status_ajax(){
 	});
 }
 
-function submit_ajax(){
+function submitAjax(){
 	$.ajax({
 		url: "content_control.php",
 		type: "POST",
@@ -44,7 +47,7 @@ function submit_ajax(){
 	});
 }
 
-function submit_form_ajax(){
+function submitFormAjax(){
 	$("#file_form").ajaxSubmit({
 		url: "content_control.php",
 		type: "POST",
@@ -53,43 +56,57 @@ function submit_form_ajax(){
 	});
 }
 
+//funkcije za sprozitev avtomatskega refresha
+function refreshQueue(){
+	if(document.getElementById("queue_selector"))
+	{
+		refreshIntervalId = setInterval(function(){
+			queueAjax();
+		},2000);
+	}
+}
+
+function refreshStatus(){
+	if(document.getElementById("status_selector"))
+	{
+		refreshIntervalId = setInterval(function(){
+			statusAjax();
+		},2000);
+	}
+}
+
 //izvede se po celotno zgeneriranem html dokumentu
 $(document).ready(function (){
 	
-	//globalne spremenljivke in dogodki - izvedejo na zacetku
-	var refreshIntervalId;
-	
+	//globalni dogodki - izvedejo na zacetku
+	clearInterval(refreshIntervalId);
 	errorHandler();
+	refreshQueue();
+	refreshStatus();
 	
-	$("#error_prompt").ajaxComplete(function() {
+	//izvede vsakic po zakljucenem ajax dogodku
+	$(document).ajaxComplete(function() {
+		clearInterval(refreshIntervalId);
 		errorHandler(3500);
+		refreshQueue();
+		refreshStatus();
 	});
 	
 	//ajax event funkcije
 	$(document).on("click", "#queue_button", function (){
-		clearInterval(refreshIntervalId);
-		queue_ajax();
-		refreshIntervalId = setInterval(function(){
-			queue_ajax();
-		},2000);
+		queueAjax();
 	});
 	
 	$(document).on("click", "#status_button", function (){
-		clearInterval(refreshIntervalId);
-		status_ajax();
-		refreshIntervalId = setInterval(function(){
-			status_ajax();
-		},2000);
+		statusAjax();
 	});
 	
 	$(document).on("click", "#submit_button", function (){
-		clearInterval(refreshIntervalId);
-		submit_ajax();
+		submitAjax();
 	});
 	
 	$(document).on("click", "#confirm_submit", function (){
-		clearInterval(refreshIntervalId);
-		submit_form_ajax();
+		submitFormAjax();
 	});
 	
 	//upravljanje z login predelom
@@ -108,7 +125,6 @@ $(document).ready(function (){
 		}
 	});
 	
-	//globalne spremenljivke in dogodki - izvedejo na zacetku
-	$("#status_button").click();
+	//globalne spremenljivke in dogodki - izvedejo na kuncu
 });
 

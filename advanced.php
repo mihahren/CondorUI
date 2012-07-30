@@ -27,6 +27,7 @@ include_once "access_control.php";
 		condor_q($out);
 		print_cmd($out);
 		echo date(DATE_COOKIE);
+		echo "<div id='queue_selector'>sdasd</div>";
 		break;
 
 	case "status":
@@ -34,105 +35,153 @@ include_once "access_control.php";
 		condor_status($out);
 		print_cmd($out);
 		echo date(DATE_COOKIE);
+		echo "<div id='status_selector'></div>";
 		break;
 
 	case "submit":
-
-		$database_link = dbConnect('condor_users');
-		$login_id = $_SESSION['login_id'];
+		
+		//pregleda, ce obstajajo vsi potrebni direktoriji za uporabnika - ce ne, jih zgenerira - ter jim doloci spremenljivke
+		if (!is_dir($uploadDir = "uploads/".$_SESSION['login_id']))
+		{
+			mkdir($uploadDir);
+		}
+		
+		if (!is_dir($resultDir = "results/".$_SESSION['login_id']))
+		{
+			mkdir($resultDir);
+		}
 
 		if($_SERVER['REQUEST_METHOD'] == "POST")
 		{	
-			//preveri, ali je bil uploadan file in ga prenese v ustrezno mapo ter doda v bazo podatkov
+			//preveri, ali so bili uploadani kaksni file-i in jih prenese v ustrezno mapo
 			if (!empty($_FILES['file']['tmp_name'][0]))
 			{
-				if (!is_dir("upload/".$login_id))
-				{
-					mkdir("upload/".$login_id);
-				}
 				for ($i=0; $i<count($_FILES['file']['tmp_name']); $i++)
 				{
-					if (file_exists("upload/".$login_id."/".$_FILES['file']['name'][$i]))
+					if (file_exists($uploadDir."/".$_FILES['file']['name'][$i]))
 					{
 						$_SESSION['custom_error'][2] = 'Datoteka ze obstaja.';
 					}
 					else
 					{
-						move_uploaded_file($_FILES['file']['tmp_name'][$i],"upload/".$login_id."/".$_FILES['file']['name'][$i]);
-						
-						$query="INSERT INTO files VALUES (NULL, $login_id, '".$_FILES['file']['name'][$i]."', '".$_FILES['file']['type'][$i]."', '".$_FILES['file']['size'][$i]."')";
-						$result = mysql_query($query, $database_link);
+						move_uploaded_file($_FILES['file']['tmp_name'][$i],$uploadDir."/".$_FILES['file']['name'][$i]);
 					}
 				}
 			}
 			
-			//preveri, ce je potrebno kaksno datoteko zbrisati
-			if (!empty($_POST['delete_file']))
+			//preveri, ce je potrebno kaksno upload datoteko zbrisati
+			if (!empty($_POST['delete_upload_file']))
 			{
-				for ($i=0; $i<(count($_POST['delete_file'])); $i++)
+				for ($i=0; $i<(count($_POST['delete_upload_file'])); $i++)
 				{
-					$query = "SELECT * FROM files WHERE fileid=".$_POST['delete_file'][$i];
-					$result = mysql_query($query, $database_link);
-					
-					unlink("upload/".$login_id."/".mysql_result($result,0,'filename'));
-					
-					$query = "DELETE FROM files WHERE fileid=".$_POST['delete_file'][$i];
-					$result = mysql_query($query, $database_link);		
+					unlink($uploadDir."/".$_POST['delete_upload_file'][$i]);	
+				}
+			}
+			
+			//preveri, ce je potrebno kaksno result datoteko zbrisati
+			if (!empty($_POST['delete_result_file']))
+			{
+				for ($i=0; $i<(count($_POST['delete_result_file'])); $i++)
+				{
+					unlink($resultDir."/".$_POST['delete_result_file'][$i]);	
 				}
 			}
 			
 			//preveri, ce je potrebno kaksen file submitat
 			if (!empty($_POST['submit_file']))
 			{
-				$query = "SELECT * FROM files WHERE fileid=".$_POST['submit_file'];
-				$result = mysql_query($query, $database_link);
-				
-				if(mysql_num_rows($result) == 0)
+				if(!file_exists($uploadDir."/".$_POST['submit_file']))
 				{
 					$_SESSION['custom_error'][3] = 'Datoteka vec ne obstaja!';
 				}
 				else
 				{
-					condor_submit("upload/".$login_id."/".mysql_result($result,0,'filename'), $out);
+					condor_submit($uploadDir."/".$_POST['submit_file'], $out);
 					$_SESSION['custom_error'][4] = $out;
 				}
 			}
 			
 			unset($_FILES['file']);
 			unset($_POST['submit_file']);
-			unset($_POST['delete_file']);
+			unset($_POST['delete_upload_file']);
+			unset($_POST['delete_result_file']);
 		}
 
-		//pregleda in izpise vse datoteke, ki ustrezajo dolocenemu uporabniku
-		$query="SELECT * FROM files WHERE userid=$login_id";
-		$result = mysql_query($query, $database_link);
-
-		if (!$result)
-		{
-			$_SESSION['custom_error'][5] = 'Napaka na podatkovni bazi.';
-		}
+		$scanUploadDir = scandir($uploadDir);
+		$scanResultDir = scandir($resultDir);
 ?>
 		<form method="post" id="file_form" enctype="multipart/form-data">
-		<table style=>
+		
+		<!-- pregleda in izpise vse uploadane datoteke, ki ustrezajo dolocenemu uporabniku -->
+		<table id="uploads_table">
 			<tr>
 				<td>filename</td>
 				<td>filetype</td>
-				<td>filesize</td>
 				<td>submit</td>
 				<td>delete</td>
 			</tr>
 <?php
-			for ($i=0; $i<(mysql_num_rows($result)); $i++)
+			//izpise .condor in .submit file
+			for ($i=0; $i<count($scanUploadDir); $i++)
 			{
+				$fullFileName = pathinfo($scanUploadDir[$i]);
+				
+				if($fullFileName['basename'] != "." && $fullFileName['basename'] != ".." && ($fullFileName['extension'] == "submit" || $fullFileName['extension'] == "condor"))
+				{
 ?>
-				<tr>
-					<td><?php echo mysql_result($result,$i,'filename'); ?></td>
-					<td><?php echo mysql_result($result,$i,'filetype'); ?></td>
-					<td><?php echo mysql_result($result,$i,'filesize'); ?></td>
-					<td><input type="radio" name="submit_file" value="<?php echo mysql_result($result,$i,'fileid'); ?>" /></td>
-					<td><input type="checkbox" name="delete_file[]" value="<?php echo mysql_result($result,$i,'fileid'); ?>" /></td>
-				</tr>
+					<tr>
+						<td><a href="<?php echo $uploadDir."/".$fullFileName['basename']; ?>"><?php echo $fullFileName['filename']; ?></a></td>
+						<td><?php echo $fullFileName['extension']; ?></td>
+						<td><input type="radio" name="submit_file" value="<?php echo $fullFileName['basename']; ?>" /></td>
+						<td><input type="checkbox" name="delete_upload_file[]" value="<?php echo $fullFileName['basename']; ?>" /></td>
+					</tr>
 <?php
+				}
+			}
+
+			//izpise vse ostale uploadane file
+			for ($i=0; $i<count($scanUploadDir); $i++)
+			{
+				$fullFileName = pathinfo($scanUploadDir[$i]);
+				
+				if($fullFileName['basename'] != "." && $fullFileName['basename'] != ".." && $fullFileName['extension'] != "submit" && $fullFileName['extension'] != "condor")
+				{
+?>
+					<tr>
+						<td><a href="<?php echo $uploadDir."/".$fullFileName['basename']; ?>"><?php echo $fullFileName['filename']; ?></a></td>
+						<td><?php echo $fullFileName['extension']; ?></td>
+						<td></td>
+						<td><input type="checkbox" name="delete_upload_file[]" value="<?php echo $fullFileName['basename']; ?>" /></td>
+					</tr>
+<?php
+				}
+			}
+?>
+		</table>
+		
+		<!-- pregleda in izpise vse result datoteke, ki ustrezajo dolocenemu uporabniku -->
+		<table id="results_table">
+			<tr>
+				<td>filename</td>
+				<td>filetype</td>
+				<td>delete</td>
+			</tr>
+<?php		
+			//izpise .condor in .submit file
+			for ($i=0; $i<count($scanResultDir); $i++)
+			{
+				$fullFileName = pathinfo($scanResultDir[$i]);
+				
+				if($fullFileName['basename'] != "." && $fullFileName['basename'] != "..")
+				{
+?>
+					<tr>
+						<td><a href="<?php echo $resultDir."/".$fullFileName['basename']; ?>"><?php echo $fullFileName['filename']; ?></a></td>
+						<td><?php echo $fullFileName['extension']; ?></td>
+						<td><input type="checkbox" name="delete_result_file[]" value="<?php echo $fullFileName['basename']; ?>" /></td>
+					</tr>
+<?php
+				}
 			}
 ?>
 		</table>
@@ -140,8 +189,8 @@ include_once "access_control.php";
 		</form>
 		<button id="confirm_submit">Submit</button><br />
 <?php
-		mysql_close($database_link);
 		echo date(DATE_COOKIE);
+		echo "<div id='submit_selector'></div>";
 		break;
 	}
 ?>

@@ -46,7 +46,7 @@ case "access":
 if (!empty($_SESSION['custom_error']))
 {
 	echo "<div id='custom_error'>";
-	for ($i=1; $i<=5; $i++)
+	for ($i=1; $i<=4; $i++)
 	{
 		if (!empty($_SESSION['custom_error'][$i]))
 		{

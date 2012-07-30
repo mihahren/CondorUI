@@ -3,8 +3,8 @@ include "functions.php";
 include "access_control.php";
 
 //default vrednosti
-$_SESSION['menu_1'] = "advanced";
-$_SESSION['menu_2'] = "status";
+//$_SESSION['menu_1'] = "advanced";
+//$_SESSION['menu_2'] = "status";
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">

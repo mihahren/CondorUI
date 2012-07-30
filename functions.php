@@ -63,4 +63,25 @@ function print_cmd($input)
 		echo $input;
 	}
 }
+
+//razbije celotbo ime datoteke v stringu na ime in tip
+function explodeFileName($string)
+{
+	$tempStrArray = explode(".",$string);
+	
+	for ($i=0; $i<(count($tempStrArray)-1); $i++)
+	{
+		$fileName = $fileName.$tempStrArray[$i];
+	}
+	
+	$fileType = $tempStrArray[(count($tempStrArray)-1)];
+	
+	if ($fileName == "")
+	{
+		$fileName = $fileType;
+		$fileType="";
+	}
+	
+	return array($fileName, $fileType);
+}
 ?>
