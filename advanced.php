@@ -1,6 +1,9 @@
 <?php
 include_once "functions.php";
 include_once "access_control.php";
+
+if ($_SESSION['access'] == "access")
+{
 ?>
 <div id="input_box">
 	<div class="button_wrapper" id="queue_button">
@@ -27,7 +30,7 @@ include_once "access_control.php";
 		condor_q($out);
 		print_cmd($out);
 		echo date(DATE_COOKIE);
-		echo "<div id='queue_selector'>sdasd</div>";
+		echo "<div id='queue_selector'></div>";
 		break;
 
 	case "status":
@@ -114,6 +117,7 @@ include_once "access_control.php";
 		
 		<!-- pregleda in izpise vse uploadane datoteke, ki ustrezajo dolocenemu uporabniku -->
 		<table id="uploads_table">
+			<tr><td colspan="4" style="text-align:center;">Uploads</td></tr>
 			<tr>
 				<td>filename</td>
 				<td>filetype</td>
@@ -131,9 +135,9 @@ include_once "access_control.php";
 ?>
 					<tr>
 						<td><a href="<?php echo $uploadDir."/".$fullFileName['basename']; ?>"><?php echo $fullFileName['filename']; ?></a></td>
-						<td><?php echo $fullFileName['extension']; ?></td>
-						<td><input type="radio" name="submit_file" value="<?php echo $fullFileName['basename']; ?>" /></td>
-						<td><input type="checkbox" name="delete_upload_file[]" value="<?php echo $fullFileName['basename']; ?>" /></td>
+						<td style="text-align:center;"><?php echo $fullFileName['extension']; ?></td>
+						<td style="text-align:center;"><input type="radio" name="submit_file" value="<?php echo $fullFileName['basename']; ?>" /></td>
+						<td style="text-align:center;"><input type="checkbox" name="delete_upload_file[]" value="<?php echo $fullFileName['basename']; ?>" /></td>
 					</tr>
 <?php
 				}
@@ -149,18 +153,20 @@ include_once "access_control.php";
 ?>
 					<tr>
 						<td><a href="<?php echo $uploadDir."/".$fullFileName['basename']; ?>"><?php echo $fullFileName['filename']; ?></a></td>
-						<td><?php echo $fullFileName['extension']; ?></td>
-						<td></td>
-						<td><input type="checkbox" name="delete_upload_file[]" value="<?php echo $fullFileName['basename']; ?>" /></td>
+						<td style="text-align:center;"><?php echo $fullFileName['extension']; ?></td>
+						<td style="text-align:center;"></td>
+						<td style="text-align:center;"><input type="checkbox" name="delete_upload_file[]" value="<?php echo $fullFileName['basename']; ?>" /></td>
 					</tr>
 <?php
 				}
-			}
-?>
+			}	
+?>			
+			<tr><td colspan="3" style="text-align:right;">Select All:</td><td style="text-align:center;"><input type="checkbox" name="select_all_uploads" value="false" /></td></tr>
 		</table>
 		
 		<!-- pregleda in izpise vse result datoteke, ki ustrezajo dolocenemu uporabniku -->
 		<table id="results_table">
+			<tr><td colspan="3" style="text-align:center;">Results</td></tr>
 			<tr>
 				<td>filename</td>
 				<td>filetype</td>
@@ -177,14 +183,15 @@ include_once "access_control.php";
 ?>
 					<tr>
 						<td><a href="<?php echo $resultDir."/".$fullFileName['basename']; ?>"><?php echo $fullFileName['filename']; ?></a></td>
-						<td><?php echo $fullFileName['extension']; ?></td>
-						<td><input type="checkbox" name="delete_result_file[]" value="<?php echo $fullFileName['basename']; ?>" /></td>
+						<td style="text-align:center;"><?php echo $fullFileName['extension']; ?></td>
+						<td style="text-align:center;"><input type="checkbox" name="delete_result_file[]" value="<?php echo $fullFileName['basename']; ?>" /></td>
 					</tr>
 <?php
 				}
 			}
-?>
-		</table>
+?>			
+			<tr><td colspan="2" style="text-align:right;">Select All:</td><td style="text-align:center;"><input type="checkbox" name="select_all_results" value="false" /></td></tr>
+		</table></br>
 		<input type="file" name="file[]" id="file" multiple/>
 		</form>
 		<button id="confirm_submit">Submit</button><br />
@@ -195,3 +202,10 @@ include_once "access_control.php";
 	}
 ?>
 </div>
+<?php
+}
+else
+{
+echo "Prislo je do napake!";
+}
+?>

@@ -48,6 +48,24 @@ right:8px;
 top:8px;
 z-index:1;
 min-height:48px;
+background-color:#FFFFFF;
+}
+
+#progress_bar{
+background-color: #B4F5B4;
+width:0%;
+height:48px;
+}
+
+#progress_number{
+height:20px;
+width:40px;
+vertical-align:middle;
+position:absolute;
+top:50%;
+margin-top:-10px;
+left:50%;
+margin-left:-20px;
 }
 
 #signup_button span{
@@ -78,7 +96,7 @@ bottom:7px;
 
 /* advanced.php */
 
-#input_box {
+#input_box{
 padding:10px;
 border:1px solid #8895a6;
 position:relative;
@@ -89,9 +107,8 @@ margin-right:8px;
 margin-bottom:8px;
 }
 
-#output_box {
-padding-left:10px;
-padding-right:10px;
+#output_box{
+padding:10px;
 border:1px solid #8895a6;
 position:relative;
 float:left;
@@ -109,6 +126,21 @@ left:8px;
 bottom:6px;
 }
 
+#uploads_table{
+margin-right:10px;
+}
 
+#results_table,
+#uploads_table{
+border-collapse:collapse;
+padding:5px;
+border:1px solid #8895a6;
+margin-bottom:10px;
+float:left;
+}
 
-
+#uploads_table td,
+#results_table td{
+border:1px solid #8895a6;
+padding:5px;
+}

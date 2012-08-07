@@ -12,9 +12,10 @@ function errorHandler(delay, fade){
 	
 	if(document.getElementById("custom_error"))
 	{
+		$("#error_prompt").empty();
 		$("#error_prompt").show();
 		$("#error_prompt").html($("#custom_error").html());
-		$("#custom_error").hide();
+		$("#custom_error").remove();
 		$("#error_prompt").delay(delay).fadeOut(fade);
 	}
 }
@@ -49,10 +50,26 @@ function submitAjax(){
 
 function submitFormAjax(){
 	$("#file_form").ajaxSubmit({
+		beforeSend: function() {
+			$("#error_prompt").empty();
+			$("#error_prompt").html("<div id='progress_bar'></div><span id='progress_number'></span>");
+			$("#error_prompt").show();
+			var percentVal = '0%';
+			$("#progress_bar").width(percentVal);
+			$("#progress_number").html(percentVal);
+		},
+		uploadProgress: function(event, position, total, percentComplete) {
+			var percentVal = percentComplete + '%';
+			$("#progress_bar").width(percentVal);
+			$("#progress_number").html(percentVal);
+		},
 		url: "content_control.php",
 		type: "POST",
 		data: {menu_1: "advanced", menu_2: "submit"},
-		success: function(result){$("#content_panel").html(result);}
+		success: function(result){
+			$("#content_panel").html(result);
+			$("#error_prompt").hide();
+		}
 	});
 }
 
