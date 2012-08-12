@@ -1,63 +1,75 @@
 /* global */
 
 body {
-margin:0px;
+margin: 0px;
 }
 
 #header {
-border-left:1px solid #8895a6;
-border-right:1px solid #8895a6;
-border-bottom:1px solid #8895a6;
-margin-left:auto;
-margin-right:auto;
-width:1000px;
-position:relative;
-padding:8px;
+border-left: 1px solid #8895a6;
+border-right: 1px solid #8895a6;
+border-bottom: 1px solid #8895a6;
+margin-left: auto;
+margin-right: auto;
+width: 1000px;
+position: relative;
+padding: 10px;
+box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 }
 
 #content_panel {
-border-left:1px solid #8895a6;
-border-right:1px solid #8895a6;
-border-bottom:1px solid #8895a6;
-margin-left:auto;
-margin-right:auto;
-width:1000px;
-position:relative;
-padding:8px;
-overflow:hidden;
+border-left: 1px solid #8895a6;
+border-right: 1px solid #8895a6;
+border-bottom: 1px solid #8895a6;
+margin-left: auto;
+margin-right: auto;
+width: 1000px;
+position: relative;
+padding: 10px;
+overflow: hidden;
+box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 }
 
 /* header.php */
 
 #menu_wrapper{
-position:absolute;
-bottom:3px
+position: absolute;
 }
 
 .menu_button_wrapper{
-position:relative;
-padding-right:10px;
-cursor:pointer;
-float:left;
+height: 25px;
+width: 120px;
+border: 1px solid #8895a6;
+position: relative;
+margin-right: 10px;
+cursor: pointer;
+float: left;
+box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
+}
+
+.menu_button_wrapper:hover{
+border: 1px solid yellow;
 }
 
 .menu_button_text{
-width:100px;
-text-align:center;
-position:absolute;
-left:50%;
-margin-left:-55px;
-bottom:5px;
+width: 100px;
+text-align: center;
+position: absolute;
+left: 50%;
+margin-left: -50px;
+bottom: 2px;
+color: #8895a6;
+text-shadow: 1px 1px 1px #B0C0D6;
 }
 
 .login_section{
-padding:3px;
-border:1px solid #8895a6;
-width:180px;
-margin-left:auto;
-margin-right:0px;
-position:relative;
-height:48px;
+padding: 3px;
+border: 1px solid #8895a6;
+width: 180px;
+margin-left: auto;
+margin-right: 0px;
+position: relative;
+height: 48px;
+box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 }
 
 #error_prompt{
@@ -100,13 +112,13 @@ color:black;
 padding-left:4px;
 text-decoration:underline;
 cursor:pointer;
-color:black;
+color: black;
 }
 
 #logout_button{
-text-decoration:underline;
-cursor:pointer;
-color:black;
+text-decoration: underline;
+cursor: pointer;
+color: #8895a6;
 }
 
 #logout_text{
@@ -118,33 +130,44 @@ bottom:7px;
 /* advanced.php */
 
 #input_box{
-padding:10px;
-border:1px solid #8895a6;
-position:relative;
-width:auto;
-float:left;
-padding-bottom:5px;
-margin-right:8px;
-margin-bottom:8px;
+padding: 10px;
+border: 1px solid #8895a6;
+position: relative;
+width: auto;
+float: left;
+padding-bottom: 0px;
+margin-right: 10px;
+box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 }
 
 #output_box{
-padding:10px;
-border:1px solid #8895a6;
-position:relative;
-float:left;
+padding: 10px;
+border: 1px solid #8895a6;
+position: relative;
+float: left;
+box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 }
 
 .button_wrapper{
-position:relative;
-cursor:pointer;
-padding-bottom:0px;
+width: 120px;
+height: 25px;
+position: relative;
+cursor: pointer;
+margin-bottom: 10px;
+border: 1px solid #8895a6;
+box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
+}
+
+.button_wrapper:hover{
+border: 1px solid yellow;
 }
 
 .button_text{
 position:absolute;
 left:8px;
-bottom:6px;
+bottom:3px;
+color: #8895a6;
+text-shadow: 1px 1px 1px #B0C0D6;
 }
 
 #uploads_table{

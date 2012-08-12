@@ -11,6 +11,7 @@ include_once "access_control.php";
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 		<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
 		<script type="text/javascript" src="global_jquery.js"></script>
+		<style type="text/css">#home_button {border: 1px solid red;}</style>
 	</head>
 	<body>
 		<!-- header, ki vsebuje glavo z login, logout menujem ter odsek za prikazovanje sporocil -->

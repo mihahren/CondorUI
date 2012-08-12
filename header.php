@@ -1,21 +1,14 @@
 <div id="header">
 	<div id="menu_wrapper">
-		<div class="menu_button_wrapper" id="basic_button">
-			<a href="index.php">
-			<img src="images/menu_button.png" />
-			<span class="menu_button_text">HOME</span></a>
-		</div>
-		<div class="menu_button_wrapper" id="basic_button">
-			<a href="basic.php">
-			<img src="images/menu_button.png" />
-			<span class="menu_button_text">BASIC</span></a>
-		</div>
-		<div class="menu_button_wrapper" id="advanced_button">
-			<a href="advanced.php">
-			<img src="images/menu_button.png" />
-			<span class="menu_button_text">ADVANCED</span></a>
-			
-		</div>
+		<a href="index.php"><div class="menu_button_wrapper" id="home_button">
+			<span class="menu_button_text">HOME</span>
+		</div></a>
+		<a href="basic.php"><div class="menu_button_wrapper" id="basic_button">
+			<span class="menu_button_text">BASIC</span>
+		</div></a>
+		<a href="advanced.php"><div class="menu_button_wrapper" id="advanced_button">
+			<span class="menu_button_text">ADVANCED</span>
+		</div></a>
 	</div>
 <?php
 	if ($_SESSION['access'] == "access")

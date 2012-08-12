@@ -76,6 +76,26 @@ function refreshStatus(){
 	}
 }
 
+//funkcija za spremembo barve gumbov v advanced nacinu
+function refreshButtonBorders(){
+	$("#queue_button").css("border","");
+	$("#status_button").css("border","");
+	$("#submit_button").css("border","");
+	
+	if(document.getElementById("queue_selector"))
+	{
+		$("#queue_button").css("border","1px solid red");
+	}
+	else if(document.getElementById("status_selector"))
+	{
+		$("#status_button").css("border","1px solid red");
+	}
+	else if(document.getElementById("submit_selector"))
+	{
+		$("#submit_button").css("border","1px solid red");
+	}
+}
+
 //izvede se po celotno zgeneriranem html dokumentu
 $(document).ready(function (){
 	
@@ -85,12 +105,22 @@ $(document).ready(function (){
 	refreshQueue();
 	refreshStatus();
 	
+	//graficni dogodki na gumbih
+	/*$(document).on("mouseover", "#home_button, #basic_button, #advanced_button, #queue_button, #status_button, #submit_button", function (){
+		$(this).css("border","1px solid yellow");
+	});
+	
+	$(document).on("mouseout", "#home_button, #basic_button, #advanced_button, #queue_button, #status_button, #submit_button", function (){
+		$(this).css("border","");
+	});*/
+	
 	//izvede vsakic po zakljucenem ajax dogodku
 	$(document).ajaxComplete(function() {
 		clearInterval(refreshIntervalId);
 		errorHandler(3500);
 		refreshQueue();
 		refreshStatus();
+		refreshButtonBorders()
 	});
 	
 	//basic event funkcije
@@ -132,6 +162,6 @@ $(document).ready(function (){
 		}
 	});
 	
-	//globalne spremenljivke in dogodki - izvedejo na kuncu
+	//globalne spremenljivke in dogodki - izvedejo na koncu
 });
 

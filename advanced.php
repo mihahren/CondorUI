@@ -11,6 +11,7 @@ include_once "access_control.php";
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 		<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
 		<script type="text/javascript" src="global_jquery.js"></script>
+		<style type="text/css">#advanced_button {border: 1px solid red;}</style>
 	</head>
 	<body>
 		<!-- header, ki vsebuje glavo z login, logout menujem ter odsek za prikazovanje sporocil -->
@@ -37,15 +38,12 @@ include_once "access_control.php";
 ?>
 			<div id="input_box">
 				<div class="button_wrapper" id="queue_button">
-					<img src="images/menu_button.png" />
 					<span class="button_text">Condor Queue</span>
 				</div>
 				<div class="button_wrapper" id="status_button">
-					<img src="images/menu_button.png" />
 					<span class="button_text">Condor Status</span>
 				</div>
 				<div class="button_wrapper" id="submit_button">
-					<img src="images/menu_button.png" />
 					<span class="button_text">Submit...</span>
 				</div>
 			</div>
