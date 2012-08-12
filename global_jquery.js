@@ -12,48 +12,32 @@ function errorHandler(delay, fade){
 	
 	if(document.getElementById("custom_error"))
 	{
-		$("#error_prompt").empty();
-		$("#error_prompt").show();
-		$("#error_prompt").html($("#custom_error").html());
+		$("#error_prompt").empty()
+			.css("background-color","red")
+			.html($("#custom_error").html())
+			.show();
 		$("#custom_error").remove();
 		$("#error_prompt").delay(delay).fadeOut(fade);
 	}
 }
 
 //ajax funkcije
-function queueAjax(){
+function submitAjax(phpPostFile, resultDivID, info){
 	$.ajax({
-		url: "content_control.php",
+		url: phpPostFile,
 		type: "POST",
-		data: {menu_1: "advanced", menu_2: "queue"},
-		success: function(result){$("#content_panel").html(result);}
+		data: {menu: info},
+		success: function(result){$(resultDivID).html(result);}
 	});
 }
 
-function statusAjax(){
-	$.ajax({
-		url: "content_control.php",
-		type: "POST",
-		data: {menu_1: "advanced", menu_2: "status"},
-		success: function(result){$("#content_panel").html(result);}
-	});
-}
-
-function submitAjax(){
-	$.ajax({
-		url: "content_control.php",
-		type: "POST",
-		data: {menu_1: "advanced", menu_2: "submit"},
-		success: function(result){$("#content_panel").html(result);}
-	});
-}
-
-function submitFormAjax(){
-	$("#file_form").ajaxSubmit({
+function submitFormAjax(formID, phpPostFile, resultDivID, info){
+	$(formID).ajaxSubmit({
 		beforeSend: function() {
-			$("#error_prompt").empty();
-			$("#error_prompt").html("<div id='progress_bar'></div><span id='progress_number'></span>");
-			$("#error_prompt").show();
+			$("#error_prompt").empty()
+				.html("<div id='progress_bar'></div><span id='progress_number'></span>")
+				.css("background-color","white")
+				.show();
 			var percentVal = '0%';
 			$("#progress_bar").width(percentVal);
 			$("#progress_number").html(percentVal);
@@ -63,11 +47,11 @@ function submitFormAjax(){
 			$("#progress_bar").width(percentVal);
 			$("#progress_number").html(percentVal);
 		},
-		url: "content_control.php",
+		url: phpPostFile,
 		type: "POST",
-		data: {menu_1: "advanced", menu_2: "submit"},
+		data: {menu: info},
 		success: function(result){
-			$("#content_panel").html(result);
+			$(resultDivID).html(result);
 			$("#error_prompt").hide();
 		}
 	});
@@ -78,7 +62,7 @@ function refreshQueue(){
 	if(document.getElementById("queue_selector"))
 	{
 		refreshIntervalId = setInterval(function(){
-			queueAjax();
+			submitAjax("advanced_ajax_content.php", "#output_box", "queue");
 		},2000);
 	}
 }
@@ -87,7 +71,7 @@ function refreshStatus(){
 	if(document.getElementById("status_selector"))
 	{
 		refreshIntervalId = setInterval(function(){
-			statusAjax();
+			submitAjax("advanced_ajax_content.php", "#output_box", "status");
 		},2000);
 	}
 }
@@ -109,21 +93,27 @@ $(document).ready(function (){
 		refreshStatus();
 	});
 	
-	//ajax event funkcije
+	//basic event funkcije
+	$(document).on("click", "#basic_submit", function (){
+		submitFormAjax("#basic_form", "advanced_ajax_content.php", "NULL", "submit");
+		submitFormAjax("#basic_form", "basic_ajax_content.php", "#content_panel", "NULL");
+	});
+	
+	//advanced event funkcije
 	$(document).on("click", "#queue_button", function (){
-		queueAjax();
+		submitAjax("advanced_ajax_content.php", "#output_box", "queue");
 	});
 	
 	$(document).on("click", "#status_button", function (){
-		statusAjax();
+		submitAjax("advanced_ajax_content.php", "#output_box", "status");
 	});
 	
 	$(document).on("click", "#submit_button", function (){
-		submitAjax();
+		submitAjax("advanced_ajax_content.php", "#output_box", "submit");
 	});
 	
 	$(document).on("click", "#confirm_submit", function (){
-		submitFormAjax();
+		submitFormAjax("#file_form", "advanced_ajax_content.php", "#output_box", "submit");
 	});
 	
 	//upravljanje z login predelom
