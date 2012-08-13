@@ -31,7 +31,7 @@ include_once "access_control.php";
 		case "no_access":
 
 			echo "Prosim vpisite svoje uporabnisko ime in geslo!";
-			$_SESSION['custom_error'][0] = "Napacni podatki!";
+			$_SESSION['custom_error'][6] = "Napacni podatki!";
 			break;
 			
 		case "access":
@@ -44,7 +44,7 @@ include_once "access_control.php";
 					<span class="button_text">Condor Status</span>
 				</div>
 				<div class="button_wrapper" id="submit_button">
-					<span class="button_text">Submit...</span>
+					<span class="button_text">File Management</span>
 				</div>
 			</div>
 			<div id="output_box">

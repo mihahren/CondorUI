@@ -1,4 +1,4 @@
-/* global */
+/* GLOBAL */
 
 body {
 margin: 0px;
@@ -29,123 +29,8 @@ overflow: hidden;
 box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 }
 
-/* header.php */
+#footer {
 
-#menu_wrapper{
-position: absolute;
-}
-
-.menu_button_wrapper{
-height: 25px;
-width: 120px;
-border: 1px solid #8895a6;
-position: relative;
-margin-right: 10px;
-cursor: pointer;
-float: left;
-box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
-}
-
-.menu_button_wrapper:hover{
-border: 1px solid yellow;
-}
-
-.menu_button_text{
-width: 100px;
-text-align: center;
-position: absolute;
-left: 50%;
-margin-left: -50px;
-bottom: 2px;
-color: #8895a6;
-text-shadow: 1px 1px 1px #B0C0D6;
-}
-
-.login_section{
-padding: 3px;
-border: 1px solid #8895a6;
-width: 180px;
-margin-left: auto;
-margin-right: 0px;
-position: relative;
-height: 48px;
-box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
-}
-
-#error_prompt{
-padding:3px;
-border:1px solid black;
-width:180px;
-position:absolute;
-right:8px;
-top:8px;
-z-index:1;
-min-height:48px;
-background-color:#FFFFFF;
-}
-
-#progress_bar{
-background-color: #B4F5B4;
-width:0%;
-height:48px;
-}
-
-#progress_number{
-height:20px;
-width:40px;
-vertical-align:middle;
-position:absolute;
-top:50%;
-margin-top:-10px;
-left:50%;
-margin-left:-20px;
-}
-
-#signup_button span{
-float:right;
-padding-right:5px;
-text-decoration:underline;
-color:black;
-}
-
-#login_button{
-padding-left:4px;
-text-decoration:underline;
-cursor:pointer;
-color: black;
-}
-
-#logout_button{
-text-decoration: underline;
-cursor: pointer;
-color: #8895a6;
-}
-
-#logout_text{
-position:absolute;
-left:9px;
-bottom:7px;
-}
-
-/* advanced.php */
-
-#input_box{
-padding: 10px;
-border: 1px solid #8895a6;
-position: relative;
-width: auto;
-float: left;
-padding-bottom: 0px;
-margin-right: 10px;
-box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
-}
-
-#output_box{
-padding: 10px;
-border: 1px solid #8895a6;
-position: relative;
-float: left;
-box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 }
 
 .button_wrapper{
@@ -170,23 +55,182 @@ color: #8895a6;
 text-shadow: 1px 1px 1px #B0C0D6;
 }
 
-#uploads_table{
-margin-right:10px;
+/* HEADER.PHP */
+
+.header_button_wrapper{
+height: 25px;
+width: 120px;
+border: 1px solid #8895a6;
+position: relative;
+margin-right: 10px;
+cursor: pointer;
+float: left;
+box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
+}
+
+.header_button_wrapper:hover{
+border: 1px solid yellow;
+}
+
+.header_button_text{
+width: 100px;
+text-align: center;
+position: absolute;
+left: 50%;
+margin-left: -50px;
+bottom: 2px;
+color: #8895a6;
+text-shadow: 1px 1px 1px #B0C0D6;
+}
+
+.login_section{
+padding:5px;
+border: 1px solid #8895a6;
+width: 180px;
+position: relative;
+margin-left: auto;
+height: 48px;
+box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
+}
+
+/* error prompt */
+#error_prompt{
+padding: 5px;
+border: 1px solid #8895a6;
+width: 360px;
+position: absolute;
+right: 10px;
+top: 10px;
+z-index: 1;
+min-height: 48px;
+background-color: #FFFFFF;
+}
+
+#progress_bar{
+background-color: #B4F5B4;
+width:0%;
+height:48px;
+}
+
+#progress_number{
+height:20px;
+width:40px;
+vertical-align:middle;
+position:absolute;
+top:50%;
+margin-top:-10px;
+left:50%;
+margin-left:-20px;
+}
+
+/* login prompt */
+#input_section{
+position: absolute;
+left: 9px;
+top: 6px;
+width: 170px;
+}
+
+#login_text{
+position: absolute;
+left: 12px;
+bottom: 6px;
+width: 165px;
+}
+
+#login_button{
+text-decoration: underline;
+cursor: pointer;
+color: black;
+}
+
+#signup_button{
+float: right;
+text-decoration: underline;
+cursor: pointer;
+color: black;
+}
+
+/* logout prompt */
+#logout_text{
+position:absolute;
+left: 12px;
+bottom: 8px;
+width: 165px;
+}
+
+#logout_button{
+text-decoration: underline;
+cursor: pointer;
+color: #8895a6;
+}
+
+/* ADVANCED.PHP */
+
+#input_box{
+position: relative;
+width: auto;
+float: left;
+margin-right: 10px;
+}
+
+#output_box{
+padding: 10px;
+border: 1px solid #8895a6;
+position: relative;
+float: left;
+box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 }
 
 #results_table,
 #uploads_table{
-border-collapse:collapse;
-padding:5px;
-border:1px solid #8895a6;
-margin-bottom:10px;
-float:left;
+border-collapse: collapse;
+padding: 5px;
+border: 1px solid #8895a6;
+margin-bottom: 10px;
+float: left;
 }
 
 #uploads_table td,
 #results_table td{
-border:1px solid #8895a6;
-padding:5px;
+border: 1px solid #8895a6;
+padding: 5px;
 }
 
-/* basic.php */
+#advanced_input_wrapper{
+position: relative;
+width: auto;
+}
+
+#advanced_file_button{
+float: left;
+margin-right: 10px;
+margin-bottom: 0px;
+}
+
+#advanced_submit_button{
+float: left;
+margin-bottom: 0px;
+}
+
+#file_form{
+margin-bottom:10px;
+height:auto;
+}
+
+
+/* BASIC.PHP */
+
+#basic_input_wrapper{
+width: auto;
+float: left;
+}
+
+#basic_output_wrapper{
+border: 1px solid #8895a6;
+padding: 10px;
+margin-left: 10px;
+width: auto;
+float: left;
+box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
+}

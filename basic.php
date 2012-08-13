@@ -20,28 +20,38 @@ include_once "access_control.php";
 		<!-- content panel, ki prikazuje glavni del aplikacije -->
 		<div id="content_panel">
 <?php	
-		//switch stavek za kontrolo dostopa
-		switch ($_SESSION['access'])
-		{
-		case "login":
+			//switch stavek za kontrolo dostopa
+			switch ($_SESSION['access'])
+			{
+			case "login":
 
-			echo "Prosim vpisite svoje uporabnisko ime in geslo!";
-			break;
-			
-		case "no_access":
+				echo "Prosim vpisite svoje uporabnisko ime in geslo!";
+				break;
+				
+			case "no_access":
 
-			echo "Prosim vpisite svoje uporabnisko ime in geslo!";
-			$_SESSION['custom_error'][0] = "Napacni podatki!";
-			break;
-			
-		case "access":
-?>
-			<form method="post" id="basic_form" enctype="multipart/form-data">
-				<input type="file" name="file[]" id="simple_file" multiple/>
-			</form>
-			<button id="basic_submit">Submit</button><br />
+				echo "Prosim vpisite svoje uporabnisko ime in geslo!";
+				$_SESSION['custom_error'][5] = "Napacni podatki!";
+				break;
+				
+			case "access":
+?>			
+				<div id="basic_input_wrapper">
+					<div class="button_wrapper" id="basic_file_button">
+						<span class="button_text">Upload Files</span>
+					</div>
+				</div>
+				
+				<div id="basic_output_wrapper">
+					Avtomatsko uploada, ustvari privzeto submit datoteko ter doda v condor queue."
+				</div>
+				
+				<form method="post" id="basic_file_form" enctype="multipart/form-data" style="visibility:hidden;">
+					<input type="hidden" name="create_submit_file" value="true" />
+					<input type="file" name="file[]" id="basic_file_upload" multiple/><br />
+				</form>
 <?php
-		}
+			}
 ?>		
 		</div>
 		

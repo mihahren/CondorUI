@@ -64,7 +64,7 @@ function print_cmd($input)
 	}
 }
 
-//razbije celotbo ime datoteke v stringu na ime in tip
+//razbije celotno ime datoteke v stringu na ime in tip
 function explodeFileName($string)
 {
 	$tempStrArray = explode(".",$string);
