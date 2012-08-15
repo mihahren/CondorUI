@@ -96,8 +96,8 @@ box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 /* error prompt */
 #error_prompt{
 padding: 5px;
-border: 1px solid #8895a6;
-width: 360px;
+border: 2px solid red;
+width: 400px;
 position: absolute;
 right: 10px;
 top: 10px;
@@ -107,9 +107,9 @@ background-color: #FFFFFF;
 }
 
 #progress_bar{
-background-color: #B4F5B4;
+background-color: #58D65E;
 width:0%;
-height:48px;
+height:58px;
 }
 
 #progress_number{
@@ -180,6 +180,8 @@ border: 1px solid #8895a6;
 position: relative;
 float: left;
 box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
+width:auto;
+min-width:500px;
 }
 
 #results_table,
@@ -218,6 +220,23 @@ margin-bottom:10px;
 height:auto;
 }
 
+#delete_submited_table{
+border-collapse: collapse;
+padding: 5px;
+border: 1px solid #8895a6;
+margin-bottom: 10px;
+float: left;
+}
+
+#delete_submited_table td{
+border: 1px solid #8895a6;
+padding: 5px;
+}
+
+#delete_submited_button{
+float: left;
+margin-bottom: 0px;
+}
 
 /* BASIC.PHP */
 

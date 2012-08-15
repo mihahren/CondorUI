@@ -31,7 +31,7 @@ include_once "access_control.php";
 		case "no_access":
 
 			echo "Prosim vpisite svoje uporabnisko ime in geslo!";
-			$_SESSION['custom_error'][4] = "Napacni podatki!";
+			$_SESSION['custom_error'][5] = "Napacni podatki!";
 			break;
 			
 		case "access":

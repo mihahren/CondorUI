@@ -36,7 +36,6 @@ else
 		$_SESSION['login_id'] = mysql_result($result,0,'userid');
 	}
 
-
 	if ($_POST['logout'] == "logout")
 	{
 		unset($_SESSION['login_id']);

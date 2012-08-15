@@ -53,10 +53,12 @@ function print_cmd($input)
 {
 	if (is_array($input))
 	{
-		for ($i=0; $i<(count($input)); $i++)
-		{
-			echo "<pre>$input[$i]</pre>";
-		}
+		echo "<table>";
+			foreach ($input as $value)
+			{
+				echo "<tr><td><pre style='display:inline;'>".$value."</pre></td></tr>";
+			}
+		echo "</table>";
 	}
 	else
 	{
@@ -83,5 +85,77 @@ function explodeFileName($string)
 	}
 	
 	return array($fileName, $fileType);
+}
+
+//vzame string, zbrise whitespace ter doda posamezne besede v array
+function splitString($string)
+{
+	$strArray = str_split($string);
+	$whitespace = false;
+	$word = false;
+	$iter = 0;
+	$newArray = array();
+	
+	for ($i=0; $i<count($strArray); $i++)
+	{
+		if ($strArray[$i] == " ")
+		{
+			$whitespace = true;
+		}
+		else
+		{
+			$newArray[$iter] .= $strArray[$i];
+			$word = true;
+			$whitespace = false;
+		}
+		
+		if ($whitespace && $word)
+		{
+			$word = false;
+			$iter++;
+		}
+	}
+	
+	return $newArray;
+}
+
+//spremeni 3 ali manj stopenjski array v 1 stopnjo, zbrise prazne vnose
+function flattenArray($inputArray)
+{
+	$flattenedArray = array();
+	$iter = 0;
+	
+	foreach ($inputArray as $value1)
+	{
+		if (is_array($value1))
+		{
+			foreach ($value1 as $value2)
+			{
+				if (is_array($value2))
+				{
+					foreach ($value2 as $value3)
+					{
+						if (!empty($value3))
+							$flattenedArray[$iter] = $value3;
+							$iter++;
+					}
+				}
+				else
+				{
+					if (!empty($value2))
+						$flattenedArray[$iter] = $value2;
+						$iter++;
+				}
+			}
+		}
+		else
+		{
+			if (!empty($value1))
+				$flattenedArray[$iter] = $value1;
+				$iter++;
+		}
+	}
+	
+	return $flattenedArray;
 }
 ?>

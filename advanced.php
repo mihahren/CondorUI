@@ -31,7 +31,7 @@ include_once "access_control.php";
 		case "no_access":
 
 			echo "Prosim vpisite svoje uporabnisko ime in geslo!";
-			$_SESSION['custom_error'][6] = "Napacni podatki!";
+			$_SESSION['custom_error'][7] = "Napacni podatki!";
 			break;
 			
 		case "access":
@@ -49,7 +49,8 @@ include_once "access_control.php";
 			</div>
 			<div id="output_box">
 				Izberi eno izmed moznosti na levi.
-			</div>		
+			</div>
+			<div id="random_test_box"></div>	
 <?php
 		}
 ?>		

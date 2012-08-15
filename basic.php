@@ -31,7 +31,7 @@ include_once "access_control.php";
 			case "no_access":
 
 				echo "Prosim vpisite svoje uporabnisko ime in geslo!";
-				$_SESSION['custom_error'][5] = "Napacni podatki!";
+				$_SESSION['custom_error'][6] = "Napacni podatki!";
 				break;
 				
 			case "access":
@@ -43,7 +43,7 @@ include_once "access_control.php";
 				</div>
 				
 				<div id="basic_output_wrapper">
-					Avtomatsko uploada, ustvari privzeto submit datoteko ter doda v condor queue."
+					Avtomatsko uploada, ustvari privzeto submit datoteko ter doda v condor queue.
 				</div>
 				
 				<form method="post" id="basic_file_form" enctype="multipart/form-data" style="visibility:hidden;">

@@ -5,34 +5,13 @@ include_once "access_control.php";
 //obdelava errorjev
 if (!empty($_SESSION['custom_error']))
 {
-	echo "<div id='custom_error'>";
-	foreach ($_SESSION['custom_error'] as $value1)
-	{
-		if (is_array($value1))
+	$uniqueArray = array_unique(flattenArray($_SESSION['custom_error']));
+
+	echo "<div id='custom_error' title='".count($uniqueArray)."'>";
+		foreach ($uniqueArray as $value)
 		{
-			foreach ($value1 as $value2)
-			{
-				if (is_array($value2))
-				{
-					foreach ($value2 as $value3)
-					{
-						if (!empty($value3))
-							echo $value3."<br />";
-					}
-				}
-				else
-				{
-					if (!empty($value2))
-						echo $value2."<br />";
-				}
-			}
+			echo $value."<br />";
 		}
-		else
-		{
-			if (!empty($value1))
-				echo $value1."<br />";
-		}
-	}
 	echo "</div>";
 }
 

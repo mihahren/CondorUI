@@ -1,24 +1,26 @@
 //globalne spremenljivke
 var refreshIntervalId;
-var show_bar = 0; 
 
 //funkcija za hendlanje error sporocil
-function errorHandler(delay, fade){
+function errorHandler(fade){
 	
 	//default vrednosti
-	delay = typeof delay !== 'undefined' ? delay : 2000;
 	fade = typeof fade !== 'undefined' ? fade : 1000;
 	
 	$("#error_prompt").hide();
 	
 	if(document.getElementById("custom_error"))
 	{
+		var delayTime = ($("#custom_error").attr("title")) * 1200;
+		if (delayTime < 3000){delayTime = 3000;}
+		
 		$("#error_prompt").empty()
-			.css("background-color","red")
+			.css({'background-color':'#c5d9f1'})
 			.html($("#custom_error").html())
 			.show();
 		$("#custom_error").remove();
-		$("#error_prompt").delay(delay).fadeOut(fade);
+		$("#error_prompt").delay(delayTime)
+			.fadeOut(fade);
 	}
 }
 
@@ -38,7 +40,7 @@ function submitFileAjax(formID, phpPostFile, resultDivID, info){
 			
 				$("#error_prompt").empty()
 					.html("<div id='progress_bar'></div><span id='progress_number'></span>")
-					.css("background-color","white")
+					.css({'padding':'0px','background-color':'white'})
 					.show();
 				var percentVal = '0%';
 				$("#progress_bar").width(percentVal);
@@ -55,7 +57,8 @@ function submitFileAjax(formID, phpPostFile, resultDivID, info){
 		data: {menu: info},
 		success: function(result){
 			$(resultDivID).html(result);
-			$("#error_prompt").hide();
+			$("#error_prompt").css({'padding':'5px'})
+				.hide();
 		}
 	});
 }
@@ -113,14 +116,14 @@ $(document).ready(function (){
 	
 	//globalni dogodki - izvedejo na zacetku
 	clearInterval(refreshIntervalId);
-	errorHandler(4000);
+	errorHandler(1000);
 	refreshQueue();
 	refreshStatus();
 	
 	//izvede vsakic po zakljucenem ajax dogodku
 	$(document).ajaxComplete(function() {
 		clearInterval(refreshIntervalId);
-		errorHandler(4000);
+		errorHandler(1000);
 		refreshQueue();
 		refreshStatus();
 		refreshButtonBorders()
@@ -147,7 +150,7 @@ $(document).ready(function (){
 	$(document).on("click", "#submit_button", function (){
 		submitAjax("advanced_ajax_content.php", "#output_box", "submit");
 	});
-	
+
 	//advanced form submit
 	$(document).on("click", "#advanced_file_button", function (){
 		$("#advanced_file_upload").click();
@@ -155,6 +158,10 @@ $(document).ready(function (){
 		
 	$(document).on("change", "#advanced_file_upload", function (){
 		submitFileAjax("#file_form", "advanced_ajax_content.php", "#output_box", "submit");
+	});
+	
+	$(document).on("click", "#delete_submited_button", function (){
+		submitFormAjax("#delete_submited_form", "advanced_ajax_content.php", "#output_box", "queue");
 	});
 	
 	$(document).on("click", "#advanced_submit_button", function (){
@@ -170,6 +177,23 @@ $(document).ready(function (){
 		$(".result_delete_checkbox").attr('checked', $('.select_all_results').is(":checked"));
 	});
 	
+	$(document).on("click", ".select_all_submits", function (){
+		$(".upload_submit_checkbox").attr('checked', $('.select_all_submits').is(":checked"));
+	});
+	
+	$(document).on("click", ".select_all_submited", function (){
+		$(".submit_delete_checkbox").attr('checked', $('.select_all_submited').is(":checked"));
+	});
+	
+	//prepreci updatanje ko je vsaj en checkbox oznacen
+	$(document).on("click", "input:checkbox", function (){
+		if ($('input:checkbox').is(":checked")){clearInterval(refreshIntervalId);}
+		else {
+			refreshQueue();
+			refreshStatus();
+		}
+	});
+
 	//upravljanje z login predelom
 	$(document).on("click", "#login_button", function (){
 		$("#login_form").submit();

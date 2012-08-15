@@ -33,6 +33,16 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 		}
 	}
 	
+	//preveri, ce je potrebno kaksno submitano datoteko odstranit iz condor queue
+	if (!empty($_POST['delete_submited_file']))
+	{
+		for ($i=0; $i<(count($_POST['delete_submited_file'])); $i++)
+		{
+			condor_remove($_POST['delete_submited_file'][$i], $removeOut);
+			$_SESSION['custom_error'][0][$i] = $removeOut;
+		}
+	}
+	
 	//preveri, ali so bili uploadani kaksni file-i in jih prenese v ustrezno mapo
 	if (!empty($_FILES['file']['tmp_name'][0]))
 	{
@@ -40,7 +50,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 		{
 			if (file_exists($uploadDir."/".$_FILES['file']['name'][$i]))
 			{
-				$_SESSION['custom_error'][0][$i] = 'Datoteka '.$_FILES['file']['name'][$i].' ze obstaja.';
+				$_SESSION['custom_error'][1][$i] = 'Datoteka '.$_FILES['file']['name'][$i].' ze obstaja.';
 			}
 			else
 			{
@@ -56,7 +66,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 		{
 			if (file_exists($uploadDir."/".$_FILES['file']['name'][$i].".submit"))
 			{
-				$_SESSION['custom_error'][1][$i] = "Datoteka ".$_FILES['file']['name'][$i].".submit ze obstaja.";
+				$_SESSION['custom_error'][2][$i] = "Datoteka ".$_FILES['file']['name'][$i].".submit ze obstaja.";
 			}
 			else
 			{
@@ -94,16 +104,16 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 	
 	if (!empty($_SESSION['submit_file']))
 	{
-		for ($i=0; $i<(count($_SESSION['submit_file'])); $i++)
+		foreach ($_SESSION['submit_file'] as $key => $value)
 		{
-			if(!file_exists($uploadDir."/".$_SESSION['submit_file'][$i]))
+			if(!file_exists($uploadDir."/".$value))
 			{
-				$_SESSION['custom_error'][2][$i] = "Datoteka ".$_SESSION['submit_file'][$i]." vec ne obstaja!";
+				$_SESSION['custom_error'][3][$key] = "Datoteka ".$value." vec ne obstaja!";
 			}
 			else
 			{
-				condor_submit($uploadDir."/".$_SESSION['submit_file'][$i], $out);
-				$_SESSION['custom_error'][3][$i] = $out;
+				condor_submit($uploadDir."/".$value, $submitOut);
+				$_SESSION['custom_error'][4][$key] = $submitOut;
 			}
 		}
 	}

@@ -12,10 +12,49 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 switch($_SESSION['menu'])
 {
 case "queue":
+	
+	include "file_manager.php";
+	
+	//sprozi globalni in user specific condor_q request
+	exec('condor_q -global', $allOutput);
 
-	condor_q($out);
-	print_cmd($out);
-	echo date(DATE_COOKIE);
+	exec('condor_q system -format %4d. ClusterId -format %-3d ProcId 2>&1', $idOutput);
+	
+	//shrani prvo vrstico ID condor_q requesta ter naredi iterator zanj
+	$idOutputExplode = splitString($idOutput[0]);
+	$iter = 0;
+	
+	//izpisi vse, preveri kje se ID ujema pri obeh condor_q requestih - tam dodaj gumb za brisanje
+	echo "<form method='post' id='delete_submited_form' enctype='multipart/form-data'><table id='delete_submited_table'>";
+	
+	echo "<tr><td colspan='2' style='text-align:center;'>Submited files</td></tr>";
+	
+	foreach ($allOutput as $value)
+	{
+		echo "<tr>";
+			if($value != NULL)
+			{
+				echo "<td style='border:0px;'><pre style='display:inline;'>".$value."</pre></td>";
+				$allOutputExplode = explode(" ", ltrim($value, " "));
+				
+				echo "<td style='text-align:center;border-top:0px;border-bottom:0px;'>";
+				if($allOutputExplode[0] === $idOutputExplode[$iter])
+				{
+					echo "<input type='checkbox' class='submit_delete_checkbox' name='delete_submited_file[]' value='".$allOutputExplode[0]."' />";
+					$iter++;
+				}
+				echo "</td>";
+			}
+		echo "</tr>";
+	}
+	echo "<tr><td style='text-align:right;'>Select All:</td><td style='text-align:center;'><input type='checkbox' name='select_all_submited' value='false' class='select_all_submited'/></td></tr>";
+
+	echo "</table></form><div style='clear:both;'></div>";
+?>	
+	<div class="button_wrapper" id="delete_submited_button">
+		<span class="button_text">Submit</span>
+	</div>
+<?php
 	echo "<div id='queue_selector'></div>";
 	break;
 
@@ -23,7 +62,6 @@ case "status":
 
 	condor_status($out);
 	print_cmd($out);
-	echo date(DATE_COOKIE);
 	echo "<div id='status_selector'></div>";
 	break;
 
@@ -57,7 +95,7 @@ case "submit":
 				<tr>
 					<td><a href="<?php echo $uploadDir."/".$fullFileName['basename']; ?>"><?php echo $fullFileName['basename']; ?></a></td>
 					<td style="text-align:center;"><?php echo $fullFileName['extension']; ?></td>
-					<td style="text-align:center;"><input type="checkbox" name="submit_file[]" value="<?php echo $fullFileName['basename']; ?>" /></td>
+					<td style="text-align:center;"><input type="checkbox" class="upload_submit_checkbox" name="submit_file[]" value="<?php echo $fullFileName['basename']; ?>" /></td>
 					<td style="text-align:center;"><input type="checkbox" class="upload_delete_checkbox" name="delete_upload_file[]" value="<?php echo $fullFileName['basename']; ?>" /></td>
 				</tr>
 <?php
@@ -82,7 +120,9 @@ case "submit":
 			}
 		}	
 ?>			
-		<tr><td colspan="3" style="text-align:right;">Select All:</td><td style="text-align:center;"><input type="checkbox" name="select_all_uploads" value="false" class="select_all_uploads" /></td></tr>
+		<tr><td colspan="2" style="text-align:right;">Select All:</td>
+			<td style="text-align:center;"><input type="checkbox" name="select_all_submits" value="false" class="select_all_submits" /></td>
+			<td style="text-align:center;"><input type="checkbox" name="select_all_uploads" value="false" class="select_all_uploads" /></td></tr>
 	</table>
 	
 	<!-- pregleda in izpise vse result datoteke, ki ustrezajo dolocenemu uporabniku -->
@@ -112,8 +152,8 @@ case "submit":
 ?>			
 		<tr><td colspan="2" style="text-align:right;">Select All:</td><td style="text-align:center;"><input type="checkbox" name="select_all_results" value="false" class="select_all_results"/></td></tr>
 	</table>
-	<input type="file" name="file[]" id="advanced_file_upload" multiple/ style="visibility:hidden;">
 	<div style="clear: both;"></div>
+	<input type="file" name="file[]" id="advanced_file_upload" multiple/ style="visibility:hidden;float:right;">
 	</form>
 	
 	<div id="advanced_input_wrapper">
@@ -128,6 +168,5 @@ case "submit":
 	echo "<div id='submit_selector'></div>";
 	break;
 }
-
 include "error_function.php";
 ?>
