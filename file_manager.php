@@ -5,12 +5,12 @@ include_once "access_control.php";
 //pregleda, ce obstajajo vsi potrebni direktoriji za uporabnika - ce ne, jih zgenerira - ter jim doloci spremenljivke
 if (!is_dir($uploadDir = "uploads/".$_SESSION['login_id']))
 {
-	mkdir($uploadDir);
+	mkdir($uploadDir, 0777, true);
 }
 
 if (!is_dir($resultDir = "results/".$_SESSION['login_id']))
 {
-	mkdir($resultDir);
+	mkdir($resultDir, 0777, true);
 }
 
 if($_SERVER['REQUEST_METHOD'] == "POST")

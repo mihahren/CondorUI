@@ -1,0 +1,10 @@
+Universe=vanilla
+Executable=uploads/1/test.bat
+Output=results/1/test.bat.output
+Error=results/1/test.bat.error
+Log=results/1/test.bat.log
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+queue

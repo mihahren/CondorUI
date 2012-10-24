@@ -18,13 +18,13 @@ case "queue":
 	//sprozi globalni in user specific condor_q request
 	exec('condor_q -global', $allOutput);
 
-	exec('condor_q system -format %4d. ClusterId -format %-3d ProcId 2>&1', $idOutput);
+	exec('condor_q www-data -format %4d. ClusterId -format %-3d ProcId 2>&1', $idOutput);
 	
 	//shrani prvo vrstico ID condor_q requesta ter naredi iterator zanj
 	$idOutputExplode = splitString($idOutput[0]);
 	$iter = 0;
 	
-	//izpisi vse, preveri kje se ID ujema pri obeh condor_q requestih - tam dodaj gumb za brisanje
+	//izpisi vse, preveri kje se ID ujema pri obeh condor_q requestih - tam doda gumb za brisanje
 	echo "<form method='post' id='delete_submited_form' enctype='multipart/form-data'><table id='delete_submited_table'>";
 	
 	echo "<tr><td colspan='2' style='text-align:center;'>Submited files</td></tr>";

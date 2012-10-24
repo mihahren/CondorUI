@@ -2,7 +2,7 @@
 //vstavi database host, username, password
 $dbhost='127.0.0.1';
 $dbuser='root';
-$dbpass='mihius88';
+$dbpass='';
 
 function dbConnect($db="")
 {
@@ -40,7 +40,7 @@ function condor_q(&$output)
 
 function condor_submit($input, &$output)
 {
-	exec('condor_submit -n miha '.$input.' 2>&1', $output);
+	exec('condor_submit '.$input.' 2>&1', $output);
 }
 
 function condor_remove($input, &$output)
