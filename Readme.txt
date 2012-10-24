@@ -2,21 +2,21 @@
 /// STRUKTURA PROGRAMA ///
 //////////////////////////
 
-access_control.php			// kontrola dostopa
-functions.php				// globalne funkcije za dostop do baze podatkov, condor ukazi in ostalo
-index.php					// prva stran
-header.php					// vsebuje navigacijske gumbe in login box
-footer.php					// small print in error funkcija
-error_function.php			// pomozna error funkcija
-basic.php					// glavna stran za basic menu, vsebuje header, footer, gumbe
-advanced.php				// glavna stran za advanced menu, vsebuje header, footer, gumbe
-basic_ajax_content.php		// vsebina, ki se izpisuje znotraj output <div> v basic.php, po principu ajax
+access_control.php		  	// kontrola dostopa
+functions.php             // globalne funkcije za dostop do baze podatkov, condor ukazi in ostalo
+index.php					        // prva stran
+header.php					      // vsebuje navigacijske gumbe in login box
+footer.php				    	  // small print in error funkcija
+error_function.php		  	// pomozna error funkcija
+basic.php				        	// glavna stran za basic menu, vsebuje header, footer, gumbe
+advanced.php			    	  // glavna stran za advanced menu, vsebuje header, footer, gumbe
+basic_ajax_content.php	  // vsebina, ki se izpisuje znotraj output <div> v basic.php, po principu ajax
 advanced_ajax_content.php	// vsebina, ki se izpisuje znotraj output <div> v advanced.php, po principu ajax
-file_manager.php			// upravlja ustvarjanje, nalaganje, brisanje datotek in map
-global_css.css				// globalni CSS file
-global_jquery.js			// globalni javascript (jQuery) file
+file_manager.php		  	  // upravlja ustvarjanje, nalaganje, brisanje datotek in map
+global_css.css			  	  // globalni CSS file
+global_jquery.js		  	  // globalni javascript (jQuery) file
 
-razno/signup.php			// obrazec za vpisovanje v condor_users bazo, tabela users
+razno/signup.php			    // obrazec za vpisovanje v condor_users bazo, tabela users
 
 /////////////////////
 /// BAZA PODATKOV ///
