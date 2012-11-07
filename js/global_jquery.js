@@ -77,7 +77,7 @@ function refreshQueue(){
 	if(document.getElementById("queue_selector"))
 	{
 		refreshIntervalId = setInterval(function(){
-			submitAjax("advanced_ajax_content.php", "#output_box", "queue");
+			submitAjax("ajax/advanced_ajax_content.php", "#output_box", "queue");
 		},2000);
 	}
 }
@@ -86,7 +86,7 @@ function refreshStatus(){
 	if(document.getElementById("status_selector"))
 	{
 		refreshIntervalId = setInterval(function(){
-			submitAjax("advanced_ajax_content.php", "#output_box", "status");
+			submitAjax("ajax/advanced_ajax_content.php", "#output_box", "status");
 		},2000);
 	}
 }
@@ -135,20 +135,20 @@ $(document).ready(function (){
 	});
 	
 	$(document).on("change", "#basic_file_upload", function (){
-		submitFileAjax("#basic_file_form", "basic_ajax_content.php", "#basic_output_wrapper", "NULL");
+		submitFileAjax("#basic_file_form", "ajax/basic_ajax_content.php", "#basic_output_wrapper", "NULL");
 	});
 	
 	//advanced menu navigation
 	$(document).on("click", "#queue_button", function (){
-		submitAjax("advanced_ajax_content.php", "#output_box", "queue");
+		submitAjax("ajax/advanced_ajax_content.php", "#output_box", "queue");
 	});
 	
 	$(document).on("click", "#status_button", function (){
-		submitAjax("advanced_ajax_content.php", "#output_box", "status");
+		submitAjax("ajax/advanced_ajax_content.php", "#output_box", "status");
 	});
 	
 	$(document).on("click", "#submit_button", function (){
-		submitAjax("advanced_ajax_content.php", "#output_box", "submit");
+		submitAjax("ajax/advanced_ajax_content.php", "#output_box", "submit");
 	});
 
 	//advanced form submit
@@ -157,28 +157,28 @@ $(document).ready(function (){
 	});
 		
 	$(document).on("change", "#advanced_file_upload", function (){
-		submitFileAjax("#file_form", "advanced_ajax_content.php", "#output_box", "submit");
+		submitFileAjax("#file_form", "ajax/advanced_ajax_content.php", "#output_box", "submit");
 	});
 	
 	$(document).on("click", "#delete_submited_button", function (){
-		submitFormAjax("#delete_submited_form", "advanced_ajax_content.php", "#output_box", "queue");
+		submitFormAjax("#delete_submited_form", "ajax/advanced_ajax_content.php", "#output_box", "queue");
 	});
 	
 	$(document).on("click", "#advanced_submit_button", function (){
-		submitFormAjax("#file_form", "advanced_ajax_content.php", "#output_box", "submit");
+		submitFormAjax("#file_form", "ajax/advanced_ajax_content.php", "#output_box", "submit");
 	});
 	
 	//advanced checkbox checking
 	$(document).on("click", ".select_all_uploads", function (){
-		$(".upload_delete_checkbox").attr('checked', $('.select_all_uploads').is(":checked"));
+		$(".uploads_delete_checkbox").attr('checked', $('.select_all_uploads').is(":checked"));
 	});
 	
 	$(document).on("click", ".select_all_results", function (){
-		$(".result_delete_checkbox").attr('checked', $('.select_all_results').is(":checked"));
+		$(".results_delete_checkbox").attr('checked', $('.select_all_results').is(":checked"));
 	});
 	
 	$(document).on("click", ".select_all_submits", function (){
-		$(".upload_submit_checkbox").attr('checked', $('.select_all_submits').is(":checked"));
+		$(".uploads_submit_checkbox").attr('checked', $('.select_all_submits').is(":checked"));
 	});
 	
 	$(document).on("click", ".select_all_submited", function (){

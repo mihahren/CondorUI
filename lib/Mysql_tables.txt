@@ -8,3 +8,11 @@ CREATE TABLE users (
   email varchar(100) not null,
   password varchar(42) not null
 );
+
+CREATE TABLE users (
+  userid int unsigned not null auto_increment primary key,
+  username varchar(100) not null,
+  password varchar(42) not null,
+  email varchar(100) not null,
+  isadmin varchar(1)
+);

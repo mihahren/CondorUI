@@ -1,16 +1,16 @@
 <?php
-include_once "functions.php";
-include_once "access_control.php";
+include_once "lib/functions.php";
+include_once "lib/access_control.php";
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>index</title>
-		<link rel="stylesheet" type="text/css" href="global_css.css" />
+		<title>advanced</title>
+		<link rel="stylesheet" type="text/css" href="css/global_css.css" />
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 		<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
-		<script type="text/javascript" src="global_jquery.js"></script>
+		<script type="text/javascript" src="js/global_jquery.js"></script>
 		<style type="text/css">#advanced_button {border: 1px solid red;}</style>
 	</head>
 	<body>

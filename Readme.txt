@@ -15,6 +15,7 @@ advanced_ajax_content.php // vsebina, ki se izpisuje znotraj output <div> v adva
 file_manager.php // upravlja ustvarjanje, nalaganje, brisanje datotek in map
 global_css.css // globalni CSS file
 global_jquery.js // globalni javascript (jQuery) file
+classes.php // file z vsemi razredi za OOP
 
 razno/signup.php // obrazec za vpisovanje v condor_users bazo, tabela users
 
