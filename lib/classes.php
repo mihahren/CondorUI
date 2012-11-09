@@ -1,4 +1,5 @@
 <?php
+include_once "functions.php";
 
 /* Razred za user management*/
 class UserManager
@@ -318,26 +319,51 @@ class FileManager
 		}
 	}
 
-	// izpisi file v tabeli
-	public function displayTable($directory = "")
+	// izpise vse file v podanem direktoriju
+	public function displayFolders($directory = "")
 	{
 
 		$scanDir = $this->scanDir($directory);
-		$dirFullName = pathinfo($directory);
+		$dirFullName = pathinfo($this->root.$directory);
 		$dirName = $dirFullName['basename'];
+		$directoryArray = splitString($directory, "/");
+		$iter = "";
 
-		echo "<!-- pregleda in izpise vse uploadane datoteke, ki ustrezajo dolocenemu uporabniku -->
-
-		<table id='".$dirName."_table' style='margin-right:10px;'>
+		// prva vrstica za navigacijo po folderjih
+		echo "<table id='file_table' style='margin-right:10px;'>
 			<tr>
-				<td colspan='4' style='text-align:center;'>".$dirName."</td>
+				<td colspan='4' style='padding: 5px;'><span class='file_navigation_button' style='cursor: pointer;' onclick=goToPath('')>root</span> / ";
+					foreach ($directoryArray as $key => $value)
+					{
+						$iter .= $value."/";
+						echo "<span class='file_navigation_button' style='cursor: pointer;' onclick=goToPath('".$iter."/')>".$value."</span> / ";
+					}
+				echo "</td>
 			</tr>
 			<tr>
-				<td>filename</td>
+				<td style='padding: 5px;'>filename</td>
 				<td>filetype</td>
 				<td>submit</td>
 				<td>delete</td>
 			</tr>";
+
+			//izpise vse folderje
+			for ($i=0; $i<count($scanDir); $i++)
+			{
+				$fullFileName = pathinfo($scanDir[$i]);
+	
+				if(is_dir($this->root.$directory.$scanDir[$i]))
+				{
+
+					echo "<tr style='background-color: white'>
+						<td style='text-align:left; min-width: 100px;'><span class='file_navigation_button' style='cursor: pointer;' onclick=goToPath('".$directory.$scanDir[$i]."/')>".$scanDir[$i]." /</span></td>
+						<td style='min-width: 60px';>folder</td>
+						<td></td>
+						<td><input type='checkbox' class='delete_checkbox' name='delete_file[]' value='".$directory.$fullFileName['basename']."'></td>
+					</tr>";
+
+				}
+			}
 
 			//izpise .condor in .submit file
 			for ($i=0; $i<count($scanDir); $i++)
@@ -347,11 +373,11 @@ class FileManager
 				if($fullFileName['extension'] == "submit" || $fullFileName['extension'] == "condor")
 				{
 
-					echo "<tr>
-						<td><a href='".$this->root.$directory.$fullFileName['basename']."'>".$fullFileName['basename']."</a></td>
-						<td style='text-align:center;'>".$fullFileName['extension']."</td>
-						<td style='text-align:center;'><input type='checkbox' class='".$dirName."_submit_checkbox' name='submit_file[]' value='".$directory.$fullFileName['basename']."' /></td>
-						<td style='text-align:center;'><input type='checkbox' class='".$dirName."_delete_checkbox' name='delete_file[]' value='".$directory.$fullFileName['basename']."'></td>
+					echo "<tr style='background-color: white'>
+						<td style='text-align:left;'><a class='file_navigation_button' href='/CondorUI".ltrim($this->root, ".").$directory.$fullFileName['basename']."'>".$fullFileName['basename']."</a></td>
+						<td>".$fullFileName['extension']."</td>
+						<td><input type='checkbox' class='submit_checkbox' name='submit_file[]' value='".$directory.$fullFileName['basename']."' /></td>
+						<td><input type='checkbox' class='delete_checkbox' name='delete_file[]' value='".$directory.$fullFileName['basename']."'></td>
 					</tr>";
 
 				}
@@ -362,23 +388,24 @@ class FileManager
 			{
 				$fullFileName = pathinfo($scanDir[$i]);
 		
-				if($fullFileName['extension'] != "submit" && $fullFileName['extension'] != "condor")
+				if(!is_dir($this->root.$directory.$scanDir[$i]) && $fullFileName['extension'] != "submit" && $fullFileName['extension'] != "condor")
 				{
 
-					echo "<tr>
-						<td><a href='".$this->root.$directory.$fullFileName['basename']."'>".$fullFileName['basename']."</a></td>
-						<td style='text-align:center;'>".$fullFileName['extension']."</td>
-						<td style='text-align:center;'></td>
-						<td style='text-align:center;'><input type='checkbox' class='".$dirName."_delete_checkbox' name='delete_file[]' value='".$directory.$fullFileName['basename']."'></td>
+					echo "<tr style='background-color: white'>
+						<td style='text-align:left;'><a class='file_navigation_button' href='/CondorUI".ltrim($this->root, ".").$directory.$fullFileName['basename']."'>".$fullFileName['basename']."</a></td>
+						<td>".$fullFileName['extension']."</td>
+						<td></td>
+						<td><input type='checkbox' class='delete_checkbox' name='delete_file[]' value='".$directory.$fullFileName['basename']."'></td>
 					</tr>";
 
 				}
-			}	
-	
+			}
+			
+			// zadnja vrstica za oznacevanje
 			echo "<tr>
-				<td colspan='2' style='text-align:right;'>Select All:</td>
-				<td style='text-align:center;'><input type='checkbox' name='select_all_submits' value='false' class='select_all_submits' /></td>
-				<td style='text-align:center;'><input type='checkbox' name='select_all_uploads' value='false' class='select_all_".$dirName."' /></td>
+				<td colspan='2' style='text-align:right; padding: 5px;'>Select All:</td>
+				<td><input type='checkbox' name='select_all_submits' value='false' class='select_all_submits' /></td>
+				<td><input type='checkbox' name='select_all_deletes' value='false' class='select_all_deletes' /></td>
 			</tr>
 		</table>";
 	}

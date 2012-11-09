@@ -61,7 +61,7 @@ function explodeFileName($string)
 }
 
 //vzame string, zbrise whitespace ter doda posamezne besede v array
-function splitString($string)
+function splitString($string, $char = " ")
 {
 	$strArray = str_split($string);
 	$whitespace = false;
@@ -71,7 +71,7 @@ function splitString($string)
 	
 	for ($i=0; $i<count($strArray); $i++)
 	{
-		if ($strArray[$i] == " ")
+		if ($strArray[$i] == $char)
 		{
 			$whitespace = true;
 		}

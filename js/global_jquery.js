@@ -111,6 +111,16 @@ function refreshButtonBorders(){
 	}
 }
 
+//funkcija za navigacijo znotraj tabele s file-i
+function goToPath(file_path){
+	$.ajax({
+		url: "ajax/advanced_ajax_content.php",
+		type: "POST",
+		data: {menu: "submit", directory: file_path},
+		success: function(result){$("#output_box").html(result);}
+	});
+}
+
 //izvede se po celotno zgeneriranem html dokumentu
 $(document).ready(function (){
 	
@@ -168,17 +178,13 @@ $(document).ready(function (){
 		submitFormAjax("#file_form", "ajax/advanced_ajax_content.php", "#output_box", "submit");
 	});
 	
-	//advanced checkbox checking
-	$(document).on("click", ".select_all_uploads", function (){
-		$(".uploads_delete_checkbox").attr('checked', $('.select_all_uploads').is(":checked"));
-	});
-	
-	$(document).on("click", ".select_all_results", function (){
-		$(".results_delete_checkbox").attr('checked', $('.select_all_results').is(":checked"));
+	//advanced checkbox checking	
+	$(document).on("click", ".select_all_deletes", function (){
+		$(".delete_checkbox").attr('checked', $('.select_all_deletes').is(":checked"));
 	});
 	
 	$(document).on("click", ".select_all_submits", function (){
-		$(".uploads_submit_checkbox").attr('checked', $('.select_all_submits').is(":checked"));
+		$(".submit_checkbox").attr('checked', $('.select_all_submits').is(":checked"));
 	});
 	
 	$(document).on("click", ".select_all_submited", function (){

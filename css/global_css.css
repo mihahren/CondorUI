@@ -184,8 +184,7 @@ width:auto;
 min-width:500px;
 }
 
-#results_table,
-#uploads_table{
+#file_table{
 border-collapse: collapse;
 padding: 5px;
 border: 1px solid #8895a6;
@@ -193,10 +192,18 @@ margin-bottom: 10px;
 float: left;
 }
 
-#uploads_table td,
-#results_table td{
+#file_table td{
 border: 1px solid #8895a6;
-padding: 5px;
+padding-left: 3px;
+padding-right: 3px;
+padding-top: 2px;
+padding-bottom: 2px;
+text-align:center;
+min-width: 40px;
+}
+
+#file_table tr{
+background-color: #e7e7e7;
 }
 
 #advanced_input_wrapper{
@@ -223,19 +230,28 @@ height:auto;
 #delete_submited_table{
 border-collapse: collapse;
 padding: 5px;
-border: 1px solid #8895a6;
+border: 0px solid #8895a6;
 margin-bottom: 10px;
 float: left;
 }
 
 #delete_submited_table td{
-border: 1px solid #8895a6;
+border: 0px solid #8895a6;
 padding: 5px;
 }
 
 #delete_submited_button{
 float: left;
 margin-bottom: 0px;
+}
+
+.file_navigation_button:hover{
+color: blue;
+}
+
+.file_navigation_button{
+text-decoration: none;
+color: black;
 }
 
 /* BASIC.PHP */

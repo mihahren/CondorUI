@@ -10,6 +10,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 {
 	//spremenljivke za navigiranje po menujih
 	$_SESSION['menu'] = $_POST['menu'];
+
+	//spremenljivka za navigiranje po display file-u
+	$_SESSION['directory'] = $_POST['directory'];
 }
 
 //switch stavek za izbiro podmenuja v advanced naèinu
@@ -23,14 +26,14 @@ case "queue":
 	exec('condor_q www-data -format %4d. ClusterId -format %-3d ProcId 2>&1', $idOutput);
 	
 	//shrani prvo vrstico ID condor_q requesta ter naredi iterator zanj
-	$idOutputExplode = splitString($idOutput[0]);
+	$idOutputExplode = splitString($idOutput[0], " ");
 	$iter = 0;
 	
 	//izpisi vse, preveri kje se ID ujema pri obeh condor_q requestih - tam doda gumb za brisanje
 ?>
 	<form method='post' id='delete_submited_form' enctype='multipart/form-data'>
 		<table id='delete_submited_table'>
-			<tr><td colspan='2' style='text-align:center;'>Submited files</td></tr>
+			<tr><td style='text-align:center;'>SUBMITED FILES</td><td style='text-align:center;'>DEL</td></tr>
 <?php
 
 			foreach ($allOutput as $value)
@@ -75,8 +78,7 @@ case "submit":
 ?>
 	<form method="post" id="file_form" enctype="multipart/form-data">
 <?php
-		$displayFiles->displayTable("uploads/");
-		$displayFiles->displayTable("results/");
+		$displayFiles->displayFolders($_SESSION['directory']);
 ?>
 		<div style="clear: both;"></div>
 		<input type="file" name="file[]" id="advanced_file_upload" multiple/ style="visibility:hidden;float:right;">
