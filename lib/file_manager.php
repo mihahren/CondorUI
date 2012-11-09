@@ -14,6 +14,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 		for ($i=0; $i<(count($_POST['delete_file'])); $i++)
 		{
 			$fileManager->removeFile($_POST['delete_file'][$i]);
+			$_SESSION['custom_error']['file_delete'] = "Uspesno izbrisano.";
 		}
 	}
 	
@@ -23,7 +24,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 		for ($i=0; $i<(count($_POST['delete_submited_file'])); $i++)
 		{
 			condor_remove($_POST['delete_submited_file'][$i], $removeOut);
-			$_SESSION['custom_error'][0][$i] = $removeOut;
+			$_SESSION['custom_error']['submit_delete'][$i] = $removeOut;
 		}
 	}
 	
@@ -33,7 +34,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 		for ($i=0; $i<count($_FILES['file']['tmp_name']); $i++)
 		{
 			$fileManager->uploadFile($_FILES['file']['tmp_name'][$i], $_FILES['file']['name'][$i], $out);
-			$_SESSION['custom_error'][1][$i] = $out;
+			$_SESSION['custom_error']['uploads'][$i] = $out;
 		}
 	}
 	
@@ -43,7 +44,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 		for ($i=0; $i<count($_FILES['file']['tmp_name']); $i++)
 		{
 			$fileManager->createSubmitFile($_FILES['file']['name'][$i], $out);
-			$_SESSION['custom_error'][2][$i] = $out;
+			$_SESSION['custom_error']['create_submit'][$i] = $out;
 				
 			//nemudoma pripravi uploadane file za submitanje
 			$_SESSION['submit_file'][$i] = "uploads/".$_FILES['file']['name'][$i].".submit";
@@ -62,11 +63,11 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 		
 		foreach ($out1 as $key => $value)
 		{
-			$_SESSION['custom_error'][3][$key] = $value;
+			$_SESSION['custom_error']['submits1'][$key] = $value;
 		}
 		foreach ($out2 as $key => $value)
 		{
-			$_SESSION['custom_error'][4][$key] = $value;
+			$_SESSION['custom_error']['submits2'][$key] = $value;
 		}
 
 	}

@@ -1,22 +1,13 @@
-009 (019.000.000) 11/09 03:57:01 Job was aborted by the user.
-	via condor_rm (by user www-data)
+000 (036.000.000) 11/09 23:11:56 Job submitted from host: <192.168.1.124:45875>
 ...
-009 (022.000.000) 11/09 03:57:01 Job was aborted by the user.
-	via condor_rm (by user www-data)
+001 (036.000.000) 11/09 23:12:04 Job executing on host: <192.168.1.124:50284>
 ...
-000 (023.000.000) 11/09 04:01:00 Job submitted from host: <192.168.1.124:54987>
-...
-001 (023.000.000) 11/09 04:01:08 Job executing on host: <192.168.1.124:60620>
-...
-007 (023.000.000) 11/09 04:01:08 Shadow exception!
-	Error from slot1@MONSTER: Failed to execute '/var/lib/condor/execute/dir_9947/condor_exec.exe': (errno=8: 'Exec format error')
+007 (036.000.000) 11/09 23:12:04 Shadow exception!
+	Error from slot1@MONSTER: Failed to execute '/var/lib/condor/execute/dir_13639/condor_exec.exe': (errno=8: 'Exec format error')
 	0  -  Run Bytes Sent By Job
 	7902  -  Run Bytes Received By Job
 ...
-012 (023.000.000) 11/09 04:01:08 Job was held.
-	Error from slot1@MONSTER: Failed to execute '/var/lib/condor/execute/dir_9947/condor_exec.exe': (errno=8: 'Exec format error')
+012 (036.000.000) 11/09 23:12:04 Job was held.
+	Error from slot1@MONSTER: Failed to execute '/var/lib/condor/execute/dir_13639/condor_exec.exe': (errno=8: 'Exec format error')
 	Code 6 Subcode 8
-...
-009 (023.000.000) 11/09 04:01:40 Job was aborted by the user.
-	via condor_rm (by user www-data)
 ...

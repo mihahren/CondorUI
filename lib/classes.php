@@ -261,14 +261,56 @@ class FileManager
 		else
 		{
 			move_uploaded_file($temp_file, $this->root."uploads/".$file);
-			$output = "";
+			$output = "Datoteka uspesno prenesena. Nahaja se v uploads mapi.";
+
+			//razpakira zip file
+			$fullFileName = pathinfo($this->root."uploads/".$file);
+			$zipAarray = array("zip","rar","tar","gz","7z");
+			if (in_array($fullFileName['extension'], $zipAarray))
+			{
+				$this->unzipFile("uploads/".$file);
+				$this->removeFile("uploads/".$file);
+			}
 		}
 	}
 	
+	// odzipa file
+	public function unzipFile($file)
+	{
+		$zip = new ZipArchive;
+		$res = $zip->open($this->root.$file);
+		$dirFullName = pathinfo($this->root.$file);
+
+		if ($res === TRUE)
+		{
+			$zip->extractTo($dirFullName['dirname']."/".$dirFullName['filename']);
+			$zip->close();
+			$this->removeFile($file);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	// zbrise file
 	public function removeFile($file)
 	{
-		unlink($this->root.$file);
+		if (is_dir($this->root.$file))
+		{
+			$scanDir = $this->scanDir($file);
+			foreach ($scanDir as $value)
+			{
+				$this->removeFile($file."/".$value);
+			}
+			
+			rmdir($this->root.$file);
+		}
+		else
+		{
+			unlink($this->root.$file);
+		}
 	}
 	
 	// ustvari submit file
@@ -383,7 +425,7 @@ class FileManager
 				}
 			}
 
-			//izpise vse ostale uploadane file
+			//izpise vse ostale file
 			for ($i=0; $i<count($scanDir); $i++)
 			{
 				$fullFileName = pathinfo($scanDir[$i]);
