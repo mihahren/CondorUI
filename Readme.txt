@@ -28,12 +28,15 @@ Baza podatkov naj bo ustvarjena z naslednjimi oznakami:
 CREATE DATABASE condor_users;
 
 CREATE TABLE users (
-  userid int unsigned not null auto_increment primary key,
-  username varchar(100) not null,
-  email varchar(100) not null,
-  password varchar(42) not null
+  	userid int unsigned not null auto_increment primary key,
+	username varchar(100) not null,
+	password varchar(42) not null,
+	email varchar(100) not null,
+	isadmin int(1),
+	registertime varchar(100) not null,
+	activetime varchar(100) not null
 );
 
-username, password in host za bazo podatkov se poda v functions.php, pod funkcijo dbConnect()
+username, password in host za bazo podatkov se poda. ko se ustvari nov UserManager objekt. Lahko se tudi postavi privzete vrednosti v classes.php
 
 Za vnos uporabnikov v condor_users bazo je priporocljivo uporabiti signup.php, ki se nahaja v mapi razno. Vnosi lahko potekajo tudi rocno, vendar je potrebno paziti, saj so passwordi hashani s PASSWORD() funkcijo vgrajeno v MySQL.
