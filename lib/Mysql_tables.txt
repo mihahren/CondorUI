@@ -3,16 +3,15 @@ CREATE DATABASE condor_users;
 USE condor_users;
 
 CREATE TABLE users (
-  userid int unsigned not null auto_increment primary key,
-  username varchar(100) not null,
-  email varchar(100) not null,
-  password varchar(42) not null
+	userid int unsigned not null auto_increment primary key,
+	username varchar(100) not null,
+	password varchar(42) not null,
+	email varchar(100) not null,
+	isadmin int(1),
+	registertime varchar(100) not null,
+	activetime varchar(100) not null
 );
 
-CREATE TABLE users (
-  userid int unsigned not null auto_increment primary key,
-  username varchar(100) not null,
-  password varchar(42) not null,
-  email varchar(100) not null,
-  isadmin varchar(1)
-);
+INSERT INTO users VALUES (NULL,'admin',PASSWORD('admin'),'admin@localhost',1,0,0);
+
+DELETE FROM users WHERE userid = 1;

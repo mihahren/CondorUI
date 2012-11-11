@@ -9,9 +9,13 @@ class UserManager
 	private $userid = "";
 	private $username = "";
 	private $password = "";
-	private $email = "";
+	private $isadmin = "";
+	private $registertime = "";
+	private $activetime = "";
+	private $dayspassed = "";
+	private $daysleft = "";
 
-	public $accesscontrol = "no_access";
+	public $accesscontrol = "login";
 
 	// constructor vzpostavi povezavo z bazo in zacne session
 	public function __construct($db_host="127.0.0.1", $db_user="root", $db_pass="", $db="condor_users")
@@ -38,7 +42,7 @@ class UserManager
 	// destructor unici session in zapre povezavo z bazo
 	public function __destruct()
 	{
-		mysql_close($this->dblink);
+		//mysql_close($this->dblink);
     }
 	
 	// preveri obstoj kombinacije uporabnik + password in shrani njegove podatke v objektu
@@ -72,13 +76,26 @@ class UserManager
 			$this->username = $user_name;
 			$this->password = $password;
 			$this->email = mysql_result($result,0,"email");
+			$this->isadmin = mysql_result($result,0,"isadmin");
+			$this->registertime = mysql_result($result,0,"registertime");
+			$this->activetime = mysql_result($result,0,"activetime");
+			$this->dayspassed = time() - $this->registertime;
+
+			if ($this->activetime == 0)
+			{
+				$this->daysleft = "inf";
+			}
+			else
+			{
+				$this->daysleft = $this->activetime - $this->dayspassed;
+			}
 
 			return true;
 		}
 	}
 	
 	// vnese novega uporabnika v bazo
-	public function inputNewUser($user_name, $password, $email, $is_admin)
+	public function inputNewUser($user_name, $password, $email, $is_admin, $register_time, $active_time)
 	{
 		$query = "SELECT * FROM users WHERE username = '".$user_name."'";
 		$result = mysql_query($query, $this->dblink);
@@ -90,8 +107,9 @@ class UserManager
 		else
 		{
 			// vstavi v bazo podatkov
-			$query = "INSERT INTO users VALUES (NULL,".$user_name.",PASSWORD('".$password."'),".$email.",".$is_admin;
-			$result = mysql_query($query, $database_link);
+			$query = "INSERT INTO users VALUES (NULL,'$user_name',PASSWORD('$password'),'$email','$is_admin','$register_time','$active_time')";
+			$result = mysql_query($query, $this->dblink);
+			return $query;
 
 			if ($result)
 			{
@@ -173,15 +191,42 @@ class UserManager
 		}
 	}
 
+	// preveri, koliko dni ima se oseba na razpolago
+	public function daysLeft($user_name, $password)
+	{
+		$this->selectUser($user_name, $password);
+
+		if (($this->dayspassed <= $this->activetime) || ($this->activetime == 0))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	// ustvari session za uporabnika
 	public function loginUser($user_name, $password)
 	{
 		$this->selectUser($user_name, $password);
-
-		$_SESSION['access'] = $this->accesscontrol;
-		$_SESSION['login_id'] = $this->userid;
-		$_SESSION['username'] = $this->username;
-		$_SESSION['password'] = $this->password;
+		
+		if ($this->daysLeft($user_name, $password))
+		{
+			$_SESSION['access'] = $this->accesscontrol;
+			$_SESSION['login_id'] = $this->userid;
+			$_SESSION['username'] = $this->username;
+			$_SESSION['password'] = $this->password;
+			$_SESSION['daysleft'] = $this->daysleft;
+		}
+		else
+		{
+			$_SESSION['access'] = "no_access";
+			unset($_SESSION['login_id']);
+			unset($_SESSION['username']);
+			unset($_SESSION['password']);
+			unset($_SESSION['daysleft']);
+		}
 	}
 
 	// izbrise session za uporabnika
@@ -191,6 +236,7 @@ class UserManager
 		unset($_SESSION['login_id']);
 		unset($_SESSION['username']);
 		unset($_SESSION['password']);
+		unset($_SESSION['daysleft']);
 	}
 
 	// izpise vse uporabnike v tabeli

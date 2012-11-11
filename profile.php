@@ -6,7 +6,7 @@ include_once "lib/access_control.php";
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>template</title>
+		<title>Profile</title>
 		<link rel="stylesheet" type="text/css" href="css/global_css.css" />
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 		<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
@@ -30,11 +30,13 @@ include_once "lib/access_control.php";
 		case "no_access":
 
 			echo "Prosim vpisite svoje uporabnisko ime in geslo!";
-			$_SESSION['custom_error']['template_login'] = "Napacni podatki ali pa je vas trial cas potekel!";
+			$_SESSION['custom_error']['profile_login'] = "Napacni podatki ali pa je vas trial cas potekel!";
 			break;
 			
 		case "access":
 		case "admin":
+
+			echo "Si v svojem profilu. Under construction!";
 
 		}
 ?>		

@@ -13,6 +13,7 @@ margin-right: auto;
 width: 1000px;
 position: relative;
 padding: 10px;
+min-height: 60px;
 box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 }
 
@@ -146,6 +147,12 @@ color: black;
 
 #signup_button{
 float: right;
+text-decoration: underline;
+cursor: pointer;
+color: black;
+}
+
+#profile_button{
 text-decoration: underline;
 cursor: pointer;
 color: black;

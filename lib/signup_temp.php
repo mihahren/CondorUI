@@ -1,5 +1,6 @@
 <?php
-include_once '../functions.php';
+include_once 'functions.php';
+include_once 'classes.php';
 
 if (!isset($_POST['submit_entry'])) //check if anything was already submitted
 {
@@ -37,7 +38,7 @@ if (!isset($_POST['submit_entry'])) //check if anything was already submitted
 }
 else //check if the entry was valid and put it into the database
 {
-	$database_link = dbConnect('condor_users');
+	$database_link = new UserManager();
 	
 	if ($_POST['new_username']=='' || $_POST['new_email']=='' || $_POST['new_password']=='') //check if any fields are blank
 	{
@@ -60,9 +61,9 @@ else //check if the entry was valid and put it into the database
 	}
 	
 	//insert into database
-	$query = "INSERT INTO users VALUES (NULL,'$_POST[new_username]','$_POST[new_email]',PASSWORD('$_POST[new_password]'))";
+	$query = "INSERT INTO users VALUES (NULL,'$_POST[new_username]','$_POST[new_email]',PASSWORD('$_POST[new_password]'),'0','0','0')";
 	
-	$result = mysql_query($query, $database_link);
+	$result = mysql_query($query, $database_link->dblink);
 
 	if (!$result)
 	{
