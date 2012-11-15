@@ -53,8 +53,8 @@
 		<div id="login_box" class="login_section">
 			<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" id="login_form" enctype="multipart/form-data">
 				<div id="input_section">
-					<input id="username_input" type="text" name="username" size="8" value="username" onFocus="this.value=''" style="float: left;"/>
-					<input id="password_input" type="password" name="password" SIZE="8" value="password" onFocus="this.value=''" style="float: left;"/>
+					<input id="username_input" type="text" name="username" value="username" onFocus="this.value=''" style="float: left;"/>
+					<input id="password_input" type="password" name="password" value="password" onFocus="this.value=''" style="float: left;"/>
 				</div>
 				<div id="login_text">
 					<span id="login_button">Login</span>

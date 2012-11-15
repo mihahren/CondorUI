@@ -15,3 +15,15 @@ CREATE TABLE users (
 INSERT INTO users VALUES (NULL,'admin',PASSWORD('admin'),'admin@localhost',1,0,0);
 
 DELETE FROM users WHERE userid = 1;
+
+DROP TABLE users;
+
+CREATE TABLE stats (
+	statid int unsigned NOT NULL auto_increment primary key,
+	userid int unsigned default '0',
+	browser varchar(255) NOT NULL default '',
+	ip varchar(15) NOT NULL default '',
+	date_visited int unsigned NOT NULL default '0',
+	page varchar(100) NOT NULL default '',
+	from_page varchar(200) NOT NULL default ''
+);

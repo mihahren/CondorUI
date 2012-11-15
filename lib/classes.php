@@ -1,11 +1,11 @@
 <?php
 include_once "functions.php";
 
-/* Razred za user management*/
+/* Razred za user management */
 class UserManager
 {
 	// spremenljivke
-	private $dblink = "";
+	protected $dblink = "";
 	private $userid = "";
 	private $username = "";
 	private $password = "";
@@ -100,7 +100,7 @@ class UserManager
 		$query = "SELECT * FROM users WHERE username = '".$user_name."'";
 		$result = mysql_query($query, $this->dblink);
 
-		if (mysql_num_rows($result) >= 1)
+		if (mysql_num_rows($result) >= 1 || (3 > strlen($user_name)) || (5 > strlen($password)) || (5 > strlen($email)))
 		{
 			return false;
 		}
@@ -498,5 +498,57 @@ class FileManager
 		</table>";
 	}
 
+}
+
+/* Razred za stats tracking */
+class StatsTracker extends UserManager
+{
+	// shrani statse v bazo podatkov
+	public function storeStats($array)
+	{
+		$query = "INSERT INTO stats ";
+		$combineValues = "(";
+		$combineKeys = "(";
+
+		foreach ($array as $key => $value)
+		{
+			$combineValues = $combineValues."'".$value."',";
+			$combineKeys = $combineKeys.$key.",";
+		}
+		
+		$combineValues = substr($combineValues, 0, -1).")";
+		$combineKeys = substr($combineKeys, 0, -1).")";
+		$query = $query.$combineKeys." VALUES ".$combineValues;
+		$result = mysql_query($query, $this->dblink);
+    }
+
+	// vrne stevilo vrst na podlagi SQL ukaza
+	public function getStatsRows($query)
+	{
+		$result = mysql_query($query, $this->dblink);
+		return mysql_num_rows($result);
+    }
+
+	// vrne array na podlagi SQL ukaza
+	public function getStatsArray($query)
+	{
+		$array = array();
+		$iter = 0;
+		$result = mysql_query($query, $this->dblink);
+
+		while($row = mysql_fetch_array($result))
+		{
+			$array[$iter] = $row;
+			$iter++;
+		}
+
+		return $array;
+    }
+
+	// izrise bar graph na podlagi enostopenjskega array-a
+	public function drawBarGraph($array)
+	{
+		
+    }
 }
 ?>

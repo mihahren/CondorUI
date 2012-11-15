@@ -1,6 +1,9 @@
 <?php
 include_once "lib/functions.php";
 include_once "lib/access_control.php";
+include_once "lib/classes.php";
+
+$statsViewer = new StatsTracker();
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -41,9 +44,18 @@ include_once "lib/access_control.php";
 			break;
 			
 		case "admin":
-			
-			echo "Si v admin predelu. Under construction!<br/>
-				  <a href='signup.php'>dodaj uporabnika</a> (napredno)";
+?>							
+			<?php include_once "lib/register.php";?>
+
+			<div class="generic_box">
+			</div>
+
+			<div class="generic_box">
+				asdasdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+			</div>
+
+
+<?php
 			break;
 		}
 ?>		

@@ -1,0 +1,10 @@
+Universe=vanilla
+Executable=../files/9/uploads/google-chrome.desktop
+Output=../files/9/results/google-chrome.desktop.output
+Error=../files/9/results/google-chrome.desktop.error
+Log=../files/9/results/google-chrome.desktop.log
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+queue

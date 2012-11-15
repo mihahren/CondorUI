@@ -2,6 +2,8 @@
 
 body {
 margin: 0px;
+font-size:100%;
+font-family: "Verdana",Helvetica,sans-serif;
 }
 
 #header {
@@ -56,6 +58,16 @@ color: #8895a6;
 text-shadow: 1px 1px 1px #B0C0D6;
 }
 
+.generic_box{
+border: 1px solid #8895a6;
+padding: 10px;
+width: auto;
+float: left;
+margin-right: 10px;
+margin-bottom: 10px;
+box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
+}
+
 /* HEADER.PHP */
 
 .header_button_wrapper{
@@ -92,6 +104,14 @@ position: relative;
 margin-left: auto;
 height: 48px;
 box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
+}
+
+#password_input,
+#username_input{
+width: 85px;
+-webkit-box-sizing: border-box;	/* Safari/Chrome, other WebKit */
+-moz-box-sizing: border-box;	/* Firefox, other Gecko */
+box-sizing: border-box;			/* Opera/IE 8+ */
 }
 
 /* error prompt */
@@ -216,6 +236,7 @@ background-color: #e7e7e7;
 #advanced_input_wrapper{
 position: relative;
 width: auto;
+float: left;
 }
 
 #advanced_file_button{
@@ -272,6 +293,15 @@ float: left;
 border: 1px solid #8895a6;
 padding: 10px;
 margin-left: 10px;
+width: auto;
+float: left;
+box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
+}
+
+/* SIGNUP.PHP */
+#add_user{
+border: 1px solid #8895a6;
+padding: 10px;
 width: auto;
 float: left;
 box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;

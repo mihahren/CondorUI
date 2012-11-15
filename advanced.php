@@ -45,7 +45,7 @@ include_once "lib/access_control.php";
 					<span class="button_text">Condor Status</span>
 				</div>
 				<div class="button_wrapper" id="submit_button">
-					<span class="button_text">File Management</span>
+					<span class="button_text">Manage Files</span>
 				</div>
 			</div>
 			<div id="output_box">
