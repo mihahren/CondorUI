@@ -545,8 +545,66 @@ class StatsTracker extends UserManager
 		return $array;
     }
 
-	// izrise bar graph na podlagi enostopenjskega array-a
-	public function drawBarGraph($array)
+	// izrise line graph na podlagi array-a
+	public function drawLineGraph($array)
+	{
+
+    }
+
+	// izrise bar graph na podlagi array-a
+	public function drawBarGraph($array, $file_name, $margin=20, $bar_width=20, $space_width=10, $line_spacing=15, $horizontal_lines=10)
+	{	
+		// izracunane dimenzije
+		$num_items = count($array);
+		$max_value = max($array);
+		$image_width = 3*$margin + $space_width + $num_items*($space_width+$bar_width);
+		$image_height = 2*$margin + $horizontal_lines*$line_spacing;
+		$ratio = ($horizontal_lines*$line_spacing)/$max_value;
+		
+		// image canvas
+		$image = imagecreatetruecolor($image_width,$image_height);
+
+		// barve
+		$background_color = imagecolorallocate($image,255,255,255);
+		$bar_color = imagecolorallocate($image,200,35,35);
+		$line_color = imagecolorallocate($image,220,220,220);
+		$string_color = imagecolorallocate($image,0,0,0);
+		
+		// narisi background
+		imagefilledrectangle($image,0,0,$image_width,$image_height,$background_color);
+
+		// narisi horizontalne crte
+		for($i=0;$i<=$horizontal_lines;$i++)
+		{
+			$x1 = 2*$margin;
+			$y1 = $y2 = $image_height - $margin - $i*$line_spacing;
+			$x2 = $image_width - $margin;
+			imageline($image,$x1,$y1,$x2,$y2,$line_color);
+			$value = intval($i*$line_spacing/$ratio);
+			imagestring($image,2,$x1-$margin,$y1-6,$value,$string_color);
+		}
+
+		// narisi bare
+		for($i=0;$i<$num_items;$i++)
+		{
+			list($key,$value)=each($array);
+			$temp_value = $value*$ratio;
+			$x1 = 2*$margin + $space_width + $i*($bar_width+$space_width);
+			$y1 = $image_height - $margin;
+			$x2 = $x1 + $bar_width;
+			$y2 = $y1 - $temp_value;
+			imagefilledrectangle($image,$x1,$y1,$x2,$y2,$bar_color);
+			imagestring($image,2,$x2-$bar_width+3,$y2-13,$value,$string_color);
+			imagestring($image,2,$x1+3,$y1+3,$key,$string_color);
+		}
+
+		// izrisi sliko
+	    imagepng($image, "images/".$file_name);
+		imagedestroy($image);
+    }
+
+	// izrise pie chart na podlagi array-a
+	public function drawPieChart($array)
 	{
 		
     }

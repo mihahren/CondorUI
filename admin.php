@@ -47,11 +47,29 @@ $statsViewer = new StatsTracker();
 ?>							
 			<?php include_once "lib/register.php";?>
 
-			<div class="generic_box">
+			<div class="graph_box">
+<?php
+				$array = array(
+					0 => 10,
+					1 => 55,
+					2 => 33,
+					3 => 154,
+					4 => 11,
+					5 => 64,
+					6 => 32,
+					7 => 2,
+					8 => 254,
+					9 => 25,
+					10 => 89
+				);
+
+				$statsViewer->drawBarGraph($array,"file1.png",22,25,15,20,10);
+				echo "<img src='images/file1.png'/>";
+?>
 			</div>
 
 			<div class="generic_box">
-				asdasdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
 			</div>
 
 

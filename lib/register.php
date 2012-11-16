@@ -63,6 +63,6 @@ if (($_SERVER['REQUEST_METHOD'] == "POST") && (isset($_POST['new_username'])))
 ?>
 		</table>
 		<input name="new_registertime" type="hidden" value="<?php echo time(); ?>" />
-		<input name="submit_entry" type="submit" value="sumbit entry" />
+		<input name="submit_entry" type="submit" value="Dodaj uporabnika" />
 	</form>
 </div>

@@ -68,6 +68,16 @@ margin-bottom: 10px;
 box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 }
 
+.graph_box{
+border: 1px solid #8895a6;
+padding: 10px;
+width: auto;
+float: left;
+margin-right: 10px;
+margin-bottom: 10px;
+box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
+}
+
 /* HEADER.PHP */
 
 .header_button_wrapper{
