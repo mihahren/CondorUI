@@ -14,7 +14,8 @@ margin-left: auto;
 margin-right: auto;
 width: 1000px;
 position: relative;
-padding: 10px;
+padding-left: 10px;
+padding-top: 10px;
 min-height: 60px;
 box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 }
@@ -27,7 +28,8 @@ margin-left: auto;
 margin-right: auto;
 width: 1000px;
 position: relative;
-padding: 10px;
+padding-left: 10px;
+padding-top: 10px;
 overflow: hidden;
 box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 }
@@ -112,6 +114,8 @@ border: 1px solid #8895a6;
 width: 180px;
 position: relative;
 margin-left: auto;
+margin-bottom: 10px;
+margin-right: 10px;
 height: 48px;
 box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 }
@@ -202,6 +206,12 @@ cursor: pointer;
 color: #8895a6;
 }
 
+/* INDEX.PHP */
+#index_text{
+margin-right: 10px;
+margin-bottom: 10px;
+}
+
 /* ADVANCED.PHP */
 
 #input_box{
@@ -209,6 +219,7 @@ position: relative;
 width: auto;
 float: left;
 margin-right: 10px;
+margin-bottom: 10px;
 }
 
 #output_box{
@@ -219,6 +230,8 @@ float: left;
 box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 width:auto;
 min-width:500px;
+margin-right: 10px;
+margin-bottom: 10px;
 }
 
 #file_table{
@@ -297,12 +310,15 @@ color: black;
 #basic_input_wrapper{
 width: auto;
 float: left;
+margin-right: 10px;
+margin-bottom: 10px;
 }
 
 #basic_output_wrapper{
 border: 1px solid #8895a6;
 padding: 10px;
-margin-left: 10px;
+margin-right: 10px;
+margin-bottom: 10px;
 width: auto;
 float: left;
 box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;

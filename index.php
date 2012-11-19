@@ -37,7 +37,7 @@ include_once "lib/access_control.php";
 		case "access":
 		case "admin":
 			
-			echo "Dobrodosli! Prosim izberite eno izmed zgornjih moznosti";
+			echo "<div id='index_text'>Dobrodosli! Prosim izberite eno izmed zgornjih moznosti</div>";
 			break;
 		}
 ?>		

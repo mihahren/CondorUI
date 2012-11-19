@@ -3,7 +3,6 @@ include_once "lib/functions.php";
 include_once "lib/access_control.php";
 include_once "lib/classes.php";
 
-$statsViewer = new StatsTracker();
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -49,7 +48,7 @@ $statsViewer = new StatsTracker();
 
 			<div class="graph_box">
 <?php
-				$array = array(
+				$array2 = array(
 					0 => 10,
 					1 => 55,
 					2 => 33,
@@ -63,16 +62,45 @@ $statsViewer = new StatsTracker();
 					10 => 89
 				);
 
-				$statsViewer->drawBarGraph($array,"file1.png",22,25,15,20,10);
+				drawLineGraph($array2,"file2.png");
+				echo "<img src='images/file2.png'/>";
+?>
+			</div>
+
+			<div class="graph_box">
+<?php
+				$array1 = array(
+					0 => 10,
+					1 => 55,
+					2 => 33,
+					3 => 154,
+					4 => 11,
+					5 => 64,
+					6 => 32,
+					7 => 2,
+					8 => 254,
+					9 => 25,
+					10 => 89
+				);
+
+				drawBarGraph($array1,"file1.png");
 				echo "<img src='images/file1.png'/>";
 ?>
 			</div>
 
-			<div class="generic_box">
+			<div class="graph_box">
+<?php
+				$array3 = array(
+					0 => 10,
+					1 => 22,
+					2 => 45,
+					3 => 23,
+				);
 
+				drawPieChart($array3,"file3.png");
+				echo "<img src='images/file3.png'/>";
+?>
 			</div>
-
-
 <?php
 			break;
 		}
