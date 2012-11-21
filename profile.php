@@ -24,19 +24,19 @@ include_once "lib/access_control.php";
 		{
 		case "login":
 
-			echo "Prosim vpisite svoje uporabnisko ime in geslo!";
+			echo "<div class='profile_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
 			break;
 			
 		case "no_access":
 
-			echo "Prosim vpisite svoje uporabnisko ime in geslo!";
+			echo "<div class='profile_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
 			$_SESSION['custom_error']['profile_login'] = "Napacni podatki ali pa je vas trial cas potekel!";
 			break;
 			
 		case "access":
 		case "admin":
 
-			echo "Si v svojem profilu. Under construction!";
+			echo "<div class='profile_text'>Si v svojem profilu. Under construction!</div>";
 
 		}
 ?>		

@@ -207,12 +207,17 @@ color: #8895a6;
 }
 
 /* INDEX.PHP */
-#index_text{
+.index_text{
 margin-right: 10px;
 margin-bottom: 10px;
 }
 
 /* ADVANCED.PHP */
+
+.advanced_text{
+margin-right: 10px;
+margin-bottom: 10px;
+}
 
 #input_box{
 position: relative;
@@ -307,6 +312,11 @@ color: black;
 
 /* BASIC.PHP */
 
+.basic_text{
+margin-right: 10px;
+margin-bottom: 10px;
+}
+
 #basic_input_wrapper{
 width: auto;
 float: left;
@@ -325,6 +335,7 @@ box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 }
 
 /* SIGNUP.PHP */
+
 #add_user{
 border: 1px solid #8895a6;
 padding: 10px;
@@ -332,3 +343,18 @@ width: auto;
 float: left;
 box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 }
+
+/* ADMIN.PHP */
+
+.admin_text{
+margin-right: 10px;
+margin-bottom: 10px;
+}
+
+/* profile.PHP */
+
+.profile_text{
+margin-right: 10px;
+margin-bottom: 10px;
+}
+

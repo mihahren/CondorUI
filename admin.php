@@ -2,6 +2,7 @@
 include_once "lib/functions.php";
 include_once "lib/access_control.php";
 include_once "lib/classes.php";
+include_once "lib/stats_variables.php";
 
 ?>
 <!DOCTYPE html>
@@ -27,78 +28,43 @@ include_once "lib/classes.php";
 		{
 		case "login":
 
-			echo "Prosim vpisite svoje uporabnisko ime in geslo!";
+			echo "<div class='admin_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
 			break;
 			
 		case "no_access":
 
-			echo "Prosim vpisite svoje uporabnisko ime in geslo!";
+			echo "<div class='admin_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
 			$_SESSION['custom_error']['admin_login'] = "Napacni podatki ali pa je vas trial cas potekel!";
 			break;
 
 		case "access":
 
-			echo "Prosim vpisite uporabnisko ime in geslo z administratorskimi pravicami!";
+			echo "<div class='admin_text'>Prosim vpisite uporabnisko ime in geslo z administratorskimi pravicami!</div>";
 			$_SESSION['custom_error']['admin_noaccess'] = "Napacni podatki! Racun nima dostopa do te strani!";
 			break;
 			
 		case "admin":
-?>							
+?>			
 			<?php include_once "lib/register.php";?>
 
 			<div class="graph_box">
 <?php
-				$array2 = array(
-					0 => 10,
-					1 => 55,
-					2 => 33,
-					3 => 154,
-					4 => 11,
-					5 => 64,
-					6 => 32,
-					7 => 2,
-					8 => 254,
-					9 => 25,
-					10 => 89
-				);
-
-				drawLineGraph($array2,"file2.png");
-				echo "<img src='images/file2.png'/>";
+				drawLineGraph($array_last_24h,"file_last_24h.png","Stevilo uporabnikov zadnjih 24 ur",55,49.3,35.5,6,3,2);
+				echo "<img src='images/file_last_24h.png'/>";
 ?>
 			</div>
 
 			<div class="graph_box">
 <?php
-				$array1 = array(
-					0 => 10,
-					1 => 55,
-					2 => 33,
-					3 => 154,
-					4 => 11,
-					5 => 64,
-					6 => 32,
-					7 => 2,
-					8 => 254,
-					9 => 25,
-					10 => 89
-				);
-
-				drawBarGraph($array1,"file1.png");
-				echo "<img src='images/file1.png'/>";
+				drawPieChart($array_page,"file_page.png","Najbolj obiskane strani",900,500,2);
+				echo "<img src='images/file_page.png'/>";
 ?>
 			</div>
 
 			<div class="graph_box">
 <?php
-				$array3 = array(
-					0 => 10,
-					1 => 22,
-					2 => 45,
-					3 => 23,
-				);
-
-				drawPieChart($array3,"file3.png");
-				echo "<img src='images/file3.png'/>";
+				drawBarGraph($array_last_year,"file_last_year.png","Stevilo uporabnikov v zadnjem letu",30,20,15,19,9,1);
+				echo "<img src='images/file_last_year.png'/>";
 ?>
 			</div>
 <?php

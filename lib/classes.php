@@ -526,7 +526,8 @@ class StatsTracker extends UserManager
 	public function getStatsRows($query)
 	{
 		$result = mysql_query($query, $this->dblink);
-		return mysql_num_rows($result);
+		$row = mysql_fetch_array($result);
+		return $row[0];
     }
 
 	// vrne array na podlagi SQL ukaza

@@ -25,19 +25,19 @@ include_once "lib/access_control.php";
 		{
 		case "login":
 
-			echo "Prosim vpisite svoje uporabnisko ime in geslo!";
+			echo "<div class='index_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
 			break;
 			
 		case "no_access":
 
-			echo "Prosim vpisite svoje uporabnisko ime in geslo!";
+			echo "<div class='index_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
 			$_SESSION['custom_error']['index_login'] = "Napacni podatki ali pa je vas trial cas potekel!";
 			break;
 			
 		case "access":
 		case "admin":
 			
-			echo "<div id='index_text'>Dobrodosli! Prosim izberite eno izmed zgornjih moznosti</div>";
+			echo "<div class='index_text'>Dobrodosli! Prosim izberite eno izmed zgornjih moznosti</div>";
 			break;
 		}
 ?>		
