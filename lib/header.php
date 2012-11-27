@@ -34,7 +34,7 @@
 <?php 
 						if (is_int($_SESSION['daysleft']))
 						{
-							echo "(".(int)($_SESSION['daysleft']/(24 * 60 * 60))." dni)";
+							echo "(".round($_SESSION['daysleft']/(24 * 60 * 60), 1)." dni)";
 						}
 						else
 						{

@@ -60,5 +60,5 @@ case "submit":
 <?php
 	break;
 }
-include "../lib/error_function.php";
+include "../lib/error_tracking.php";
 ?>

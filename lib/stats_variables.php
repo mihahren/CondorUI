@@ -1,6 +1,7 @@
 <?php
 include_once "functions.php";
 include_once "classes.php";
+include_once "access_control.php";
 
 $stats_viewer = new StatsTracker();
 
@@ -55,4 +56,19 @@ for($i=0;$i<12;$i++)
 }
 
 $array_last_year = array_reverse($array_last_year);
+
+// array za graf "Najbolj obiskane strani uporabnika"
+$page_index_user = $stats_viewer->getStatsRows("SELECT COUNT(*) FROM stats WHERE page='/CondorUI/index.php' AND userid=".$_SESSION['login_id']);
+$page_basic_user = $stats_viewer->getStatsRows("SELECT COUNT(*) FROM stats WHERE page='/CondorUI/basic.php' AND userid=".$_SESSION['login_id']);
+$page_advanced_user = $stats_viewer->getStatsRows("SELECT COUNT(*) FROM stats WHERE page='/CondorUI/advanced.php' AND userid=".$_SESSION['login_id']);
+$page_profile_user = $stats_viewer->getStatsRows("SELECT COUNT(*) FROM stats WHERE page='/CondorUI/profile.php' AND userid=".$_SESSION['login_id']);
+$page_admin_user = $stats_viewer->getStatsRows("SELECT COUNT(*) FROM stats WHERE page='/CondorUI/admin.php' AND userid=".$_SESSION['login_id']);
+
+$array_page_user = array(
+	'index' => $page_index_user,
+	'basic' => $page_basic_user,
+	'advanced' => $page_advanced_user,
+	'profile' => $page_profile_user,
+	'admin' => $page_admin_user,
+);
 ?>

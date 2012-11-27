@@ -45,26 +45,28 @@ include_once "lib/stats_variables.php";
 			
 		case "admin":
 ?>			
-			<?php include_once "lib/register.php";?>
+			<?php include "lib/register.php";?>
 
-			<div class="graph_box">
+			<div id='admin_24h_graph' class="graph_box">
 <?php
-				drawLineGraph($array_last_24h,"file_last_24h.png","Stevilo uporabnikov zadnjih 24 ur",55,49.3,35.5,6,3,2);
+				drawLineGraph($array_last_24h,"file_last_24h.png","Stevilo uporabnikov zadnjih 24 ur",60,49.0,35,8,2.5,2);
 				echo "<img src='images/file_last_24h.png'/>";
 ?>
 			</div>
 
-			<div class="graph_box">
+			<?php include "lib/user_editor.php";?>
+
+			<div id='admin_365d_graph' class="graph_box">
 <?php
-				drawPieChart($array_page,"file_page.png","Najbolj obiskane strani",900,500,2);
-				echo "<img src='images/file_page.png'/>";
+				drawBarGraph($array_last_year,"file_last_year.png","Stevilo uporabnikov v zadnjem letu",35,24,18,18.5,7,1);
+				echo "<img src='images/file_last_year.png'/>";
 ?>
 			</div>
 
-			<div class="graph_box">
+			<div id='admin_popular_graph' class="graph_box">
 <?php
-				drawBarGraph($array_last_year,"file_last_year.png","Stevilo uporabnikov v zadnjem letu",30,20,15,19,9,1);
-				echo "<img src='images/file_last_year.png'/>";
+				drawPieChart($array_page,"file_page.png","Najbolj obiskane strani",900,500,2);
+				echo "<img src='images/file_page.png'/>";
 ?>
 			</div>
 <?php

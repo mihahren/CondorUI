@@ -1,6 +1,8 @@
 <?php
 include_once "lib/functions.php";
 include_once "lib/access_control.php";
+include_once "lib/stats_variables.php";
+
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -36,10 +38,18 @@ include_once "lib/access_control.php";
 		case "access":
 		case "admin":
 
-			echo "<div class='profile_text'>Si v svojem profilu. Under construction!</div>";
-
+			include "lib/user_editor.php";
+		
+?>
+			<div id='profile_popular_graph' class="graph_box">
+<?php
+				drawPieChart($array_page_user,"file_page.png","Najbolj obiskane strani uporabnika",800,436,2);
+				echo "<img src='images/file_page.png'/>";
+?>
+			</div>
+<?php
 		}
-?>		
+?>
 		</div>
 		
 		<!-- footer, ki vsebuje small print in error funkcijo -->

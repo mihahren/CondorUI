@@ -359,18 +359,22 @@ function drawPieChart($array, $file_name, $naslov="test graph", $image_width=900
 	// narisi graf in legendo
 	for($i=0;$i<$num_items;$i++)
 	{
-		// graf
 		list($key,$value)=each($array);
-		$end = $start + $value*$ratio;
-		$arc_color = imagecolorallocate($image,rand(0,255),rand(0,255),$i*255/$num_items);
-		imagefilledarc($image,$image_height/2,$image_height/1.75,$image_height/1.3,$image_height/1.3,$start,$end,$arc_color,IMG_ARC_PIE);
-		$start = $end;
 
-		// legenda
-		$x_leg = $image_height+$image_height/20;
-		$y_leg = $image_height/5+$i*$image_height/9;
-		imagefilledrectangle($image,$x_leg,$y_leg,$x_leg+$image_height/12,$y_leg+$image_height/12,$arc_color);
-		imagettftext($image,$image_height/26,0,$x_leg+$image_height/10,$y_leg+$image_height/16,$string_color,$_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf",$key." [".round(100*$value/array_sum($array), 2)."%]");
+		if ($value > 0)
+		{
+			// graf
+			$end = $start + $value*$ratio;
+			$arc_color = imagecolorallocate($image,rand(0,255),rand(0,255),$i*255/$num_items);
+			imagefilledarc($image,$image_height/2,$image_height/1.75,$image_height/1.3,$image_height/1.3,$start,$end,$arc_color,IMG_ARC_PIE);
+			$start = $end;
+
+			// legenda
+			$x_leg = $image_height+$image_height/20;
+			$y_leg = $image_height/5+$i*$image_height/9;
+			imagefilledrectangle($image,$x_leg,$y_leg,$x_leg+$image_height/12,$y_leg+$image_height/12,$arc_color);
+			imagettftext($image,$image_height/26,0,$x_leg+$image_height/10,$y_leg+$image_height/16,$string_color,$_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf",$key." [".round(100*$value/array_sum($array), 2)."%]");
+		}
 	}
 
 	// izrisi sliko

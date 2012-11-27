@@ -3,22 +3,41 @@ include_once "lib/functions.php";
 include_once "lib/access_control.php";
 include_once "lib/classes.php";
 
-if (($_SERVER['REQUEST_METHOD'] == "POST") && (isset($_POST['new_username'])))
+$userManager = new UserManager();	//zacne nov ali nadaljuje obstojec session
+
+if (($_SERVER['REQUEST_METHOD'] == "POST") && isset($_POST['submit_entry_register']))
 {
-	if(!$userManager->inputNewUser($_POST['new_username'], $_POST['new_password'], $_POST['new_email'], $_POST['new_isadmin'], $_POST['new_registertime'], $_POST['new_activetime']))
+	$new_username = "";
+	$new_email = "";
+
+	if ($userManager->checkUsernameExistance($_POST['new_username'])) // preveri, ce username ze obstaja
 	{
-		$_SESSION['custom_error']['registration'] = "Prislo je do napake. Preveri vpisane podatke";
+		$new_username = $_POST['new_username'];
 	}
-	else
+
+	if ($userManager->checkEmailExistance($_POST['new_email'])) // preveri, ce email ze obstaja
 	{
-		$_SESSION['custom_error']['registration'] = "Registracija uspela!";
+		$new_email = $_POST['new_email'];
+	}
+
+	$register_user = $userManager->inputNewUser($new_username, $_POST['new_password'], $new_email, $_POST['new_isadmin'], $_POST['new_registertime'], $_POST['new_activetime']);
+
+	foreach ($register_user as $key => $value)
+	{
+		$_SESSION['custom_error']['register_user'][$key] = $value;
 	}
 }
 ?>
 
-<div class="generic_box">
+<div id='register_form' class="generic_box">
 	<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
-		<table>
+		<table style='border-collapse:collapse;'>
+			<tr>
+				<td colspan='2' style='text-align:center;'>Dodaj uporabnika</div></td>
+			</tr>
+			<tr>
+				<td colspan='2'><div style='padding-bottom:5px; margin-bottom:5px; border-bottom:1px solid #8895a6;'></div></td>
+			</tr>
 			<tr>
 				<td align="right">Username:</td>
 				<td><input name="new_username" type="text" maxlength="100" size="25" /></td>
@@ -63,6 +82,7 @@ if (($_SERVER['REQUEST_METHOD'] == "POST") && (isset($_POST['new_username'])))
 ?>
 		</table>
 		<input name="new_registertime" type="hidden" value="<?php echo time(); ?>" />
-		<input name="submit_entry" type="submit" value="Dodaj uporabnika" />
+		<div style='padding-bottom:5px; margin-bottom:10px; border-bottom:1px solid #8895a6;'></div>
+		<input name="submit_entry_register" type="submit" value="Dodaj uporabnika" />
 	</form>
 </div>

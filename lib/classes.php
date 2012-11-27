@@ -9,6 +9,7 @@ class UserManager
 	private $userid = "";
 	private $username = "";
 	private $password = "";
+	private $email = "";
 	private $isadmin = "";
 	private $registertime = "";
 	private $activetime = "";
@@ -93,102 +94,179 @@ class UserManager
 			return true;
 		}
 	}
+
+	// preveri obstoj uporabniskega imena
+	public function checkUsernameExistance($username)
+	{
+		$query = "SELECT * FROM users WHERE username = '".$username."'";
+		$result = mysql_query($query, $this->dblink);
+
+		if (mysql_num_rows($result) >= 1)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	// preveri obstoj emaila
+	public function checkEmailExistance($email)
+	{
+		$query = "SELECT * FROM users WHERE email = '".$email."'";
+		$result = mysql_query($query, $this->dblink);
+
+		if (mysql_num_rows($result) >= 1)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
 	
 	// vnese novega uporabnika v bazo
 	public function inputNewUser($user_name, $password, $email, $is_admin, $register_time, $active_time)
 	{
-		$query = "SELECT * FROM users WHERE username = '".$user_name."'";
-		$result = mysql_query($query, $this->dblink);
-
-		if (mysql_num_rows($result) >= 1 || (3 > strlen($user_name)) || (5 > strlen($password)) || (5 > strlen($email)))
+		if (3 > strlen($user_name)) // preveri novi username
 		{
-			return false;
+			$result_array[0] = "Prekratek username ali pa ze obstaja.";
+		}
+		elseif (5 > strlen($password)) // preveri novi password
+		{
+			$result_array[1] = "Prekratek password.";
+		}
+		elseif (5 > strlen($email)) // preveri novi email
+		{
+			$result_array[2] = "Prekratek email ali pa ze obstaja.";
 		}
 		else
 		{
-			// vstavi v bazo podatkov
 			$query = "INSERT INTO users VALUES (NULL,'$user_name',PASSWORD('$password'),'$email','$is_admin','$register_time','$active_time')";
 			$result = mysql_query($query, $this->dblink);
-			return $query;
-
 			if ($result)
 			{
-				return true;
+				$result_array[3] = "Uspesno registrirano.";
 			}
 			else
 			{
-				return false;
+				$result_array[4] = "Prislo je do napake pri vnosu.";
 			}
 		}
-	}
-	
-	// spremeni uporabnisko ime obstojecega uporabnika
-	public function editUser($user_name, $password, $new_user_name)
-	{
-		if($this->selectUser($user_name, $password))
-		{
-			$query = "UPDATE users SET username = ".$new_user_name." WHERE id = ".$this->userid;
-			$result = mysql_query($query, $this->dblink);
 
-			if ($result)
+		return $result_array;
+	}
+
+	// spremeni uporabnisko ime, password, email - za uporabnika
+	public function editUser($user_name, $password, $new_user_name, $new_password, $new_email)
+	{
+		if($this->selectUser($user_name, $password)) // preveri prvotni username in password
+		{
+			$result_array = array();
+		
+			if (3 < strlen($new_user_name)) // preveri novi username
 			{
-				return true;
+				$query = "UPDATE users SET username = '".$new_user_name."' WHERE userid = ".$this->userid;
+				$result = mysql_query($query, $this->dblink);
+				$user_name = $new_user_name;
+				$this->loginUser($user_name, $password);
+				$result_array[1] = "Username spremenjen.";
 			}
-			else
+			elseif ($new_user_name != "")
 			{
-				return false;
+				$result_array[1] = "Prekratek username.";
+			}
+
+			if (5 < strlen($new_password)) // preveri novi password
+			{
+				$query = "UPDATE users SET password = PASSWORD('".$new_password."') WHERE userid = ".$this->userid;
+				$result = mysql_query($query, $this->dblink);
+				$password = $new_password;
+				$this->loginUser($user_name, $password);
+				$result_array[2] = "Password spremenjen.";
+			}
+			elseif ($new_password != "")
+			{
+				$result_array[2] = "Prekratek password.";
+			}
+
+			if (5 < strlen($new_email)) // preveri novi email
+			{
+				$query = "UPDATE users SET email = '".$new_email."' WHERE userid = ".$this->userid;
+				$result = mysql_query($query, $this->dblink);
+				$result_array[3] = "Email spremenjen.";
+			}
+			elseif ($new_email != "")
+			{
+				$result_array[3] = "Prekratek email.";
 			}
 		}
 		else
 		{
-			return false;
+			$result_array[0] = "Napacen username ali password.";
 		}
+
+		return $result_array;
 	}
 
-	// spremeni password obstojecega uporabnika
-	public function editPassword($user_name, $password, $new_password)
+	// spremeni uporabnisko ime, password, email - za admina
+	public function editUserAdmin($user_name, $new_user_name, $new_password, $new_email)
 	{
-		if($this->selectUser($user_name, $password))
+		$result_array = array();
+		
+		if (3 < strlen($new_user_name)) // preveri novi username
 		{
-			$query = "UPDATE users SET password = PASSWORD('".$new_password."') WHERE id = ".$this->userid;
+			$query = "UPDATE users SET username = '".$new_user_name."' WHERE username = '".$user_name."'";
 			$result = mysql_query($query, $this->dblink);
-
-			if ($result)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			$user_name = $new_user_name;
+			$result_array[0] = "Username spremenjen.";
 		}
-		else
+		elseif ($new_user_name != "")
 		{
-			return false;
+			$result_array[0] = "Prekratek username.";
 		}
+
+		if (5 < strlen($new_password)) // preveri novi password
+		{
+			$query = "UPDATE users SET password = PASSWORD('".$new_password."') WHERE username = '".$user_name."'";
+			$result = mysql_query($query, $this->dblink);
+			$result_array[1] = "Password spremenjen.";
+		}
+		elseif ($new_password != "")
+		{
+			$result_array[1] = "Prekratek password.";
+		}
+
+		if (5 < strlen($new_email)) // preveri novi email
+		{
+			$query = "UPDATE users SET email = '".$new_email."' WHERE username = '".$user_name."'";
+			$result = mysql_query($query, $this->dblink);
+			$result_array[2] = "Email spremenjen.";
+		}
+		elseif ($new_email != "")
+		{
+			$result_array[2] = "Prekratek email.";
+		}
+
+		return $result_array;
 	}
 
-	// spremeni email obstojecega uporabnika
-	public function editEmail($user_name, $password, $new_email)
+	// izpisi seznam vseh usernamov v array
+	public function getUserArray($query)
 	{
-		if($this->selectUser($user_name, $password))
-		{
-			$query = "UPDATE users SET email = ".$new_email." WHERE id = ".$this->userid;
-			$result = mysql_query($query, $this->dblink);
+		$array = array();
+		$iter = 0;
+		$result = mysql_query($query, $this->dblink);
 
-			if ($result)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
+		while($row = mysql_fetch_array($result))
 		{
-			return false;
+			$array[$iter] = $row[0];
+			$iter++;
 		}
+
+		return $array;
 	}
 
 	// preveri, koliko dni ima se oseba na razpolago
@@ -217,6 +295,7 @@ class UserManager
 			$_SESSION['login_id'] = $this->userid;
 			$_SESSION['username'] = $this->username;
 			$_SESSION['password'] = $this->password;
+			$_SESSION['email'] = $this->email;
 			$_SESSION['daysleft'] = $this->daysleft;
 		}
 		else
@@ -225,6 +304,7 @@ class UserManager
 			unset($_SESSION['login_id']);
 			unset($_SESSION['username']);
 			unset($_SESSION['password']);
+			unset($_SESSION['email']);
 			unset($_SESSION['daysleft']);
 		}
 	}
@@ -236,7 +316,23 @@ class UserManager
 		unset($_SESSION['login_id']);
 		unset($_SESSION['username']);
 		unset($_SESSION['password']);
+		unset($_SESSION['email']);
 		unset($_SESSION['daysleft']);
+	}
+
+	// izbrise uporabnika
+	public function deleteUser($username)
+	{
+		$query = "DELETE FROM users WHERE username = '".$username."'";
+		$result = mysql_query($query, $this->dblink);
+		if ($result)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	// izpise vse uporabnike v tabeli

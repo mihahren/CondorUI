@@ -130,15 +130,16 @@ box-sizing: border-box;			/* Opera/IE 8+ */
 
 /* error prompt */
 #error_prompt{
-padding: 5px;
+padding: 10px;
 border: 2px solid red;
-width: 400px;
+min-width: 170px;
 position: absolute;
 right: 10px;
 top: 10px;
 z-index: 1;
-min-height: 48px;
+min-height: 38px;
 background-color: #FFFFFF;
+text-align: center;
 }
 
 #progress_bar{
@@ -351,10 +352,40 @@ margin-right: 10px;
 margin-bottom: 10px;
 }
 
-/* profile.PHP */
+#admin_24h_graph{
+width: 631px;
+height: 210px;
+}
+
+#admin_365d_graph{
+width: 572px;
+height: 225px;
+}
+
+#admin_popular_graph{
+width: 450px;
+height: 245px;
+}
+
+#register_form{
+width: 305px;
+height: 210px;
+}
+
+#edit_user_form{
+width: 364px;
+height: 225px;
+}
+
+/* PROFILE.PHP */
 
 .profile_text{
 margin-right: 10px;
 margin-bottom: 10px;
+}
+
+#profile_popular_graph{
+width: 400px;
+height: 225px;
 }
 
