@@ -3,24 +3,17 @@ include_once "lib/functions.php";
 include_once "lib/access_control.php";
 include_once "lib/classes.php";
 
-$userManager = new UserManager();	//zacne nov ali nadaljuje obstojec session
+$userManager = new UserManager();	// zacne nov ali nadaljuje obstojec session
 
-if (($_SERVER['REQUEST_METHOD'] == "POST") && isset($_POST['submit_entry_edit_user']))
+if (($_SERVER['REQUEST_METHOD'] == "POST") && isset($_POST['submit_entry_edit_user'])) // preveri, ce hocemo spreminjati podatke
 {
 	$new_username = "";
 	$new_password = "";
 	$new_email = "";
 
-	if (!empty($_POST['edit_username'])) // preveri, ce username ze obstaja in ali ga zelimo spremeniti
+	if (!empty($_POST['edit_username'])) // preveri, cezelimo spremeniti username
 	{
-		if ($userManager->checkUsernameExistance($_POST['edit_username']))
-		{
-			$new_username = $_POST['edit_username'];
-		}
-		else
-		{
-			$_SESSION['custom_error']['user_editing']['username_exists'] = "Username ze obstaja.";
-		}
+		$new_username = $_POST['edit_username'];
 	}
 
 	if (!empty($_POST['edit_password'])) // preveri, ce zelimo spremeniti password
@@ -28,20 +21,13 @@ if (($_SERVER['REQUEST_METHOD'] == "POST") && isset($_POST['submit_entry_edit_us
 		$new_password = $_POST['edit_password'];
 	}
 
-	if (!empty($_POST['edit_email'])) // preveri, ce email ze obstaja in ali ga zelimo spremeniti
+	if (!empty($_POST['edit_email'])) // preveri, ce zelimo spremeniti email
 	{
-		if ($userManager->checkEmailExistance($_POST['edit_email']))
-		{
-			$new_email = $_POST['edit_email'];
-		}
-		else
-		{
-			$_SESSION['custom_error']['user_editing']['email_exists'] = "Email ze obstaja.";
-		}
+		$new_email = $_POST['edit_email'];
 	}
 
 
-	if (isset($_POST['select_user'])) //doloci, ali gre za admin uporabnika
+	if (isset($_POST['select_user'])) // doloci, ali gre za admin uporabnika
 	{
 		$admin_user_edit = $userManager->editUserAdmin($_POST['select_user'], $new_username, $new_password, $new_email);
 
@@ -61,9 +47,9 @@ if (($_SERVER['REQUEST_METHOD'] == "POST") && isset($_POST['submit_entry_edit_us
 	}
 }
 
-if (($_SERVER['REQUEST_METHOD'] == "POST") && isset($_POST['delete_entry_edit_user']))
+if (($_SERVER['REQUEST_METHOD'] == "POST") && isset($_POST['delete_entry_edit_user'])) // preveri, ce hocemo brisati uporabnika
 {
-	if ($_POST['select_user'] != $_SESSION['username'])
+	if ($_POST['select_user'] != $_SESSION['username']) // preveri, ce gre za trenutno logiranega uporabnika
 	{
 		if ($userManager->deleteUser($_POST['select_user']))
 		{
@@ -91,7 +77,7 @@ if (($_SERVER['REQUEST_METHOD'] == "POST") && isset($_POST['delete_entry_edit_us
 				<td colspan='2'><div style='padding-bottom:5px; margin-bottom:5px; border-bottom:1px solid #8895a6;'></div></td>
 			</tr>
 <?php
-			if ($_SESSION['access'] == 'access')
+			if ($_SESSION['access'] == 'access') // ce je navadni uporabnik
 			{
 ?>
 				<tr>
@@ -104,7 +90,7 @@ if (($_SERVER['REQUEST_METHOD'] == "POST") && isset($_POST['delete_entry_edit_us
 				</tr>
 <?php
 			}
-			elseif ($_SESSION['access'] == 'admin')
+			elseif ($_SESSION['access'] == 'admin') // ce je admin uporabnik
 			{
 				$username_array = $userManager->getUserArray("SELECT username FROM users");
 ?>
@@ -114,8 +100,16 @@ if (($_SERVER['REQUEST_METHOD'] == "POST") && isset($_POST['delete_entry_edit_us
 						<select name='select_user'>
 <?php
 							foreach ($username_array as $value)
-							{		
-								echo "<option value='".$value."'>".$value."</option>";
+							{
+								$userid_array = $userManager->getUserArray("SELECT userid FROM users WHERE username = '".$value."'");
+								$isadmin_array = $userManager->getUserArray("SELECT isadmin FROM users WHERE username = '".$value."'");
+
+								if ($isadmin_array[0] == 1) // preveri, ce je admin, in izpise ime rdece
+									$admin_color = "style='color:red'";
+								else
+									$admin_color = "";
+
+								echo "<option ".$admin_color." value='".$value."'>".$value." (".$userid_array[0].")</option>";
 							}
 ?>						
 						</select>

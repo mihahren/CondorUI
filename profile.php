@@ -24,15 +24,16 @@ include_once "lib/stats_variables.php";
 		//switch stavek za kontrolo dostopa
 		switch ($_SESSION['access'])
 		{
-		case "login":
-
-			echo "<div class='profile_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
-			break;
-			
 		case "no_access":
 
 			echo "<div class='profile_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
-			$_SESSION['custom_error']['profile_login'] = "Napacni podatki ali pa je vas trial cas potekel!";
+			$_SESSION['custom_error']['profile_login'] = "Napacni podatki!";
+			break;
+
+		case "time_out":
+
+			echo "<div class='index_text'>Prosim vpisite drugo uporabnisko ime in geslo!</div>";
+			$_SESSION['custom_error']['profile_login'] = "Vas trial cas je potekel!";
 			break;
 			
 		case "access":
@@ -43,11 +44,17 @@ include_once "lib/stats_variables.php";
 ?>
 			<div id='profile_popular_graph' class="graph_box">
 <?php
-				drawPieChart($array_page_user,"file_page.png","Najbolj obiskane strani uporabnika",800,436,2);
+				drawPieChart($array_page_user,"file_page.png","Najbolj obiskane strani uporabnika",400,220,2);
 				echo "<img src='images/file_page.png'/>";
 ?>
 			</div>
 <?php
+			break;
+
+		default:
+
+			echo "<div class='basic_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
+			break;
 		}
 ?>
 		</div>

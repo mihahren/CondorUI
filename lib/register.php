@@ -7,31 +7,16 @@ $userManager = new UserManager();	//zacne nov ali nadaljuje obstojec session
 
 if (($_SERVER['REQUEST_METHOD'] == "POST") && isset($_POST['submit_entry_register']))
 {
-	$new_username = "";
-	$new_email = "";
+	$register_user = $userManager->inputNewUser($_POST['new_username'], $_POST['new_password'], $_POST['new_email'], $_POST['new_isadmin'], $_POST['new_registertime'], $_POST['new_activetime']);
 
-	if ($userManager->checkUsernameExistance($_POST['new_username'])) // preveri, ce username ze obstaja
-	{
-		$new_username = $_POST['new_username'];
-	}
+	$_SESSION['custom_error']['register_user'] = $register_user;
 
-	if ($userManager->checkEmailExistance($_POST['new_email'])) // preveri, ce email ze obstaja
-	{
-		$new_email = $_POST['new_email'];
-	}
-
-	$register_user = $userManager->inputNewUser($new_username, $_POST['new_password'], $new_email, $_POST['new_isadmin'], $_POST['new_registertime'], $_POST['new_activetime']);
-
-	foreach ($register_user as $key => $value)
-	{
-		$_SESSION['custom_error']['register_user'][$key] = $value;
-	}
 }
 ?>
 
 <div id='register_form' class="generic_box">
 	<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
-		<table style='border-collapse:collapse;'>
+		<table style='border-collapse:collapse; width:305px;'>
 			<tr>
 				<td colspan='2' style='text-align:center;'>Dodaj uporabnika</div></td>
 			</tr>

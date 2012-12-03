@@ -23,21 +23,27 @@ include_once "lib/access_control.php";
 		//switch stavek za kontrolo dostopa
 		switch ($_SESSION['access'])
 		{
-		case "login":
-
-			echo "<div class='index_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
-			break;
-			
 		case "no_access":
 
 			echo "<div class='index_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
-			$_SESSION['custom_error']['index_login'] = "Napacni podatki ali pa je vas trial cas potekel!";
+			$_SESSION['custom_error']['index_login'] = "Napacni podatki!";
+			break;
+
+		case "time_out":
+
+			echo "<div class='index_text'>Prosim vpisite drugo uporabnisko ime in geslo!</div>";
+			$_SESSION['custom_error']['index_login'] = "Vas trial cas je potekel!";
 			break;
 			
 		case "access":
 		case "admin":
 			
 			echo "<div class='index_text'>Dobrodosli! Prosim izberite eno izmed zgornjih moznosti</div>";
+			break;
+
+		default:
+
+			echo "<div class='basic_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
 			break;
 		}
 ?>		

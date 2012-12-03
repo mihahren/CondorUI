@@ -199,17 +199,22 @@ function imagelinethick($image, $x1, $y1, $x2, $y2, $color, $thick = 1)
 }
 
 // izrise line graph na podlagi array-a
-function drawLineGraph($array, $file_name, $naslov="test graph", $margin=30, $space_width=55, $line_spacing=20, $horizontal_lines=10, $axis_frequency=1, $aa_level=1)
+function drawLineGraph($array, $file_name, $naslov="test graph", $margin=25, $space_width=20, $line_spacing=20, $horizontal_lines=10, $axis_frequency=1, $aa_level=1)
 {
+	//dinamicne vrednosti
+	$margin = $margin*$aa_level;
+	$space_width = $space_width*$aa_level;
+	$line_spacing = $line_spacing*$aa_level;
+	$font_size = 11*$aa_level;
+
 	// izracunane dimenzije
 	$num_items = count($array);
 	$max_value = max($array);
-	$image_width = 1.5*$margin + $num_items*$space_width;
-	$image_height = 2*$margin + $horizontal_lines*$line_spacing;
+	$image_width = 2*$margin + $num_items*$space_width;
+	$image_height = 2.5*$margin + $horizontal_lines*$line_spacing;
 	$aaimage_width = $image_width/$aa_level;
 	$aaimage_height = $image_height/$aa_level;
 	$ratio = ($horizontal_lines*$line_spacing)/$max_value;
-	$font_size = $line_spacing*0.65;
 	$array_keys = array_keys($array);
 	$iter = 1;
 	
@@ -227,17 +232,17 @@ function drawLineGraph($array, $file_name, $naslov="test graph", $margin=30, $sp
 	imagefilledrectangle($image,0,0,$image_width,$image_height,$background_color);
 
 	// napisi naslov
-	imagettftext($image,$image_height/12,0,$margin,$image_height/10,$string_color,$_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf",$naslov);
+	imagettftext($image,$font_size*1.5,0,$margin,$font_size*1.8,$string_color,$_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf",$naslov);
 
 	// narisi horizontalne crte
 	for($i=0;$i<=$horizontal_lines;$i++)
 	{
 		$x1 = $margin;
-		$y1 = $y2 = $image_height - $margin/2 - $i*$line_spacing;
-		$x2 = $image_width - $margin/2;
+		$y1 = $y2 = $image_height - $margin - $i*$line_spacing;
+		$x2 = $image_width - $margin;
 		imagelinethick($image,$x1,$y1,$x2,$y2,$line_color,2*$aa_level);
 		$value = intval($i*$line_spacing/$ratio);
-		imagettftext($image,$font_size,0,0,$y1+$font_size/2,$string_color,$_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf",$value);	// y-os text
+		imagettftext($image, $font_size, 0, $x1-$font_size/3-strlen((string)$value)*$font_size, $y1+$font_size/2, $string_color, $_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf", $value);	// y-os text
 	}
 
 	// narisi graf
@@ -246,14 +251,14 @@ function drawLineGraph($array, $file_name, $naslov="test graph", $margin=30, $sp
 		$current_value = $array[$array_keys[$i]]*$ratio;
 		$next_value = $array[$array_keys[$i+1]]*$ratio;
 		$x1 = $margin + $space_width/2 + $i*$space_width;
-		$y1 = $image_height - $margin/2 - $current_value;
+		$y1 = $image_height - $margin - $current_value;
 		$x2 = $x1 + $space_width;
-		$y2 = $image_height - $margin/2 - $next_value;
+		$y2 = $image_height - $margin - $next_value;
 		if ($i<($num_items-1))
 			imagelinethick($image,$x1,$y1,$x2,$y2,$graph_color,3*$aa_level);
 		if ($iter>=$axis_frequency)
 		{
-			imagettftext($image,$font_size,0,$x1-$font_size*strlen($array_keys[$i])/6,$image_height,$string_color,$_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf",$array_keys[$i]);	// x-os text
+			imagettftext($image, $font_size, 0, $x1-$font_size*strlen($array_keys[$i])/6, $image_height-$font_size/2, $string_color, $_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf", $array_keys[$i]);	// x-os text
 			$iter = 1;
 		}
 		else
@@ -272,6 +277,13 @@ function drawLineGraph($array, $file_name, $naslov="test graph", $margin=30, $sp
 // izrise bar graph na podlagi array-a
 function drawBarGraph($array, $file_name, $naslov="test graph", $margin=30, $bar_width=25, $space_width=15, $line_spacing=15, $horizontal_lines=10, $aa_level=1)
 {	
+	//dinamicne vrednosti
+	$margin = $margin*$aa_level;
+	$bar_width = $bar_width*$aa_level;
+	$space_width = $space_width*$aa_level;
+	$line_spacing = $line_spacing*$aa_level;
+	$font_size = 11*$aa_level;
+
 	// izracunane dimenzije
 	$num_items = count($array);
 	$max_value = max($array);
@@ -280,7 +292,6 @@ function drawBarGraph($array, $file_name, $naslov="test graph", $margin=30, $bar
 	$aaimage_width = $image_width/$aa_level;
 	$aaimage_height = $image_height/$aa_level;
 	$ratio = ($horizontal_lines*$line_spacing)/$max_value;
-	$font_size = $line_spacing*0.65;
 	
 	// image canvas
 	$image = imagecreatetruecolor($image_width,$image_height);
@@ -296,17 +307,17 @@ function drawBarGraph($array, $file_name, $naslov="test graph", $margin=30, $bar
 	imagefilledrectangle($image,0,0,$image_width,$image_height,$background_color);
 
 	// napisi naslov
-	imagettftext($image,$image_height/15,0,$margin,$margin*0.75,$string_color,$_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf",$naslov);
+	imagettftext($image, $font_size*1.5, 0, $margin, $font_size*1.8, $string_color, $_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf", $naslov);
 
 	// narisi horizontalne crte
 	for($i=0;$i<=$horizontal_lines;$i++)
 	{
 		$x1 = $margin;
-		$y1 = $y2 = $image_height - $margin*0.75 - $i*$line_spacing;
+		$y1 = $y2 = $image_height - $margin - $i*$line_spacing;
 		$x2 = $image_width - $margin/2;
 		imagelinethick($image,$x1,$y1,$x2,$y2,$line_color,2*$aa_level);
 		$value = intval($i*$line_spacing/$ratio);
-		imagettftext($image,$font_size,0,0,$y1+$font_size/2,$string_color,$_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf",$value);	// y-os text
+		imagettftext($image, $font_size, 0, $x1-$font_size/3-strlen((string)$value)*$font_size, $y1+$font_size/2, $string_color, $_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf", $value);	// y-os text
 	}
 
 	// narisi bare
@@ -315,12 +326,12 @@ function drawBarGraph($array, $file_name, $naslov="test graph", $margin=30, $bar
 		list($key,$value)=each($array);
 		$temp_value = $value*$ratio;
 		$x1 = $margin + $space_width + $i*($bar_width+$space_width);
-		$y1 = $image_height - $margin*0.75;
+		$y1 = $image_height - $margin;
 		$x2 = $x1 + $bar_width;
 		$y2 = $y1 - $temp_value;
 		imagefilledrectangle($image,$x1,$y1,$x2,$y2,$bar_color);
-		imagettftext($image,$font_size,0,$x1+$bar_width*0.05,$y2-5*$aa_level,$string_color,$_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf",$value);	// vrednosti
-		imagettftext($image,$font_size,0,$x1+$bar_width/2-strlen($key)*$font_size/3,$image_height-$font_size/5,$string_color,$_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf",$key);	// x-os text
+		imagettftext($image, $font_size, 0, $x1+$bar_width*0.05, $y2-5*$aa_level, $string_color, $_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf", $value);	// vrednosti
+		imagettftext($image, $font_size, 0, $x1+$bar_width/2-strlen($key)*$font_size/3, $image_height-$font_size/2, $string_color, $_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf", $key);	// x-os text
 	}
 
 	// izrisi sliko
@@ -331,14 +342,18 @@ function drawBarGraph($array, $file_name, $naslov="test graph", $margin=30, $bar
 }
 
 // izrise pie chart na podlagi array-a
-function drawPieChart($array, $file_name, $naslov="test graph", $image_width=900, $image_height=500, $aa_level=2)
+function drawPieChart($array, $file_name, $naslov="test graph", $image_width=450, $image_height=250, $aa_level=2)
 {
 	// izracunane dimenzije
 	$num_items = count($array);
 	$max_value = max($array);
 	$ratio = 360/(array_sum($array));
-	$aaimage_width = $image_width/$aa_level;
-	$aaimage_height = $image_height/$aa_level;
+	$aaimage_width = $image_width;
+	$aaimage_height = $image_height;
+	$image_width = $image_width*$aa_level;
+	$image_height = $image_height*$aa_level;
+	$font_size = 10*$aa_level;
+	$radius = $image_height-$font_size*6;
 	$start = -90;
 	$end = -90;
 	
@@ -351,10 +366,10 @@ function drawPieChart($array, $file_name, $naslov="test graph", $image_width=900
 	$string_color = imagecolorallocate($image,0,0,0);
 	
 	// narisi background
-	imagefilledrectangle($image,0,0,$image_width,$image_height,$background_color);
+	imagefilledrectangle($image, 0, 0, $image_width, $image_height,$background_color);
 
 	// napisi naslov
-	imagettftext($image,$image_height/15,0,$image_height/2-$image_height/(1.3*2),$image_height/10,$string_color,$_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf",$naslov);
+	imagettftext($image, $font_size*1.5, 0, $font_size*1.5, $font_size*3, $string_color,$_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf", $naslov);
 
 	// narisi graf in legendo
 	for($i=0;$i<$num_items;$i++)
@@ -366,14 +381,14 @@ function drawPieChart($array, $file_name, $naslov="test graph", $image_width=900
 			// graf
 			$end = $start + $value*$ratio;
 			$arc_color = imagecolorallocate($image,rand(0,255),rand(0,255),$i*255/$num_items);
-			imagefilledarc($image,$image_height/2,$image_height/1.75,$image_height/1.3,$image_height/1.3,$start,$end,$arc_color,IMG_ARC_PIE);
+			imagefilledarc($image, $font_size*1.5+$radius/2, $font_size*5+$radius/2, $radius, $radius, $start, $end, $arc_color, IMG_ARC_PIE);
 			$start = $end;
 
 			// legenda
-			$x_leg = $image_height+$image_height/20;
-			$y_leg = $image_height/5+$i*$image_height/9;
-			imagefilledrectangle($image,$x_leg,$y_leg,$x_leg+$image_height/12,$y_leg+$image_height/12,$arc_color);
-			imagettftext($image,$image_height/26,0,$x_leg+$image_height/10,$y_leg+$image_height/16,$string_color,$_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf",$key." [".round(100*$value/array_sum($array), 2)."%]");
+			$x_leg = $font_size*4+$radius;
+			$y_leg = $font_size*5+$i*(30*$aa_level);
+			imagefilledrectangle($image, $x_leg, $y_leg, $x_leg+20*$aa_level, $y_leg+20*$aa_level, $arc_color);
+			imagettftext($image, $font_size, 0, $x_leg+25*$aa_level, $y_leg+10*$aa_level+$font_size/2, $string_color, $_SERVER["DOCUMENT_ROOT"]."/CondorUI/fonts/arial.ttf", $key." [".round(100*$value/array_sum($array), 2)."%]");
 		}
 	}
 

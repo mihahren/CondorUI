@@ -22,16 +22,17 @@ include_once "lib/access_control.php";
 <?php	
 			//switch stavek za kontrolo dostopa
 			switch ($_SESSION['access'])
-			{
-			case "login":
-
-				echo "<div class='basic_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
-				break;
-				
+			{		
 			case "no_access":
 
 				echo "<div class='basic_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
-				$_SESSION['custom_error']['basic_login'] = "Napacni podatki ali pa je vas trial cas potekel!";
+				$_SESSION['custom_error']['basic_login'] = "Napacni podatki!";
+				break;
+
+			case "time_out":
+
+				echo "<div class='index_text'>Prosim vpisite drugo uporabnisko ime in geslo!</div>";
+				$_SESSION['custom_error']['basic_login'] = "Vas trial cas je potekel!";
 				break;
 				
 			case "access":
@@ -52,6 +53,12 @@ include_once "lib/access_control.php";
 					<input type="file" name="file[]" id="basic_file_upload" multiple/><br />
 				</form>
 <?php
+				break;
+
+			default:
+
+				echo "<div class='basic_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
+				break;
 			}
 ?>		
 		</div>

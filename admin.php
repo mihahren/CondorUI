@@ -26,21 +26,22 @@ include_once "lib/stats_variables.php";
 		//switch stavek za kontrolo dostopa
 		switch ($_SESSION['access'])
 		{
-		case "login":
-
-			echo "<div class='admin_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
-			break;
-			
 		case "no_access":
 
 			echo "<div class='admin_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
-			$_SESSION['custom_error']['admin_login'] = "Napacni podatki ali pa je vas trial cas potekel!";
+			$_SESSION['custom_error']['admin_login'] = "Napacni podatki!";
+			break;
+
+		case "time_out":
+
+			echo "<div class='index_text'>Prosim vpisite drugo uporabnisko ime in geslo!</div>";
+			$_SESSION['custom_error']['admin_login'] = "Vas trial cas je potekel!";
 			break;
 
 		case "access":
 
 			echo "<div class='admin_text'>Prosim vpisite uporabnisko ime in geslo z administratorskimi pravicami!</div>";
-			$_SESSION['custom_error']['admin_noaccess'] = "Napacni podatki! Racun nima dostopa do te strani!";
+			$_SESSION['custom_error']['admin_login'] = "Racun nima dostopa do te strani!";
 			break;
 			
 		case "admin":
@@ -49,7 +50,7 @@ include_once "lib/stats_variables.php";
 
 			<div id='admin_24h_graph' class="graph_box">
 <?php
-				drawLineGraph($array_last_24h,"file_last_24h.png","Stevilo uporabnikov zadnjih 24 ur",60,49.0,35,8,2.5,2);
+				drawLineGraph($array_last_24h,"file_last_24h.png","Stevilo uporabnikov zadnjih 24 ur",25,24.4,29,5,2,2);
 				echo "<img src='images/file_last_24h.png'/>";
 ?>
 			</div>
@@ -58,18 +59,23 @@ include_once "lib/stats_variables.php";
 
 			<div id='admin_365d_graph' class="graph_box">
 <?php
-				drawBarGraph($array_last_year,"file_last_year.png","Stevilo uporabnikov v zadnjem letu",35,24,18,18.5,7,1);
+				drawBarGraph($array_last_year,"file_last_year.png","Stevilo uporabnikov v zadnjem letu",25,25,18,26,6,2);
 				echo "<img src='images/file_last_year.png'/>";
 ?>
 			</div>
 
 			<div id='admin_popular_graph' class="graph_box">
 <?php
-				drawPieChart($array_page,"file_page.png","Najbolj obiskane strani",900,500,2);
+				drawPieChart($array_page,"file_page.png","Najbolj obiskane strani",450,250,2);
 				echo "<img src='images/file_page.png'/>";
 ?>
 			</div>
 <?php
+			break;
+
+		default:
+
+			echo "<div class='basic_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
 			break;
 		}
 ?>		

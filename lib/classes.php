@@ -1,7 +1,7 @@
 <?php
 include_once "functions.php";
 
-/* Razred za user management */
+/* RAZRED ZA USER MANAGEMENT */
 class UserManager
 {
 	// spremenljivke
@@ -103,11 +103,11 @@ class UserManager
 
 		if (mysql_num_rows($result) >= 1)
 		{
-			return false;
+			return true;
 		}
 		else
 		{
-			return true;
+			return false;
 		}
 	}
 
@@ -119,40 +119,95 @@ class UserManager
 
 		if (mysql_num_rows($result) >= 1)
 		{
-			return false;
+			return true;
 		}
 		else
 		{
-			return true;
+			return false;
 		}
 	}
-	
-	// vnese novega uporabnika v bazo
-	public function inputNewUser($user_name, $password, $email, $is_admin, $register_time, $active_time)
+
+	// preveri vse kontrole za username
+	public function usernameControl($username)
 	{
-		if (3 > strlen($user_name)) // preveri novi username
+		$result_array = array();
+
+		if ($username == "") // preveri,ce je polje zapolnjeno
 		{
-			$result_array[0] = "Prekratek username ali pa ze obstaja.";
+			$result_array[0] = "";
 		}
-		elseif (5 > strlen($password)) // preveri novi password
+		if ($this->checkUsernameExistance($username)) // preveri obstoj username
+		{
+			$result_array[1] = "Username ze obstaja.";
+		}
+		if (3 > strlen($username) && $username != "") // preveri dolzino username
+		{
+			$result_array[2] = "Prekratek username.";
+		}
+
+		return $result_array;
+	}
+
+	// preveri vse kontrole za password
+	public function passwordControl($password)
+	{
+		$result_array = array();
+
+		if ($password == "") // preveri,ce je polje zapolnjeno
+		{
+			$result_array[0] = "";
+		}
+		if (5 > strlen($password) && $password != "") // preveri dolzino password
 		{
 			$result_array[1] = "Prekratek password.";
 		}
-		elseif (5 > strlen($email)) // preveri novi email
+
+		return $result_array;
+	}
+
+	// preveri vse kontrole za email
+	public function emailControl($email)
+	{
+		$result_array = array();
+
+		if ($email == "") // preveri,ce je polje zapolnjeno
 		{
-			$result_array[2] = "Prekratek email ali pa ze obstaja.";
+			$result_array[0] = "";
 		}
-		else
+		if ($this->checkEmailExistance($email)) // preveri obstoj email
+		{
+			$result_array[1] = "Email ze obstaja.";
+		}
+		if (3 > strlen($email) && $email != "") // preveri dolzino email
+		{
+			$result_array[2] = "Prekratek email.";
+		}
+
+		return $result_array;
+	}
+
+	// vnese novega uporabnika v bazo
+	public function inputNewUser($user_name, $password, $email, $is_admin, $register_time, $active_time)
+	{
+		$result_array = array();
+
+		// pogoji za registracijo
+		$result_array[0] = $this->usernameControl($user_name);
+		$result_array[1] = $this->passwordControl($password);
+		$result_array[2] = $this->emailControl($email);
+		
+		// registracija
+		if (empty($result_array))
 		{
 			$query = "INSERT INTO users VALUES (NULL,'$user_name',PASSWORD('$password'),'$email','$is_admin','$register_time','$active_time')";
 			$result = mysql_query($query, $this->dblink);
 			if ($result)
 			{
-				$result_array[3] = "Uspesno registrirano.";
+				$result_array[0] = "Uspesno registrirano.";
 			}
 			else
 			{
-				$result_array[4] = "Prislo je do napake pri vnosu.";
+				$result_array[1] = "Prislo je do napake pri vnosu.";
 			}
 		}
 
@@ -165,43 +220,40 @@ class UserManager
 		if($this->selectUser($user_name, $password)) // preveri prvotni username in password
 		{
 			$result_array = array();
-		
-			if (3 < strlen($new_user_name)) // preveri novi username
+			
+			// pogoji za urejanje
+			$result_array[0] = $this->usernameControl($new_user_name);
+			$result_array[1] = $this->passwordControl($new_password);
+			$result_array[2] = $this->emailControl($new_email);
+
+			// username urejanje
+			if (empty($result_array[0]))
 			{
 				$query = "UPDATE users SET username = '".$new_user_name."' WHERE userid = ".$this->userid;
 				$result = mysql_query($query, $this->dblink);
 				$user_name = $new_user_name;
 				$this->loginUser($user_name, $password);
-				$result_array[1] = "Username spremenjen.";
-			}
-			elseif ($new_user_name != "")
-			{
-				$result_array[1] = "Prekratek username.";
+				$result_array[0] = "Username spremenjen.";
 			}
 
-			if (5 < strlen($new_password)) // preveri novi password
+			// password urejanje
+			if (empty($result_array[1]))
 			{
 				$query = "UPDATE users SET password = PASSWORD('".$new_password."') WHERE userid = ".$this->userid;
 				$result = mysql_query($query, $this->dblink);
 				$password = $new_password;
 				$this->loginUser($user_name, $password);
-				$result_array[2] = "Password spremenjen.";
-			}
-			elseif ($new_password != "")
-			{
-				$result_array[2] = "Prekratek password.";
+				$result_array[1] = "Password spremenjen.";
 			}
 
-			if (5 < strlen($new_email)) // preveri novi email
+			// email urejanje
+			if (empty($result_array[2]))
 			{
 				$query = "UPDATE users SET email = '".$new_email."' WHERE userid = ".$this->userid;
 				$result = mysql_query($query, $this->dblink);
-				$result_array[3] = "Email spremenjen.";
+				$result_array[2] = "Email spremenjen.";
 			}
-			elseif ($new_email != "")
-			{
-				$result_array[3] = "Prekratek email.";
-			}
+
 		}
 		else
 		{
@@ -215,45 +267,41 @@ class UserManager
 	public function editUserAdmin($user_name, $new_user_name, $new_password, $new_email)
 	{
 		$result_array = array();
-		
-		if (3 < strlen($new_user_name)) // preveri novi username
+
+		// pogoji za urejanje
+		$result_array[0] = $this->usernameControl($new_user_name);
+		$result_array[1] = $this->passwordControl($new_password);
+		$result_array[2] = $this->emailControl($new_email);
+
+		// username checking
+		if (empty($result_array[0]))
 		{
 			$query = "UPDATE users SET username = '".$new_user_name."' WHERE username = '".$user_name."'";
 			$result = mysql_query($query, $this->dblink);
 			$user_name = $new_user_name;
 			$result_array[0] = "Username spremenjen.";
 		}
-		elseif ($new_user_name != "")
-		{
-			$result_array[0] = "Prekratek username.";
-		}
 
-		if (5 < strlen($new_password)) // preveri novi password
+		// password checking
+		if (empty($result_array[1]))
 		{
 			$query = "UPDATE users SET password = PASSWORD('".$new_password."') WHERE username = '".$user_name."'";
 			$result = mysql_query($query, $this->dblink);
 			$result_array[1] = "Password spremenjen.";
 		}
-		elseif ($new_password != "")
-		{
-			$result_array[1] = "Prekratek password.";
-		}
 
-		if (5 < strlen($new_email)) // preveri novi email
+		// email checking
+		if (empty($result_array[2])) // preveri novi email
 		{
 			$query = "UPDATE users SET email = '".$new_email."' WHERE username = '".$user_name."'";
 			$result = mysql_query($query, $this->dblink);
 			$result_array[2] = "Email spremenjen.";
 		}
-		elseif ($new_email != "")
-		{
-			$result_array[2] = "Prekratek email.";
-		}
 
 		return $result_array;
 	}
 
-	// izpisi seznam vseh usernamov v array
+	// izpisi query seznam v array
 	public function getUserArray($query)
 	{
 		$array = array();
@@ -272,31 +320,42 @@ class UserManager
 	// preveri, koliko dni ima se oseba na razpolago
 	public function daysLeft($user_name, $password)
 	{
-		$this->selectUser($user_name, $password);
-
-		if (($this->dayspassed <= $this->activetime) || ($this->activetime == 0))
+		if ($this->selectUser($user_name, $password))
 		{
-			return true;
-		}
-		else
-		{
-			return false;
+			if (($this->dayspassed <= $this->activetime) || ($this->activetime == 0))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 	}
 
 	// ustvari session za uporabnika
 	public function loginUser($user_name, $password)
 	{
-		$this->selectUser($user_name, $password);
-		
-		if ($this->daysLeft($user_name, $password))
+		if ($this->selectUser($user_name, $password))
 		{
-			$_SESSION['access'] = $this->accesscontrol;
-			$_SESSION['login_id'] = $this->userid;
-			$_SESSION['username'] = $this->username;
-			$_SESSION['password'] = $this->password;
-			$_SESSION['email'] = $this->email;
-			$_SESSION['daysleft'] = $this->daysleft;
+			if ($this->daysLeft($user_name, $password))
+			{
+				$_SESSION['access'] = $this->accesscontrol;
+				$_SESSION['login_id'] = $this->userid;
+				$_SESSION['username'] = $this->username;
+				$_SESSION['password'] = $this->password;
+				$_SESSION['email'] = $this->email;
+				$_SESSION['daysleft'] = $this->daysleft;
+			}
+			else
+			{
+				$_SESSION['access'] = "time_out";
+				unset($_SESSION['login_id']);
+				unset($_SESSION['username']);
+				unset($_SESSION['password']);
+				unset($_SESSION['email']);
+				unset($_SESSION['daysleft']);
+			}
 		}
 		else
 		{
@@ -342,7 +401,7 @@ class UserManager
 	}
 }
 
-/* Razred za file management */
+/* RAZRED ZA FILE MANAGEMENT */
 
 class FileManager
 {
@@ -596,7 +655,8 @@ class FileManager
 
 }
 
-/* Razred za stats tracking */
+/* RAZRED ZA STATS TRACKING */
+
 class StatsTracker extends UserManager
 {
 	// shrani statse v bazo podatkov

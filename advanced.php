@@ -23,15 +23,16 @@ include_once "lib/access_control.php";
 		//switch stavek za kontrolo dostopa
 		switch ($_SESSION['access'])
 		{
-		case "login":
-
-			echo "<div class='advanced_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
-			break;
-			
 		case "no_access":
 
 			echo "<div class='advanced_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
-			$_SESSION['custom_error']['advanced_login'] = "Napacni podatki ali pa je vas trial cas potekel!";
+			$_SESSION['custom_error']['advanced_login'] = "Napacni podatki!";
+			break;
+
+		case "time_out":
+
+			echo "<div class='index_text'>Prosim vpisite drugo uporabnisko ime in geslo!</div>";
+			$_SESSION['custom_error']['advanced_login'] = "Vas trial cas je potekel!";
 			break;
 			
 		case "access":
@@ -53,6 +54,12 @@ include_once "lib/access_control.php";
 			</div>
 			<div id="random_test_box"></div>	
 <?php
+			break;
+
+		default:
+
+			echo "<div class='basic_text'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
+			break;
 		}
 ?>		
 		</div>
