@@ -2,37 +2,38 @@
 include_once "lib/functions.php";
 include_once "lib/access_control.php";
 include_once "lib/classes.php";
-
-switch ($_SESSION['access'])
-{
-case "access":
-
-	header('Location: index.php');
-	break;	
-
-case "no_access":
-
-	$_SESSION['custom_error']['index_login'] = "Napacni podatki ali pa je vas trial cas potekel!";
-	break;
-}
 ?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>Signup</title>
-		<link rel="stylesheet" type="text/css" href="css/global_css.css" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Index</title>
+		<!-- jQuery -->
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 		<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
+		<!-- Bootstrap -->
+		<link href="css/bootstrap.css" rel="stylesheet">
+		<link href="css/bootstrap-responsive.css" rel="stylesheet">
+		<script type="text/javascript" src="js/bootstrap.js"></script>
+		<!-- Custom scripts and css -->
 		<script type="text/javascript" src="js/global_jquery.js"></script>
+		<link href="css/global_css.css" rel="stylesheet">
 	</head>
 	<body>
 		<!-- header, ki vsebuje glavo z login, logout menujem ter odsek za prikazovanje sporocil -->
 		<?php include_once "lib/header.php";?>
 
 		<!-- content panel, ki prikazuje glavni del aplikacije -->
-		<div id="content_panel">
-			<?php include_once "lib/register.php";?>
+		<div class="container">
+			<div class="row">
+				<div class="span4">
+					<?php include_once "lib/register.php";?>
+				</div>
+				<div class="span8">
+				
+				</div>
+			</div>
 		</div>
 		
 		<!-- footer, ki vsebuje small print in error funkcijo -->

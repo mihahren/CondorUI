@@ -3,13 +3,13 @@ CREATE DATABASE condor_users;
 USE condor_users;
 
 CREATE TABLE users (
-	userid int unsigned not null auto_increment primary key,
-	username varchar(100) not null,
-	password varchar(42) not null,
-	email varchar(100) not null,
+	userid int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	username varchar(100) NOT NULL,
+	password varchar(42) NOT NULL,
+	email varchar(100) NOT NULL,
 	isadmin int(1),
-	registertime varchar(100) not null,
-	activetime varchar(100) not null
+	registertime varchar(100) NOT NULL,
+	activetime varchar(100) NOT NULL
 );
 
 INSERT INTO users VALUES (NULL,'admin',PASSWORD('admin'),'admin@localhost',1,0,0);
@@ -19,11 +19,11 @@ DELETE FROM users WHERE userid = 1;
 DROP TABLE users;
 
 CREATE TABLE stats (
-	statid int unsigned NOT NULL auto_increment primary key,
-	userid int unsigned default '0',
-	browser varchar(255) NOT NULL default '',
-	ip varchar(15) NOT NULL default '',
-	date_visited int unsigned NOT NULL default '0',
-	page varchar(100) NOT NULL default '',
-	from_page varchar(200) NOT NULL default ''
+	statid int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	userid int UNSIGNED DEFAULT '0' FOREIGN KEY REFERENCES users(userid),
+	browser varchar(255) NOT NULL DEFAULT '',
+	ip varchar(15) NOT NULL DEFAULT '',
+	date_visited int unsigned NOT NULL DEFAULT '0',
+	page varchar(100) NOT NULL DEFAULT '',
+	from_page varchar(200) NOT NULL DEFAULT ''
 );

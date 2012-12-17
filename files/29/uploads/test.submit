@@ -1,0 +1,11 @@
+Universe=vanilla
+Executable=../files/29/uploads/test.sh
+Output=../files/29/results/test.sh.output
+Error=../files/29/results/test.sh.error
+Log=../files/29/results/test.sh.log
++Owner="admin"
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+queue 10
