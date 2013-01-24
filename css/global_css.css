@@ -65,41 +65,12 @@ color: #8895a6;
 text-shadow: 1px 1px 1px #B0C0D6;
 }
 
-.graph_box{
-border: 1px solid #8895a6;
-padding: 10px;
-width: auto;
-float: left;
-margin-right: 10px;
-margin-bottom: 10px;
-box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
-}
-
-#progress_bar{
-background-color: #58D65E;
-width:0%;
-height:58px;
-}
-
-#progress_number{
-height:20px;
-width:40px;
-vertical-align:middle;
-position:absolute;
-top:50%;
-margin-top:-10px;
-left:50%;
-margin-left:-20px;
-}
-
-/* login prompt */
+/* HEADER.PHP */
 
 #profile_button{
 text-decoration: underline;
-cursor: pointer;
 }
 
-/* logout prompt */
 #logout_button{
 text-decoration: underline;
 cursor: pointer;
@@ -108,55 +79,16 @@ cursor: pointer;
 #logout_button:hover{
 text-decoration: underline;
 cursor: pointer;
-color: black;
 }
 
 /* INDEX.PHP */
-.index_text{
-margin-right: 10px;
-margin-bottom: 10px;
-}
 
 /* ADVANCED.PHP */
-.adv_menu_btn:hover{
+.adv_menu_btn{
 cursor: pointer;
 }
 
-#delete_submited_table td{
-padding: 3px;
-}
-
-#default_condor_table td{
-padding: 3px;
-}
-
-#file_table td{
-vertical-align:middle;
-}
-
 /* BASIC.PHP */
-
-.basic_text{
-margin-right: 10px;
-margin-bottom: 10px;
-}
-
-#basic_input_wrapper{
-width: auto;
-float: left;
-margin-right: 10px;
-margin-bottom: 10px;
-}
-
-#basic_output_wrapper{
-border: 1px solid #8895a6;
-padding: 10px;
-margin-right: 10px;
-margin-bottom: 10px;
-width: auto;
-float: left;
-box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
-}
 
 /* SIGNUP.PHP */
 
@@ -164,13 +96,142 @@ box-shadow: 1px 1px 2px #B0C0D6, 1px 1px 2px #B0C0D6 inset;
 
 /* PROFILE.PHP */
 
-.profile_text{
-margin-right: 10px;
-margin-bottom: 10px;
+/* CUSTOM POPOVER */
+.custom-popover {
+  position: absolute;
+  top: -4px;
+  left: 353px;
+  z-index: 1010;
+  width: 400px;
+  padding: 1px;
+  text-align: left;
+  white-space: normal;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+     -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -webkit-background-clip: padding-box;
+     -moz-background-clip: padding;
+          background-clip: padding-box;
 }
 
-#profile_popular_graph{
-width: 400px;
-height: 225px;
+.custom-popover.top {
+  margin-top: -10px;
 }
 
+.custom-popover.right {
+  margin-left: 10px;
+}
+
+.custom-popover.bottom {
+  margin-top: 10px;
+}
+
+.custom-popover.left {
+  margin-left: -10px;
+}
+
+.custom-popover-title {
+  padding: 8px 14px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 18px;
+  background-color: #f7f7f7;
+  border-bottom: 1px solid #ebebeb;
+  -webkit-border-radius: 5px 5px 0 0;
+     -moz-border-radius: 5px 5px 0 0;
+          border-radius: 5px 5px 0 0;
+}
+
+.custom-popover-content {
+  padding: 9px 14px;
+}
+
+.custom-popover .arrow,
+.custom-popover .arrow:after {
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+
+.custom-popover .arrow {
+  border-width: 11px;
+}
+
+.custom-popover .arrow:after {
+  border-width: 10px;
+  content: "";
+}
+
+.custom-popover.top .arrow {
+  bottom: -11px;
+  left: 50%;
+  margin-left: -11px;
+  border-top-color: #999;
+  border-top-color: rgba(0, 0, 0, 0.25);
+  border-bottom-width: 0;
+}
+
+.custom-popover.top .arrow:after {
+  bottom: 1px;
+  margin-left: -10px;
+  border-top-color: #ffffff;
+  border-bottom-width: 0;
+}
+
+.custom-popover.right .arrow {
+  top: 50%;
+  left: -11px;
+  margin-top: -11px;
+  border-right-color: #999;
+  border-right-color: rgba(0, 0, 0, 0.25);
+  border-left-width: 0;
+}
+
+.custom-popover.right .arrow:after {
+  bottom: -10px;
+  left: 1px;
+  border-right-color: #ffffff;
+  border-left-width: 0;
+}
+
+.custom-popover.bottom .arrow {
+  top: -11px;
+  left: 50%;
+  margin-left: -11px;
+  border-bottom-color: #999;
+  border-bottom-color: rgba(0, 0, 0, 0.25);
+  border-top-width: 0;
+}
+
+.custom-popover.bottom .arrow:after {
+  top: 1px;
+  margin-left: -10px;
+  border-bottom-color: #ffffff;
+  border-top-width: 0;
+}
+
+.custom-popover.left .arrow {
+  top: 50%;
+  right: -11px;
+  margin-top: -11px;
+  border-left-color: #999;
+  border-left-color: rgba(0, 0, 0, 0.25);
+  border-right-width: 0;
+}
+
+.custom-popover.left .arrow:after {
+  right: 1px;
+  bottom: -10px;
+  border-left-color: #ffffff;
+  border-right-width: 0;
+}

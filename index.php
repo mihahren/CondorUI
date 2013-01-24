@@ -48,12 +48,48 @@ include_once "lib/access_control.php";
 				<div class="span8">
 					<div class="row-fluid">
 						<div class="span12">
-							<div class="btn-group" style="margin-bottom:20px;float:right">
-								<button class="btn disabled">Avtomatsko uploada, ustvari privzeto submit datoteko ter doda v condor queue.</button>
+							<div class="btn-group visible-desktop" style="margin-bottom:20px">
 								<button id="home_file_button" class="btn btn-primary">Upload Files</button>
+								<button class="btn disabled">Ustvari privzet submit file</button>
+							</div>
+							<div class="btn-group hidden-desktop" style="margin-bottom:20px">
+								<button id="home_file_button" class="btn btn-primary">Upload Files</button>
+								<button class="btn disabled">Ustvari submit</button>
 							</div>
 						</div>
 					</div>
+					<div class="row-fluid">
+						<div class="span12">
+							<div class="tabbable" >
+								<ul class="nav nav-tabs" style="margin-bottom:-1px">
+<?php
+									if ($_SESSION['menu'] == "computer_status")
+									{
+										$lastSubmitsActive = "";
+										$computerStatusActive = "class='active'";
+									}
+									else
+									{
+										$lastSubmitsActive = "class='active'";
+										$computerStatusActive = "";
+									}
+								
+									echo "<li id='button_last_submits' ".$lastSubmitsActive."><a href='#tab_last_submits' data-toggle='tab'>Zadnji submiti</a></li>";
+									echo "<li id='button_computer_status' ".$computerStatusActive."><a href='#tab_computer_status' data-toggle='tab'>Status racunalnikov</a></li>";
+?>
+								</ul>
+								<div class="tab-content" style="padding:10px;border:1px solid #dddddd">
+									<div class="tab-pane active" id="tab_last_submits">
+										<?php include "ajax/home_ajax_content.php";?>
+									</div>
+									<div class="tab-pane" id="tab_computer_status">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="span4">
 					<div class="row-fluid">
 						<div class="span12">
 							<div class="generic_box" style="background-color:#f5f5f5">
@@ -62,27 +98,12 @@ include_once "lib/access_control.php";
 							</div>
 						</div>
 					</div>
-					<form method="post" id="home_form" enctype="multipart/form-data" style="visibility:hidden">
-						<input type="hidden" name="create_submit_file" value="true" />
-						<input type="file" name="file[]" id="home_file_upload" multiple/><br />
-					</form>
-				</div>
-				<div class="span4">
-					<div class="tabbable" >
-						<ul class="nav nav-tabs" style="margin-bottom:-1px">
-							<li id="button_last_submits" class="active"><a href="#tab_last_submits" data-toggle="tab">Zadnji submiti</a></li>
-							<li id="button_computer_status"><a href="#tab_computer_status" data-toggle="tab">Status racunalnikov</a></li>
-						</ul>
-						<div class="tab-content" style="padding:10px;border:1px solid #dddddd">
-							<div class="tab-pane active" id="tab_last_submits">
-								<?php include "ajax/home_ajax_content.php";?>
-							</div>
-							<div class="tab-pane" id="tab_computer_status">
-							</div>
-						</div>
-					</div>
 				</div>
 			</div>
+			<form method="post" id="home_form" enctype="multipart/form-data" style="visibility:hidden">
+				<input type="hidden" name="create_submit_file" value="true" />
+				<input type="file" name="file[]" id="home_file_upload" multiple/><br />
+			</form>
 <?php
 			break;
 
@@ -93,9 +114,16 @@ include_once "lib/access_control.php";
 		}
 ?>		
 		</div>
+		<div id="output_box"></div>
 		
 		<!-- footer, ki vsebuje small print in error funkcijo -->
 		<?php include_once "lib/footer.php";?>
+		<div class="popover">
+			<div class="arrow"></div>
+			<h3 class="popover-title">Popover bottom</h3>
+			<div class="popover-content">
+				<p>Sed posuere consectetur est at lobortis. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</p>
+			</div>
+		</div>
 	</body>
 </html>
-

@@ -49,7 +49,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 	{
 		for ($i=0; $i<count($_FILES['file']['tmp_name']); $i++)
 		{
-			$fileManager->uploadFile($_FILES['file']['tmp_name'][$i], $_FILES['file']['name'][$i], $out);
+			$fileManager->uploadFile($_FILES['file']['tmp_name'][$i], $_FILES['file']['name'][$i], $_SESSION['username'], $out);
 			$_SESSION['custom_error']['uploads'][$i] = $out;
 		}
 	}
@@ -75,7 +75,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 	
 	if (!empty($_SESSION['submit_file']))
 	{	
-		$fileManager->submitFile($_SESSION['submit_file'], $out);
+		$fileManager->submitFile($_SESSION['submit_file'], $_SESSION['username'], $out);
 		
 		foreach ($out as $key => $value)
 		{

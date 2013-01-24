@@ -44,17 +44,9 @@ include_once "lib/access_control.php";
 			case "access":
 			case "admin":
 ?>
-				<div class="btn-group">
-					<button id="basic_file_button" class="btn btn-primary">Upload Files</button>
-					<button class="btn disabled">Avtomatsko uploada, ustvari privzeto submit datoteko ter doda v condor queue.</button>
-				</div>
-				
-				<form method="post" id="basic_file_form" enctype="multipart/form-data" style="visibility:hidden;">
-					<input type="hidden" name="create_submit_file" value="true" />
-					<input type="file" name="file[]" id="basic_file_upload" multiple/><br />
-				</form>
 				<div id="output_box"></div>
 <?php
+				echo "<div class='hero-unit'>Nahajas se v akcelelogrami predelu!</div>";
 				break;
 
 			default:
@@ -62,7 +54,7 @@ include_once "lib/access_control.php";
 				echo "<div class='hero-unit'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
 				break;
 			}
-?>		
+?>	
 		</div>
 		
 		<!-- footer, ki vsebuje small print in error funkcijo -->

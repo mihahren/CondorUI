@@ -2,15 +2,28 @@
 var refreshIntervalId;
 
 //funkcija za hendlanje error sporocil
-function errorHandler(){
-	$("#error_prompt").hide();
+function errorHandlerMobile(){
+	$("#error_prompt_mobile").hide();
 	
-	if(document.getElementById("custom_error"))
+	if(document.getElementById("custom_error_mobile"))
 	{	
-		$("#error_prompt").empty()
-			.html($("#custom_error").html())
+		$("#error_prompt_mobile").empty()
+			.html($("#custom_error_mobile").html())
 			.show();
-		$("#custom_error").remove();
+		$("#custom_error_mobile").remove();
+	}
+}
+
+
+function errorHandlerDesktop(){
+	$("#error_prompt_desktop").hide();
+	
+	if(document.getElementById("custom_error_desktop"))
+	{	
+		$("#error_prompt_desktop").empty()
+			.html($("#custom_error_desktop").html())
+			.show();
+		$("#custom_error_desktop").remove();
 	}
 }
 
@@ -86,23 +99,13 @@ function submitFormAjaxSubmit(submit_info){
 	});
 }
 
-//funkcija za brisanje submitanih datotek na index strani
-function homeAjaxDelete(menu_info, output_id, del_info){
+//funkcija za brisanje submitanih datotek v condor tabeli
+function ajaxCondorDelete(page_id, menu_info,  del_info, output_id){
 	$.ajax({
-		url: "ajax/home_ajax_content.php",
+		url: page_id,
 		type: "POST",
 		data: {menu: menu_info, delete_submited_file: del_info},
 		success: function(result){$(output_id).html(result);}
-	});
-}
-
-//funkcija za brisanje submitanih datotek na advanced strani
-function submitAjaxDelete(del_info){
-	$.ajax({
-		url: "ajax/advanced_ajax_content.php",
-		type: "POST",
-		data: {menu: "queue", delete_submited_file: del_info},
-		success: function(result){$("#output_box").html(result);}
 	});
 }
 
@@ -112,19 +115,19 @@ function refreshCondor(){
 	{
 		refreshIntervalId = setInterval(function(){
 			submitAjax("ajax/advanced_ajax_content.php", "#output_box", "status");
-		},2000);
+		},5000);
 	}
 	else if(document.getElementById("queue_selector"))
 	{
 		refreshIntervalId = setInterval(function(){
 			submitAjax("ajax/advanced_ajax_content.php", "#output_box", "queue");
-		},2000);
+		},5000);
 	}
 }
 
 //funkcije za pavzo refresha, ko je alert na zaslonu
 function stopRefresh(){
-	if ($('#error_prompt').is(":visible"))
+	if ($('#error_prompt_mobile').is(":visible") || $('#error_prompt_desktop').is(":visible"))
 	{
 		clearInterval(refreshIntervalId);
 	}
@@ -155,7 +158,8 @@ $(document).ready(function (){
 	
 	//globalni dogodki - izvedejo na zacetku
 	clearInterval(refreshIntervalId);
-	errorHandler();
+	errorHandlerMobile()
+	errorHandlerDesktop();
 	refreshCondor();
 	refreshButtonBorders();
 	stopRefresh();
@@ -163,7 +167,8 @@ $(document).ready(function (){
 	//izvede vsakic po zakljucenem ajax dogodku
 	$(document).ajaxComplete(function() {
 		clearInterval(refreshIntervalId);
-		errorHandler();
+		errorHandlerMobile();
+		errorHandlerDesktop();
 		refreshCondor();
 		refreshButtonBorders();
 		stopRefresh();
@@ -191,16 +196,16 @@ $(document).ready(function (){
 		submitAjax("ajax/advanced_ajax_content.php", "#output_box", "submit");
 	});
 	
-	//home form submit
+	//home file form submit
 	$(document).on("click", "#home_file_button", function (){
 		$("#home_file_upload").click();
 	});
 	
 	$(document).on("change", "#home_file_upload", function (){
-		submitFileAjax("#home_form", "ajax/home_ajax_content.php", "NULL", "NULL");
+		submitFileAjax("#home_form", "ajax/home_ajax_content.php", "#tab_last_submits", "NULL");
 	});
 	
-	//basic form submit
+	//basic file form submit
 	$(document).on("click", "#basic_file_button", function (){
 		$("#basic_file_upload").click();
 	});
@@ -209,7 +214,7 @@ $(document).ready(function (){
 		submitFileAjax("#basic_file_form", "ajax/basic_ajax_content.php", "#output_box", "NULL");
 	});
 	
-	//advanced form submit
+	//advanced file form submit
 	$(document).on("click", "#advanced_file_button", function (){
 		$("#advanced_file_upload").click();
 	});
@@ -219,8 +224,15 @@ $(document).ready(function (){
 	});
 	
 	//nadaljuje z refreshanjem po zaprtju 
-	$(document).on("click", "#main_alert_button", function (){
-		if (!$('#main_alert').is(":visible"))
+	$(document).on("click", "#alert_button_mobile", function (){
+		if (!$('#mobile_alert').is(":visible"))
+		{
+			refreshCondor();
+		}
+	});
+	
+	$(document).on("click", "#alert_button_desktop", function (){
+		if (!$('#desktop_alert').is(":visible"))
 		{
 			refreshCondor();
 		}
@@ -229,6 +241,31 @@ $(document).ready(function (){
 	//upravljanje z login predelom	
 	$(document).on("click", "#logout_button", function (){
 		$("#logout_form").submit();
+	});
+	
+	//zapri popover
+	$(document).on("click", "#alert_button_desktop", function (){
+		$("#error_prompt_desktop").hide();
+	});
+	
+	
+	//alert button
+	$(document).on("click", "#alert_button", function (){
+		if($('#alert_button').hasClass("active")){
+			$.ajax({
+				url: "lib/error_tracking.php",
+				type: "POST",
+				data: {alert_popup: "toggled"},
+				success: function(result){$("").html(result);}
+			});
+		}else{
+			$.ajax({
+				url: "lib/error_tracking.php",
+				type: "POST",
+				data: {alert_popup: "default"},
+				success: function(result){$("").html(result);}
+			});
+		}
 	});
 	
 	//globalne spremenljivke in dogodki - izvedejo na koncu

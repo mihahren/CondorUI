@@ -19,12 +19,13 @@ DELETE FROM users WHERE userid = 1;
 DROP TABLE users;
 
 CREATE TABLE stats (
-	statid int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	statid int UNSIGNED NOT NULL AUTO_INCREMENT,
 	userid int UNSIGNED DEFAULT '0',
 	browser varchar(255) NOT NULL DEFAULT '',
 	ip varchar(15) NOT NULL DEFAULT '',
 	date_visited int unsigned NOT NULL DEFAULT '0',
 	page varchar(100) NOT NULL DEFAULT '',
 	from_page varchar(200) NOT NULL DEFAULT ''
+	PRIMARY KEY (statid),
 	FOREIGN KEY (userid) REFERENCES users(userid)
 );

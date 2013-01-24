@@ -9,10 +9,10 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 	//spremenljivke za navigiranje po menujih
 	if(isset($_POST['menu']))
 		$_SESSION['menu'] = $_POST['menu'];
-
-	//spremenljivka za navigiranje po display file-u
-	if(isset($_POST['directory']))
-		$_SESSION['directory'] = $_POST['directory'];
+	
+	//spremenljivke za navigiranje po straneh
+	if (isset($_POST['page_number']))
+		$_SESSION['current_page'] = $_POST['page_number'];
 }
 
 //switch stavek za izbiro podmenuja v advanced naèinu
@@ -20,84 +20,82 @@ switch($_SESSION['menu'])
 {
 case "computer_status":
 
-	condor_generic('condor_status -xml -attributes Name,State,Activity',$output);
-	$stringOutput = convertString($output);
-	$computerStatus = computerStatus($stringOutput);
+	condor_generic('condor_status -xml -attributes Name,State,Activity',$codnorOutput);
+	$stringOutput = convertString($codnorOutput);
+
+	$xml = simplexml_load_string($stringOutput);
+
+	$computerStatusArray = array();
+	$iter = 0;
+
+	foreach ($xml->c as $c)
+	{
+		foreach ($c->a as $a)
+		{
+			$computerStatusArray[$iter][(string)$a['n']] = (string)($a->Children());
+		}
 	
-	if (empty($computerStatus))
-	{
-		echo "<div style='width:100%; text-align:center'><strong>Vas condor queue je prazen!</strong></div>";
-	}	
-	else
-	{
-		echo "<table class='table table-condensed'>
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>State</th>
-					<th>Activity</th>
-				</tr>
-			</thead>
-			<tbody>";		
-
-				foreach ($computerStatus as $key => $value)
-				{
-					echo "<tr>
-						<td>".$value['Name']."</td>
-						<td>".$value['State']."</td>
-						<td>".$value['Activity']."</td>
-					</tr>";
-				}
-								
-			echo "</tbody>
-		</table>";
+		$iter++;
 	}
+	
+	$computerStatus = new CondorManager($computerStatusArray, 15, $_SESSION['current_page']);
+	$computerStatus->drawComputerStatusTable("ajax/home_ajax_content.php", "computer_status", "#tab_computer_status");
+	$computerStatus->drawPageNavigation("ajax/home_ajax_content.php", "computer_status","#tab_computer_status", "page_number");
+	
 	break;
-
+	
 case "last_submits":
 default:
-		
-	condor_generic('condor_q -xml -attributes ClusterId,JobStartDate,Cmd,JobStatus submitter '.$_SESSION['username'],$output);
-	$stringOutput = convertString($output);
-	$lastSubmits = lastSubmits($stringOutput);
-	
-	if (empty($lastSubmits))
-	{
-		echo "<div style='width:100%; text-align:center'><strong>Vas condor queue je prazen!</strong></div>";
-	}	
-	else
-	{
-		echo "<table class='table table-condensed'>
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Submitted</th>
-					<th>Name</th>
-					<th>State</th>
-					<th>Del</th>
-				</tr>
-			</thead>
-			<tbody>";		
 
-				foreach ($lastSubmits as $key => $value)
-				{
-					if ($value['ClusterId'] != $temp_cluster)
-					{
-						echo "<tr>
-							<td>".$value['ClusterId']."</td>
-							<td>".date("d/m - H:i",$value['JobStartDate'])."</td>
-							<td>".$value['Cmd']."</td>
-							<td>".$value['JobStatus']."</td>
-							<td style='text-align: center;'><a class='mouse_hover' onclick=\"homeAjaxDelete('#last_submits','#tab_last_submits','".$value['ClusterId']."')\"><i class='icon-trash'></i></a></td>
-						</tr>";
-						
-						$temp_cluster = $value['ClusterId'];
-					}
-				}
-								
-			echo "</tbody>
-		</table>";
+	// ustvarjen array za prikaz v tabeli
+	condor_generic('condor_q -xml -attributes ClusterId,JobStartDate,Cmd,JobStatus submitter '.$_SESSION['username'],$condorOutput);
+	$stringOutput = convertString($condorOutput);
+
+	$xml = simplexml_load_string($stringOutput);
+	
+	$lastSubmitsArray = array();
+	$iter = 0;
+	
+	foreach ($xml->c as $c)
+	{
+		foreach ($c->a as $a)
+		{
+			switch ((string)$a['n'])
+			{			
+			case "Cmd":
+				$a_path = pathinfo((string)($a->children()));
+				$lastSubmitsArray[$iter][(string)$a['n']] = $a_path['basename'];
+				break;
+				
+			default:
+				$lastSubmitsArray[$iter][(string)$a['n']] = (string)($a->children());
+				break;	
+			}
+		}
+		
+		$iter++;
 	}
+	
+	//skrajsan array za tabelo, samo unikatni cluster vnosi
+	$lastSubmitsCorrection = array();
+	$lastClusterID = $lastSubmitsArray[0]["ClusterId"];
+	$lastSubmitsCorrection[0] = $lastSubmitsArray[0];
+	$iter = 1;
+	
+	for ($i=1;$i<count($lastSubmitsArray);$i++)
+	{
+		if($lastSubmitsArray[$i]["ClusterId"] != $lastClusterID)
+		{
+			$lastSubmitsCorrection[$iter] = $lastSubmitsArray[$i];
+			$iter++;
+			$lastClusterID = $lastSubmitsArray[$i]["ClusterId"];
+		}
+	}
+
+	$lastSubmits = new CondorManager($lastSubmitsCorrection, 15, $_SESSION['current_page']);
+	$lastSubmits->drawLastSubmitTable("ajax/home_ajax_content.php", "last_submits", "#tab_last_submits");
+	$lastSubmits->drawPageNavigation("ajax/home_ajax_content.php", "last_submits","#tab_last_submits", "page_number");
+
 	break;
 }
 include "../lib/error_tracking.php";

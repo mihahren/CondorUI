@@ -2,6 +2,7 @@
 include_once "functions.php";
 
 /* RAZRED ZA USER MANAGEMENT */
+
 class UserManager
 {
 	// spremenljivke
@@ -346,6 +347,7 @@ class UserManager
 				$_SESSION['password'] = $this->password;
 				$_SESSION['email'] = $this->email;
 				$_SESSION['daysleft'] = $this->daysleft;
+				$_SESSION['isadmin'] = $this->isadmin;
 			}
 			else
 			{
@@ -449,9 +451,9 @@ class FileManager
 	}
 
 	// uploada file
-	public function uploadFile($temp_file, $file, &$output)
+	public function uploadFile($temp_file, $file, $username, &$output)
 	{
-		if (!preg_match("/[^a-z0-9_.]/i", $file))
+		if (!preg_match("/[^a-z0-9_.-]/i", $file))
 		{
 			if (file_exists($this->root."uploads/".$file))
 			{
@@ -460,12 +462,19 @@ class FileManager
 			else
 			{
 				move_uploaded_file($temp_file, $this->root."uploads/".$file);
+				$this->correctSubmitFile($this->root.$files, $user_name);
+				
 				$output = "Datoteka ".$file." uspesno prenesena. Nahaja se v uploads mapi.";
-
-				//razpakira zip file
 				$fullFileName = pathinfo($this->root."uploads/".$file);
-				$zipAarray = array("zip");
-				if (in_array($fullFileName['extension'], $zipAarray))
+				
+				//Popravi submit file
+				$submitArray = array("submit","condor");
+				if (in_array($fullFileName['extension'], $submitArray))
+					$this->correctSubmitFile($this->root."uploads/".$file, $username);
+				
+				//razpakira zip file
+				$zipArray = array("zip");
+				if (in_array($fullFileName['extension'], $zipArray))
 				{
 					$this->unzipFile("uploads/".$file);
 					$this->removeFile("uploads/".$file);
@@ -474,7 +483,7 @@ class FileManager
 		}
 		else
 		{
-			$output = "Ime datoteke lahko vsebuje samo stevilke, crke in znaka _ ter .";
+			$output = "Ime datoteke lahko vsebuje samo stevilke, crke in znake _ . -";
 		}
 	}
 	
@@ -520,7 +529,7 @@ class FileManager
 	// ustvari submit file
 	public function createSubmitFile($exec_file, $username, &$output)
 	{
-		if(!preg_match("/[^a-z0-9_.]/i", $exec_file))
+		if(!preg_match("/[^a-z0-9_.-]/i", $exec_file))
 		{
 			if (file_exists($this->root."uploads/".$exec_file.".submit"))
 			{
@@ -554,12 +563,67 @@ class FileManager
 		}
 		else
 		{
-			$output = "Ime submit datoteke lahko vsebuje samo stevilke, crke in znaka _ ter .";
+			$output = "Ime submit datoteke lahko vsebuje samo stevilke, crke in znake _ . -";
 		}
+	}
+	
+	// preveri poti v mapah in owner status submit datoteke
+	public function correctSubmitFile($submitFile, $username)
+	{
+		$dirPath = pathinfo($submitFile);
+	
+		$readFile = fopen($submitFile,"r");
+		$writeFile = fopen($submitFile.".out","w");
+		
+		fwrite($writeFile, "+Owner=\"".$username."\"".PHP_EOL);
+		
+		while(!feof($readFile))
+		{
+			$line = fgets($readFile);
+			
+			if (strpos($line, "Executable") !== false)
+			{
+				$fileName = substr(strstr($line, '='), 1);
+				$line = "Executable=".$dirPath['dirname']."/".$fileName;
+			}
+			elseif (strpos($line, "Output") !== false) 
+			{
+				$fileName = substr(strstr($line, '='), 1);
+				$fileNamePath = pathinfo($fileName);
+				mkdir(str_replace("uploads", "results", $dirPath['dirname'])."/".$fileNamePath['dirname'], 0777, true);
+				$line = "Output=".str_replace("uploads", "results", $dirPath['dirname'])."/".$fileName;
+			}
+			elseif (strpos($line, "Error") !== false)
+			{
+				$fileName = substr(strstr($line, '='), 1);
+				$fileNamePath = pathinfo($fileName);
+				mkdir(str_replace("uploads", "results", $dirPath['dirname'])."/".$fileNamePath['dirname'], 0777, true);
+				$line = "Error=".str_replace("uploads", "results", $dirPath['dirname'])."/".$fileName;
+			}
+			elseif (strpos($line, "Log") !== false)
+			{
+				$fileName = substr(strstr($line, '='), 1);
+				$fileNamePath = pathinfo($fileName);
+				mkdir(str_replace("uploads", "results", $dirPath['dirname'])."/".$fileNamePath['dirname'], 0777, true);
+				$line = "Log=".str_replace("uploads", "results", $dirPath['dirname'])."/".$fileName;
+			}
+			elseif (strpos($line, "Owner") !== false)
+			{
+				$line = "";
+			}
+			
+			fwrite($writeFile, $line);
+		}
+	
+		fclose($readFile);
+		fclose($writeFile);
+		
+		unlink($submitFile);
+		rename($submitFile.".out", $submitFile);
 	}
 
 	// submitaj file v condor
-	public function submitFile($files, &$output)
+	public function submitFile($files, $user_name, &$output)
 	{
 		if (is_array($files))
 		{
@@ -571,9 +635,9 @@ class FileManager
 				{
 					$output[$key] = "Datoteka ".$file_name['basename']." vec ne obstaja!";
 				}
-				elseif(preg_match("/[^a-z0-9_.]/i", $file_name['basename']))
+				elseif(preg_match("/[^a-z0-9_.-]/i", $file_name['basename']))
 				{
-					$output[$key] = "Ime submitane datoteke lahko vsebuje samo stevilke, crke in znaka _ ter .";
+					$output[$key] = "Ime submitane datoteke lahko vsebuje samo stevilke, crke in znake _ . -";
 				}
 				else
 				{
@@ -590,9 +654,9 @@ class FileManager
 			{
 				$output['submit'] = "Datoteka ".$file_name['basename']." vec ne obstaja!";
 			}
-			elseif(preg_match("/[^a-z0-9_.]/i", $file_name['basename']))
+			elseif(preg_match("/[^a-z0-9_.-]/i", $file_name['basename']))
 			{
-				$output[$key] = "Ime submitane datoteke lahko vsebuje samo stevilke, crke in znaka _ ter .";
+				$output[$key] = "Ime submitane datoteke lahko vsebuje samo stevilke, crke in znake _ . -";
 			}
 			else
 			{
@@ -748,5 +812,400 @@ class StatsTracker extends UserManager
 
 		return $array;
     }
+}
+
+/* RAZRED ZA CONDOR MANAGEMENT */
+
+class CondorManager
+{
+	// vhodne spremenljivke
+	private $condorArray;
+	private $elementNumber;
+	private $currentPage;
+	
+	// drugi interni podatki
+	private $arrayKeys;
+	private $pageNumbers;
+	private $minPage;
+	private $maxPage;
+	private $pagePrevStatus;
+	private $pagePrev;
+	private $pageNextStatus;
+	private $pageNext;
+	private $minDisplayPage;
+	private $minDisplayCont;
+	private $maxDisplayPage;
+	private $maxDisplayCont;
+
+	// constructor
+	public function __construct($condor_Array, $element_Number = 15, $current_Page)
+	{
+		//shranjene spremenljivke
+		$this->condorArray = $condor_Array;
+		$this->elementNumber = $element_Number;
+		$this->currentPage = $current_Page;
+			
+		//privzete vrednosti
+		$this->pageNumbers = ceil(count($this->condorArray)/$this->elementNumber);
+		
+		if ($this->pageNumbers <= 0)
+			$this->pageNumbers = 1;
+		
+		if (!isset($current_Page))
+			$this->currentPage = 1;
+		
+		if ($this->currentPage >= $this->pageNumbers)
+			$this->currentPage = $this->pageNumbers;				
+		
+		
+		//spremenljivke za dolocitev min in max elementov trenutne strani
+		if ($this->currentPage >= $this->pageNumbers)
+			$this->minPage = $this->elementNumber * $this->pageNumbers - $this->elementNumber;
+		elseif ($this->currentPage <=1 )
+			$this->minPage = 0;
+		else
+			$this->minPage = $this->elementNumber * $this->currentPage - $this->elementNumber;
+		
+		if ($this->currentPage >= $this->pageNumbers)
+			$this->maxPage = count($this->condorArray);
+		elseif ($this->currentPage <= 1)
+			$this->maxPage = $this->elementNumber;
+		else
+			$this->maxPage = $this->elementNumber * $this->currentPage;
+		
+		//spremenljivke za dolocitev min in max vidnih strani na navigaciji
+		if (($this->currentPage - 4) > 1)
+		{
+			$this->minDisplayPage = $this->currentPage - 4;
+			$this->minDisplayCont = true;
+		}
+		else
+		{
+			$this->minDisplayPage = 1;
+			$this->minDisplayCont = false;
+		}
+		
+		if (($this->currentPage + 4) < $this->pageNumbers)
+		{
+			$this->maxDisplayPage = $this->currentPage + 4;
+			$this->maxDisplayCont = true;
+		}
+		else
+		{
+			$this->maxDisplayPage = $this->pageNumbers;
+			$this->maxDisplayCont = false;
+		}
+		
+		//spremenljivke za dolocitev onemogocenja gumbov za naprej in nazaj
+		if($this->currentPage <= 1)
+		{
+			$this->pagePrevStatus = "disabled";
+			$this->pagePrev = $this->currentPage;
+		}
+		else
+		{
+			$this->pagePrevStatus = "";
+			$this->pagePrev = $this->currentPage-1;
+		}
+
+		if($this->currentPage >= $this->pageNumbers)
+		{
+			$this->pageNextStatus = "disabled";
+			$this->pageNext = $this->currentPage;
+		}
+		else
+		{
+			$this->pageNextStatus = "";
+			$this->pageNext = $this->currentPage+1;
+		}
+	}
+
+	//home last submits
+	public function drawLastSubmitTable($ajax_Page, $menu_info, $output_ID)
+	{
+		if(empty($this->condorArray))
+		{
+			echo "<div style='width:100%; text-align:center'><strong>Vas condor queue je prazen!</strong></div>";
+		}
+		else
+		{
+			echo "<table class='table table-condensed'>
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Name</th>
+						<th>Date</th>
+						<th>Status</th>
+						<th>Delete</th>";
+					echo "</tr>
+				</thead>
+				<tbody>";
+				
+					$tempCluster = "";
+				
+					// for zanka, ki gre skozi vse elelmente, ki bojo izpisani
+					for ($i=$this->minPage;$i<$this->maxPage;$i++)
+					{
+						if ($tempCluster != $this->condorArray[$i]['ClusterId'])
+						{
+							echo "<tr>";
+								echo "<td>".$this->condorArray[$i]['ClusterId']."</td>";
+								echo "<td>".$this->condorArray[$i]['Cmd']."</td>";
+								echo "<td>".date("d/m - H:i",$this->condorArray[$i]['JobStartDate'])."</td>";
+								switch ($this->condorArray[$i]['JobStatus'])
+								{
+								case 0:
+									echo "<td>Unexpanded</td>";
+									break;
+									
+								case 1:
+									echo "<td>Idle</td>";
+									break;
+									
+								case 2:
+									echo "<td>Running</td>";
+									break;
+									
+								case 3:
+									echo "<td>Removed</td>";
+									break;
+									
+								case 4:
+									echo "<td>Completed</td>";
+									break;
+									
+								case 5:
+									echo "<td>Held</td>";
+									break;
+									
+								case 6:
+									echo "<td>Submission error</td>";
+									break;
+								}
+								echo "<td style='text-align: center;'><a class='mouse_hover' onclick=\"ajaxCondorDelete('".$ajax_Page."','".$menu_info."','".$this->condorArray[$i]['ClusterId']."','".$output_ID."')\"><i class='icon-trash'></i></a></td>";
+							echo "</tr>";
+							
+							$tempCluster = $this->condorArray[$i]['ClusterId'];
+						}
+					}
+					
+				echo "</tbody>
+			</table>";
+		}
+	}
+	
+	//home computer status
+	public function drawComputerStatusTable($ajax_Page, $menu_info, $output_ID)
+	{
+		if (empty($this->condorArray))
+		{
+			echo "<div style='width:100%; text-align:center'><strong>Condor pool je prazen!</strong></div>";
+		}	
+		else
+		{
+			echo "<table class='table table-condensed'>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>State</th>
+						<th>Activity</th>
+					</tr>
+				</thead>
+				<tbody>";		
+
+					foreach ($this->condorArray as $key => $value)
+					{
+						echo "<tr>
+							<td>".$value['Name']."</td>
+							<td>".$value['State']."</td>
+							<td>".$value['Activity']."</td>
+						</tr>";
+					}
+								
+				echo "</tbody>
+			</table>";
+		}
+	}
+	
+	//advanced condor queue
+	public function drawCondorQTable($ajax_Page, $menu_info, $output_ID, $user_name, $is_admin)
+	{
+		if(empty($this->condorArray))
+		{
+			echo "<div style='width:100%; text-align:center'><strong>Condor queue je prazen!</strong></div>";
+		}
+		else
+		{
+			echo "<table class='table table-condensed'>
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Owner</th>
+						<th>Submitted</th>
+						<th>Run Time</th>
+						<th>State</th>
+						<th>Priority</th>
+						<th>Size</th>
+						<th>Name</th>
+						<th>Delete</th>";
+					echo "</tr>
+				</thead>
+				<tbody>";
+	
+					// for zanka, ki gre skozi vse elelmente, ki bojo izpisani
+					for ($i=$this->minPage;$i<$this->maxPage;$i++)
+					{
+						echo "<tr>";
+							echo "<td>".$this->condorArray[$i]['ClusterID'].".".$this->condorArray[$i]['ProcID']."</td>";
+							echo "<td>".$this->condorArray[$i]['Owner']."</td>";
+							echo "<td>".date("d/m - H:i",$this->condorArray[$i]['JobStartDate'])."</td>";
+							echo "<td>".date("H:i:s",$this->condorArray[$i]['CommittedTime']-60*60)."</td>";
+							switch ($this->condorArray[$i]['JobStatus'])
+							{
+							case 0:
+								echo "<td>Unexpanded</td>";
+								break;
+								
+							case 1:
+								echo "<td>Idle</td>";
+								break;
+								
+							case 2:
+								echo "<td>Running</td>";
+								break;
+								
+							case 3:
+								echo "<td>Removed</td>";
+								break;
+								
+							case 4:
+								echo "<td>Completed</td>";
+								break;
+								
+							case 5:
+								echo "<td>Held</td>";
+								break;
+								
+							case 6:
+								echo "<td>Submission error</td>";
+								break;
+							}
+							echo "<td>".$this->condorArray[$i]['JobPrio']."</td>";
+							echo "<td>".$this->condorArray[$i]['ExecutableSize']."</td>";
+							echo "<td>".$this->condorArray[$i]['CMD']."</td>";
+							
+							if (($this->condorArray[$i]['Owner'] == $user_name) || ($is_admin >= 1))
+								echo "<td style='text-align: center;'><a class='mouse_hover' onclick=\"ajaxCondorDelete('".$ajax_Page."','".$menu_info."','".$this->condorArray[$i]['ClusterID'].".".$this->condorArray[$i]['ProcID']."','".$output_ID."')\"><i class='icon-trash'></i></a></td>";
+							else
+								echo "<td></td>";
+						echo "</tr>";
+					}
+						
+				echo "</tbody>
+			</table>";
+		}
+	}
+	
+	//advanced condor status
+	public function drawCondorStatusTable($ajax_Page, $menu_info, $output_ID)
+	{
+		if(empty($this->condorArray))
+		{
+			echo "<div style='width:100%; text-align:center'><strong>Condor pool je prazen!</strong></div>";
+		}
+		else
+		{
+			echo "<table class='table table-condensed'>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Operating Sys</th>
+						<th>Architecture</th>
+						<th>State</th>
+						<th>Activity</th>
+						<th>Load</th>
+						<th>Memory</th>";
+					echo "</tr>
+				</thead>
+				<tbody>";
+	
+					// for zanka, ki gre skozi vse elelmente, ki bojo izpisani
+					for ($i=$this->minPage;$i<$this->maxPage;$i++)
+					{
+						echo "<tr>";
+							echo "<td>".$this->condorArray[$i]['Name']."</td>";
+							echo "<td>".$this->condorArray[$i]['OpSys']."</td>";
+							echo "<td>".$this->condorArray[$i]['Arch']."</td>";
+							echo "<td>".$this->condorArray[$i]['State']."</td>";
+							echo "<td>".$this->condorArray[$i]['Activity']."</td>";
+							echo "<td>".round($this->condorArray[$i]['LoadAvg'],4)."</td>";
+							echo "<td>".$this->condorArray[$i]['Memory']."</td>";
+						echo "</tr>";
+					}
+						
+				echo "</tbody>
+			</table>";
+		}	
+	}
+	
+	//advanced condor status total
+	public function drawCondorStatusTotalTable($ajax_Page, $menu_info, $output_ID)
+	{
+		if(empty($this->condorArray))
+		{
+			echo "<div style='width:100%; text-align:center'><strong>Condor pool je prazen!</strong></div>";
+		}
+		else
+		{
+			echo "<table class='table table-condensed'>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Total</th>
+						<th>Claimed</th>
+						<th>Unclaimed</th>";
+					echo "</tr>
+				</thead>
+				<tbody>";
+					
+					// for zanka, ki gre skozi vse elelmente, ki bojo izpisani
+					for ($i=$this->minPage;$i<$this->maxPage;$i++)
+					{
+						echo "<tr>";
+							echo "<td>".$this->condorArray[$i]['Arch']."</td>";
+							echo "<td>".$this->condorArray[$i]['Total']."</td>";
+							echo "<td>".$this->condorArray[$i]['Claimed']."</td>";
+							echo "<td>".$this->condorArray[$i]['Unclaimed']."</td>";
+						echo "</tr>";
+					}
+						
+				echo "</tbody>
+			</table>";
+		}	
+	}
+	
+	// izpis navigacije strani
+	public function drawPageNavigation($ajax_Page, $menu_info, $output_ID, $page_index)
+	{
+		echo "<div class='pagination' style='margin-bottom:0px'>
+			<ul>
+				<li onclick=\"$.ajax({url:'".$ajax_Page."', type:'POST', data:{menu:'".$menu_info."', ".$page_index.":1}, success:function(result){\$('".$output_ID."').html(result);}})\" class='".$this->pagePrevStatus."'><a href=''><<</a></li>
+				<li onclick=\"$.ajax({url:'".$ajax_Page."', type:'POST', data:{menu:'".$menu_info."', ".$page_index.":".$this->pagePrev."}, success:function(result){\$('".$output_ID."').html(result);}})\" class='".$this->pagePrevStatus."'><a href=''>Prev</a></li>";
+				if($this->minDisplayCont)
+					echo "<li class='disabled'><a href=''>...</a></li>";
+				for ($i=$this->minDisplayPage;$i<=$this->maxDisplayPage;$i++)
+				{
+					if($this->currentPage == $i)
+						echo "<li onclick=\"$.ajax({url:'".$ajax_Page."', type:'POST', data:{menu:'".$menu_info."', ".$page_index.":".$i."}, success:function(result){\$('".$output_ID."').html(result);}})\" class='active'><a href=''>".$i."</a></li>";
+					else
+						echo "<li onclick=\"$.ajax({url:'".$ajax_Page."', type:'POST', data:{menu:'".$menu_info."', ".$page_index.":".$i."}, success:function(result){\$('".$output_ID."').html(result);}})\"><a href=''>".$i."</a></li>";
+				}
+				if($this->maxDisplayCont)
+					echo "<li class='disabled'><a href=''>...</a></li>";
+				echo "<li onclick=\"$.ajax({url:'".$ajax_Page."', type:'POST', data:{menu:'".$menu_info."', ".$page_index.":".$this->pageNext."}, success:function(result){\$('".$output_ID."').html(result);}})\" class='".$this->pageNextStatus."'><a href=''>Next</a></li>
+				<li onclick=\"$.ajax({url:'".$ajax_Page."', type:'POST', data:{menu:'".$menu_info."', ".$page_index.":".$this->pageNumbers."}, success:function(result){\$('".$output_ID."').html(result);}})\" class='".$this->pageNextStatus."'><a href=''>>></a></li>
+			</ul>
+		</div>";
+	}
 }
 ?>
