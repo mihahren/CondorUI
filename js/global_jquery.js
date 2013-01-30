@@ -27,22 +27,30 @@ function errorHandlerDesktop(){
 	}
 }
 
-//ajax funkcije za navigiranje po menijih
-function submitAjax(phpPostFile, resultDivID, info){
+//ajax funkcije za navigiranje po datotekah
+function submitAjax(phpPostFile, resultDivID){
 	$.ajax({
 		url: phpPostFile,
 		type: "POST",
-		data: {menu: info},
+		success: function(result){$(resultDivID).html(result);}
+	});
+}
+
+//ajax funkcije za navigiranje po condor manager tab meniju
+function submitCmMenuAjax(phpPostFile, resultDivID, info){
+	$.ajax({
+		url: phpPostFile,
+		type: "POST",
+		data: {cm_menu: info},
 		success: function(result){$(resultDivID).html(result);}
 	});
 }
 
 //ajax funkcija za sprozitev ajax form submita
-function submitFormAjax(formID, phpPostFile, resultDivID, info){
+function submitFormAjax(formID, phpPostFile, resultDivID){
 	$(formID).ajaxSubmit({
 		url: phpPostFile,
 		type: "POST",
-		data: {menu: info},
 		success: function(result){$(resultDivID).html(result);}
 	});
 }
@@ -69,87 +77,52 @@ function submitFileAjax(formID, phpPostFile, resultDivID, info){
 	});
 }
 
-//funkcije za navigacijo znotraj tabele z datotekami
-function goToPath(file_path){
-	$.ajax({
-		url: "ajax/advanced_ajax_content.php",
-		type: "POST",
-		data: {menu: "submit", directory: file_path},
-		success: function(result){$("#output_box").html(result);}
-	});
-}
-
-//funkcija za brisanje datotek znotraj tabele z datotekami
-function submitFormAjaxDelete(del_info){
-	$("#file_form").ajaxSubmit({
-		url: "ajax/advanced_ajax_content.php",
-		type: "POST",
-		data: {menu: "submit", delete_file: del_info},
-		success: function(result){$("#output_box").html(result);}
-	});
-}
-
-//funkcija za submitanje datotek znotraj tabele z datotekami
-function submitFormAjaxSubmit(submit_info){
-	$("#file_form").ajaxSubmit({
-		url: "ajax/advanced_ajax_content.php",
-		type: "POST",
-		data: {menu: "submit", submit_file: submit_info},
-		success: function(result){$("#output_box").html(result);}
-	});
-}
-
-//funkcija za brisanje submitanih datotek v condor tabeli
-function ajaxCondorDelete(page_id, menu_info,  del_info, output_id){
-	$.ajax({
-		url: page_id,
-		type: "POST",
-		data: {menu: menu_info, delete_submited_file: del_info},
-		success: function(result){$(output_id).html(result);}
-	});
-}
-
 //funkcija za sprozitev avtomatskega refresha
-function refreshCondor(){
+/*function refreshCondor(){
 	if(document.getElementById("status_selector"))
 	{
 		refreshIntervalId = setInterval(function(){
-			submitAjax("ajax/advanced_ajax_content.php", "#output_box", "status");
+			submitAjax("ajax/advanced_ajax_content.php", "#output_box");
 		},5000);
 	}
 	else if(document.getElementById("queue_selector"))
 	{
 		refreshIntervalId = setInterval(function(){
-			submitAjax("ajax/advanced_ajax_content.php", "#output_box", "queue");
+			submitAjax("ajax/advanced_ajax_content.php", "#output_box");
 		},5000);
 	}
-}
+}*/
 
 //funkcije za pavzo refresha, ko je alert na zaslonu
-function stopRefresh(){
+/*function stopRefresh(){
 	if ($('#error_prompt_mobile').is(":visible") || $('#error_prompt_desktop').is(":visible"))
 	{
 		clearInterval(refreshIntervalId);
 	}
-}
+}*/
 
-//funkcija za spremembo barve gumbov v advanced nacinu
-function refreshButtonBorders(){
-	$("#queue_button").css({"background-color":"", "color":""});
-	$("#status_button").css({"background-color":"", "color":""});
-	$("#submit_button").css({"background-color":"", "color":""});
+//funkcija za spremembo barve gumbov v control panel
+function refreshButtons(){
+	$("#zip_upload_button").css({"background-color":"", "color":""});
+	$("#file_manager_button").css({"background-color":"", "color":""});
+	$("#condor_manager_button").css({"background-color":"", "color":""});
+	$("#ida_curves_button").css({"background-color":"", "color":""});
 	
-	if(document.getElementById("queue_selector"))
+	if(document.getElementById("control_panel_ajax_zip"))
 	{
-		$("#queue_button").css({"background-color":"#0088cc", "color":"#ffffff"});
+		$("#zip_upload_button").css({"background-color":"#a10010", "color":"#ffffff"});
 	}
-	else if(document.getElementById("status_selector"))
+	else if(document.getElementById("control_panel_ajax_file_manager"))
 	{
-		$("#status_button").css({"background-color":"#0088cc", "color":"#ffffff"});
+		$("#file_manager_button").css({"background-color":"#a10010", "color":"#ffffff"});
 	}
-	else if(document.getElementById("submit_selector"))
+	else if(document.getElementById("control_panel_ajax_condor_manager"))
 	{
-		$("#submit_button").css({"background-color":"#0088cc", "color":"#ffffff"});
+		$("#condor_manager_button").css({"background-color":"#a10010", "color":"#ffffff"});
+	}
+	else if(document.getElementById("control_panel_ajax_ida"))
+	{
+		$("#ida_curves_button").css({"background-color":"#a10010", "color":"#ffffff"});
 	}
 }
 
@@ -160,71 +133,83 @@ $(document).ready(function (){
 	clearInterval(refreshIntervalId);
 	errorHandlerMobile()
 	errorHandlerDesktop();
-	refreshCondor();
-	refreshButtonBorders();
-	stopRefresh();
+	refreshButtons();
+	//refreshCondor();
+	//stopRefresh();
 	
 	//izvede vsakic po zakljucenem ajax dogodku
 	$(document).ajaxComplete(function() {
 		clearInterval(refreshIntervalId);
 		errorHandlerMobile();
 		errorHandlerDesktop();
-		refreshCondor();
-		refreshButtonBorders();
-		stopRefresh();
+		refreshButtons();
+		//refreshCondor();
+		//stopRefresh();
 	});
 	
-	//home menu navigation
-	$(document).on("click", "#button_last_submits", function (){
-		submitAjax("ajax/home_ajax_content.php", "#tab_last_submits", "last_submits");
+	//navigiranje control panel predela	
+	$(document).on("click", "#condor_manager_button", function (){
+		submitAjax("ajax/control_panel_ajax_condor_manager.php", "#output_box_control_panel");
 	});
 	
-	$(document).on("click", "#button_computer_status", function (){
-		submitAjax("ajax/home_ajax_content.php", "#tab_computer_status", "computer_status");
+	$(document).on("click", "#file_manager_button", function (){
+		submitAjax("ajax/control_panel_ajax_file_manager.php", "#output_box_control_panel");
 	});
 	
-	//advanced menu navigation
-	$(document).on("click", "#queue_button", function (){
-		submitAjax("ajax/advanced_ajax_content.php", "#output_box", "queue");
+	$(document).on("click", "#zip_upload_button", function (){
+		submitAjax("ajax/control_panel_ajax_zip.php", "#output_box_control_panel");
 	});
 	
-	$(document).on("click", "#status_button", function (){
-		submitAjax("ajax/advanced_ajax_content.php", "#output_box", "status");
+	$(document).on("click", "#ida_curves_button", function (){
+		submitAjax("ajax/control_panel_ajax_ida.php", "#output_box_control_panel");
 	});
 	
-	$(document).on("click", "#submit_button", function (){
-		submitAjax("ajax/advanced_ajax_content.php", "#output_box", "submit");
+	//navigiranje condor manager predela
+	$(document).on("click", "#button_all_q", function (){
+		submitCmMenuAjax("ajax/control_panel_ajax_condor_manager.php", "#output_box_control_panel", "all_q");
 	});
 	
-	//home file form submit
-	$(document).on("click", "#home_file_button", function (){
-		$("#home_file_upload").click();
+	$(document).on("click", "#button_all_q_cluster", function (){
+		submitCmMenuAjax("ajax/control_panel_ajax_condor_manager.php", "#output_box_control_panel", "all_q_cluster");
 	});
 	
-	$(document).on("change", "#home_file_upload", function (){
-		submitFileAjax("#home_form", "ajax/home_ajax_content.php", "#tab_last_submits", "NULL");
+	$(document).on("click", "#button_user_q", function (){
+		submitCmMenuAjax("ajax/control_panel_ajax_condor_manager.php", "#output_box_control_panel", "user_q");
 	});
 	
-	//basic file form submit
-	$(document).on("click", "#basic_file_button", function (){
-		$("#basic_file_upload").click();
-	});
-	
-	$(document).on("change", "#basic_file_upload", function (){
-		submitFileAjax("#basic_file_form", "ajax/basic_ajax_content.php", "#output_box", "NULL");
-	});
-	
-	//advanced file form submit
-	$(document).on("click", "#advanced_file_button", function (){
-		$("#advanced_file_upload").click();
+	//control panel file form submit
+	$(document).on("click", "#ctr_pnl_file_button", function (){
+		$("#ctr_pnl_file_upload").click();
 	});
 		
-	$(document).on("change", "#advanced_file_upload", function (){
-		submitFileAjax("#file_form", "ajax/advanced_ajax_content.php", "#output_box", "submit");
+	$(document).on("change", "#ctr_pnl_file_upload", function (){
+		submitFileAjax("#ctr_pnl_file_form", "ajax/control_panel_ajax_file_manager.php", "#output_box_control_panel", "NULL");
+	});
+	
+	//control panel zip file form submit
+	$(document).on("click", "#ctr_pnl_zip_file_button", function (){
+		$("#ctr_pnl_zip_upload").click();
+	});
+		
+	$(document).on("change", "#ctr_pnl_zip_upload", function (){
+		submitFileAjax("#ctr_pnl_zip_form", "ajax/control_panel_ajax_zip.php", "#output_box_control_panel", "NULL");	
+	});
+	
+	//control panel ida form submit		
+	$(document).on("click", "#ida_submit_button", function (){
+		submitFormAjax("#ida_form", "ajax/control_panel_ajax_ida.php", "#output_box_control_panel");
+	});
+	
+	$(document).on("click", "#ida_plus_sign", function (){
+		$("#ida_default_row").clone().appendTo("#ida_result_row");
+	});
+	
+	$(document).on("click", "#ida_minus_sign", function (){
+		$("#ida_result_row tr:last").remove()
 	});
 	
 	//nadaljuje z refreshanjem po zaprtju 
-	$(document).on("click", "#alert_button_mobile", function (){
+	/*$(document).on("click", "#alert_button_mobile", function (){
 		if (!$('#mobile_alert').is(":visible"))
 		{
 			refreshCondor();
@@ -236,9 +221,9 @@ $(document).ready(function (){
 		{
 			refreshCondor();
 		}
-	});
+	});*/
 
-	//upravljanje z login predelom	
+	//upravljanje z login predelom
 	$(document).on("click", "#logout_button", function (){
 		$("#logout_form").submit();
 	});

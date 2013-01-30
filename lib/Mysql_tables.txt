@@ -25,6 +25,13 @@ CREATE TABLE stats (
 	ip varchar(15) NOT NULL DEFAULT '',
 	date_visited int unsigned NOT NULL DEFAULT '0',
 	page varchar(100) NOT NULL DEFAULT '',
-	from_page varchar(200) NOT NULL DEFAULT ''
+	from_page varchar(150) NOT NULL DEFAULT '',
+	submit_cluster int unsigned NOT NULL DEFAULT '0',
+	submit_proc int unsigned NOT NULL DEFAULT '0',
 	FOREIGN KEY (userid) REFERENCES users(userid)
+);
+
+CREATE TABLE condor_stats (
+	statid int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	username varchar(20) NOT NULL,
 );

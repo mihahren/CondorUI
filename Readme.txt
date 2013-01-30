@@ -55,3 +55,13 @@ Za vnos uporabnikov v condor_users bazo je priporocljivo uporabiti signup.php, k
 
 V condor je potrebno konfigurirati s sledecim ukazom:
 QUEUE_ALL_USERS_TRUSTED = TRUE
+
+/////////////////
+/// BOOTSTRAP ///
+/////////////////
+
+@navbarBackground: #a10010
+@navbarBackgroundHighlight: #b80012
+@navbarText: @white
+@navbarLinkColor: @white
+@navbarLinkColorActive: @white

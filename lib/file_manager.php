@@ -8,86 +8,135 @@ $fileManager = new FileManager("../files/");
 
 if($_SERVER['REQUEST_METHOD'] == "POST")
 {	
-	//preveri, ce je potrebno kaksno datoteko zbrisati
-	if (!empty($_POST['delete_file']))
+	//preveri, ali so bili uploadani kaksni file-i in jih prenese ter razpakira v ustrezne mape
+	if ($_POST['upload_file'] == "true" && isset($_FILES['file']) && isset($_POST['upload_path']))
 	{
-		if(is_array($_POST['delete_file']))
+		//a gre za array ali samo en file
+		if (is_array($_FILES['file']['name']))
 		{
-			for ($i=0; $i<(count($_POST['delete_file'])); $i++)
+			for ($i=0; $i<count($_FILES['file']['tmp_name']); $i++)
 			{
-				$fileManager->removeFile($_POST['delete_file'][$i]);
-				$_SESSION['custom_error']['file_delete'] = "Uspesno izbrisano.";
+				$fileManager->uploadFile($_FILES['file']['tmp_name'][$i], $_FILES['file']['name'][$i], $_POST['upload_path'], $upload_out);
+				$_SESSION['custom_error']['uploads'][$i] = $upload_out;
 			}
 		}
 		else
 		{
+			$fileManager->uploadFile($_FILES['file']['tmp_name'], $_FILES['file']['name'], $_POST['upload_path'], $upload_out);
+			$_SESSION['custom_error']['uploads'] = $upload_out;		
+		}
+	}
+	
+	//preveri, ali je kaksen file potrebno razpakirati
+	if ($_POST['unzip_file'] == "true" && isset($_POST['file_zip']))
+	{
+		//a gre za array ali samo en file
+		if (is_array($_POST['file_zip']))
+		{
+			for ($i=0; $i<count($_POST['file_zip']); $i++)
+			{
+				$fullFileName = pathinfo($_POST['file_zip'][$i]);
+				$zipArray = array("zip");
+	
+				//preveri, ce je file .zip
+				if (in_array($fullFileName['extension'], $zipArray))
+				{
+					$unzip_success = $fileManager->unzipFile($_POST['file_zip'][$i], $unzip_out);
+					$_SESSION['custom_error']['unzip'][$i] = $unzip_out;
+				}
+			}
+		}
+		else
+		{
+			$fullFileName = pathinfo($_POST['file_zip']);
+			$zipArray = array("zip");
+
+			//preveri, ce je file .zip
+			if (in_array($fullFileName['extension'], $zipArray))
+			{
+				$unzip_success = $fileManager->unzipFile($_POST['file_zip'], $unzip_out);
+				$_SESSION['custom_error']['unzip'] = $unzip_out;
+			}
+		}
+	}
+
+	//preveri, ce je potrebno kaksno datoteko zbrisati
+	if (isset($_POST['delete_file']))
+	{
+		//a gre za array ali samo en file
+		if(is_array($_POST['delete_file']))
+		{
+			for ($i=0; $i<(count($_POST['delete_file'])); $i++)
+			{
+				$fullFileName = pathinfo($_POST['delete_file'][$i]);
+				$fileManager->removeFile($_POST['delete_file'][$i]);
+				$_SESSION['custom_error']['file_delete'] = $fullFileName['basename']." uspesno izbrisan.";
+			}
+		}
+		else
+		{
+			$fullFileName = pathinfo($_POST['delete_file']);
 			$fileManager->removeFile($_POST['delete_file']);
-			$_SESSION['custom_error']['file_delete'] = "Uspesno izbrisano.";
+			$_SESSION['custom_error']['file_delete'] = $fullFileName['basename']." uspesno izbrisan.";
+		}
+	}
+	
+	//preveri, ce je potrebno kaksen file submitat
+	if (isset($_POST['submit_file']))
+	{	
+		//a gre za array ali samo en file
+		if(is_array($_POST['submit_file']))
+		{
+			for ($i=0; $i<(count($_POST['submit_file'])); $i++)
+			{
+				$fileManager->submitFile($_POST['submit_file'][$i], $_SESSION['username'], $out);
+		
+				foreach ($out as $key => $value)
+				{
+					$_SESSION['custom_error']['submits'][$i][$key] = $value;
+				}
+			}
+		}
+		else
+		{
+			$fileManager->submitFile($_POST['submit_file'], $_SESSION['username'], $out);
+		
+			foreach ($out as $key => $value)
+			{
+				$_SESSION['custom_error']['submits'][$key] = $value;
+			}
 		}
 	}
 	
 	//preveri, ce je potrebno kaksno submitano datoteko odstranit iz condor queue
 	if (!empty($_POST['delete_submited_file']))
 	{
+		//a gre za array ali samo en file
 		if(is_array($_POST['delete_submited_file']))
 		{
 			for ($i=0; $i<(count($_POST['delete_submited_file'])); $i++)
 			{
-				condor_remove($_POST['delete_submited_file'][$i], $removeOut);
+				condor_generic('condor_rm '.$_POST['delete_submited_file'][$i], $removeOut);
 				$_SESSION['custom_error']['submit_delete'][$i] = $removeOut;
 			}
 		}
 		else
 		{
-			condor_remove($_POST['delete_submited_file'], $removeOut);
+			condor_generic('condor_rm '.$_POST['delete_submited_file'], $removeOut);
 			$_SESSION['custom_error']['submit_delete'] = $removeOut;
 		}
 	}
-	
-	//preveri, ali so bili uploadani kaksni file-i in jih prenese v ustrezno mapo
-	if (!empty($_FILES['file']['tmp_name'][0]))
-	{
-		for ($i=0; $i<count($_FILES['file']['tmp_name']); $i++)
-		{
-			$fileManager->uploadFile($_FILES['file']['tmp_name'][$i], $_FILES['file']['name'][$i], $_SESSION['username'], $out);
-			$_SESSION['custom_error']['uploads'][$i] = $out;
-		}
-	}
-	
-	//preveri, ce je potrebno ustvariti kaksen submit file
-	if (!empty($_POST['create_submit_file']))
-	{
-		for ($i=0; $i<count($_FILES['file']['tmp_name']); $i++)
-		{
-			$fileManager->createSubmitFile($_FILES['file']['name'][$i], $_SESSION['username'], $out);
-			$_SESSION['custom_error']['create_submit'][$i] = $out;
-				
-			//nemudoma pripravi uploadane file za submitanje
-			$_SESSION['submit_file'][$i] = "uploads/".$_FILES['file']['name'][$i].".submit";
-		}
-	}
-	
-	//preveri, ce je potrebno kaksen file submitat
-	if (!empty($_POST['submit_file']))
-	{
-		$_SESSION['submit_file'] = $_POST['submit_file'];
-	}
-	
-	if (!empty($_SESSION['submit_file']))
-	{	
-		$fileManager->submitFile($_SESSION['submit_file'], $_SESSION['username'], $out);
-		
-		foreach ($out as $key => $value)
-		{
-			$_SESSION['custom_error']['submits'][$key] = $value;
-		}
-	}
+}
 
+if ($_SERVER['REQUEST_METHOD'] != "POST")
+{
+	unset($_POST['upload_file']);
 	unset($_FILES['file']);
-	unset($_POST['submit_file']);
-	unset($_SESSION['submit_file']);
-	unset($_POST['delete_upload_file']);
-	unset($_POST['delete_result_file']);
+	unset($_POST['upload_path']);
+	unset($_POST['unzip_file']);
+	unset($_POST['delete_file']);
 	unset($_POST['create_submit_file']);
+	unset($_POST['submit_file']);
+	unset($_POST['delete_submited_file']);
 }
 ?>

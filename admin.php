@@ -52,6 +52,12 @@ include_once "lib/classes.php";
 		case "admin":
 ?>			
 			<div class="row-fluid">
+				<div class="span12">
+					<h1>Admin</h1>
+				</div>
+			</div>
+			
+			<div class="row-fluid">
 				<div class="span4">
 					<?php include "lib/register.php";?>
 				</div>

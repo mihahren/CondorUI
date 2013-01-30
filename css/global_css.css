@@ -65,6 +65,18 @@ color: #8895a6;
 text-shadow: 1px 1px 1px #B0C0D6;
 }
 
+#pagination_global a{
+min-width:14px;
+text-align:center;
+color:#a10010;
+}
+
+#pagination_global li.disabled a,
+#pagination_global li.active a{
+color:gray;
+}
+
+
 /* HEADER.PHP */
 
 #profile_button{
@@ -81,14 +93,201 @@ text-decoration: underline;
 cursor: pointer;
 }
 
+.register_button{
+color: white;
+text-decoration: underline;
+}
+
+.register_button:hover{
+color: #333333;
+}
+
+#alert_button{
+color: #fff;
+background-image: -moz-linear-gradient(top, #a10010, #b80012);
+background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#a10010), to(#b80012));
+background-image: -webkit-linear-gradient(top, #a10010, #b80012);
+background-image: -o-linear-gradient(top, #a10010, #b80012);
+background-image: linear-gradient(to bottom, #a10010, #b80012);
+background-repeat: repeat-x;
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffa10010', endColorstr='#ffb80012', GradientType=0);
+*background-color: #a10010;
+/* Darken IE7 buttons by default so they stand out more given they won't have borders */
+filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+border: 1px solid #bbbbbb;
+*border: 0;
+border-bottom-color: #a2a2a2;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+*margin-left: .3em;
+-webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+}
+
+#alert_button:hover,
+#alert_button:active,
+#alert_button.active,
+#alert_button.disabled,
+#alert_button[disabled] {
+color: #333333;
+background-color: #e6e6e6;
+*background-color: #d9d9d9;
+}
+
+#alert_button:hover {
+color: #333333;
+text-decoration: none;
+background-position: 0 0px;
+-webkit-transition: background-position 0.05s linear;
+-moz-transition: background-position 0.05s linear;
+-o-transition: background-position 0.05s linear;
+transition: background-position 0.05s linear;
+}
+
+#alert_button.active,
+#alert_button:active {
+background-image: none;
+outline: 0;
+}
+
+#collapse_link_index,
+#collapse_link_tour,
+#collapse_link_links,
+#collapse_link_status,
+#collapse_link_admin,
+#collapse_link_control_panel
+{
+color:white;
+}
+#collapse_link_index:hover,
+#collapse_link_tour:hover,
+#collapse_link_links:hover,
+#collapse_link_status:hover,
+#collapse_link_admin:hover,
+#collapse_link_control_panel:hover
+{
+color:#333333;
+}
+
+#logo{
+position:absolute;
+top: 75px;
+left: -120px;
+z-index:-1;
+}
+
+#collapse_link_index{
+font-size:160%
+}
+
 /* INDEX.PHP */
 
-/* ADVANCED.PHP */
-.adv_menu_btn{
+#hero-image{
+z-index:-1;
+position:absolute;
+min-height:600px;
+width:100%;
+background: url('../img/supercomputer_hero.jpg') no-repeat center bottom;
+background-size:cover;
+}
+
+#hero-text{
+position:relative;
+top:65px;
+height:600px;
+width:800px;
+margin:0 auto;
+text-align:center;
+}
+
+#hero-text h1{
+font-family: Arial;
+font-size:100px;
+height:100px;
+text-shadow: 2px 2px 2px #000000;
+color:white;
+margin:0px;
+}
+
+#hero-text h2{
+font-family: Arial;
+font-size:40px;
+height:30px;
+text-shadow: 2px 2px 2px #000000;
+color:white;
+margin:0px;
+margin-top:-10px;
+}
+
+/* LINKS.PHP */
+
+.margin-correction{
+margin-bottom:20px;
+}
+
+.margin-correction img{
+max-width:200px;
+}
+
+/* STATUS.PHP */
+
+/* CONTROL_PANEL.PHP */
+
+.ctr_pnl_menu_btn{
 cursor: pointer;
 }
 
-/* BASIC.PHP */
+.ctr_pnl_menu_btn a{
+color: #a10010;
+}
+
+#file_table tr > td:first-child a{
+color:#a10010;
+}
+
+ul.breadcrumb a{
+color:#a10010;
+}
+
+#condor_manager_tab li a{
+color:#a10010;
+}
+
+#condor_manager_tab li.active a{
+color:gray;
+}
+
+#condor_manager_box{
+padding: 15px 15px 15px;
+margin: 0 auto 20px;
+background-color: #fff;
+border: 1px solid #e5e5e5;
+-webkit-border-bottom-right-radius: 5px;
+-webkit-border-bottom-left-radius: 5px;
+-moz-border-radius-bottomright: 5px;
+-moz-border-radius-bottomleft: 5px;
+border-bottom-right-radius: 5px;
+border-bottom-left-radius: 5px;
+-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+   -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+        box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+#ida_plus_sign:hover,
+#ida_minus_sign:hover{
+cursor:pointer;
+}
+
+#ida_table td,
+#ida_table th{
+border-bottom:1px solid white;
+}
+
+#ida_table tbody{
+border:1px solid white;
+}
 
 /* SIGNUP.PHP */
 
@@ -99,16 +298,16 @@ cursor: pointer;
 /* CUSTOM POPOVER */
 .custom-popover {
   position: absolute;
-  top: -4px;
-  left: 353px;
+  top: 34px;
+  left: 0px;
   z-index: 1010;
   width: 400px;
   padding: 1px;
   text-align: left;
   white-space: normal;
   background-color: #ffffff;
-  border: 1px solid #ccc;
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  border: 1px solid #a10010;
+  border: 1px solid rgba(161, 0, 16, 1);
   -webkit-border-radius: 6px;
      -moz-border-radius: 6px;
           border-radius: 6px;
@@ -143,7 +342,7 @@ cursor: pointer;
   font-weight: normal;
   line-height: 18px;
   background-color: #f7f7f7;
-  border-bottom: 1px solid #ebebeb;
+  border-bottom: 1px solid #a10010;
   -webkit-border-radius: 5px 5px 0 0;
      -moz-border-radius: 5px 5px 0 0;
           border-radius: 5px 5px 0 0;
@@ -206,10 +405,10 @@ cursor: pointer;
 
 .custom-popover.bottom .arrow {
   top: -11px;
-  left: 50%;
+  left: 10%;
   margin-left: -11px;
-  border-bottom-color: #999;
-  border-bottom-color: rgba(0, 0, 0, 0.25);
+  border-bottom-color: #a10010;
+  border-bottom-color: rgba(161, 0, 16, 0.25);
   border-top-width: 0;
 }
 

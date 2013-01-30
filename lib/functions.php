@@ -11,16 +11,6 @@ function condor_q(&$output)
 	exec('condor_q 2>&1', $output);
 }
 
-function condor_submit($input, &$output)
-{
-	exec('condor_submit '.$input.' 2>&1', $output);
-}
-
-function condor_remove($input, &$output)
-{
-	exec('condor_rm '.$input.' 2>&1', $output);
-}
-
 function condor_generic($input, &$output)
 {
 	exec($input.' 2>&1', $output);
