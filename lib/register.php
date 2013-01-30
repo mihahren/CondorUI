@@ -40,6 +40,5 @@ if (($_SERVER['REQUEST_METHOD'] == "POST") && isset($_POST['submit_entry_registe
 	}
 ?>
 	<input name="new_registertime" type="hidden" value="<?php echo time(); ?>" />
-	<input class="btn btn-primary" type="submit" name="submit_entry_register" value="Dodaj uporabnika" />
+	<input class="btn btn-inverse" type="submit" name="submit_entry_register" value="Dodaj uporabnika" />
 </form>
-

@@ -10,10 +10,13 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 
 	if (isset($_POST['username']) || isset($_POST['password']))	//preveri vnesen username in password
 	{
-		$userManager->loginUser($_POST['username'], $_POST['password']);
+		if($userManager->loginUser($_POST['username'], $_POST['password']))
+			$_SESSION['custom_error']['login'] = "Dobrodošli v uporabniškem vmesniku za HTCondor";
+		else
+			$_SESSION['custom_error']['login'] = "Napačni podatki!";
 	}
 
-	if ($_POST['logout'] == "logout")
+	if (isset($_POST['logout']))
 	{
 		$userManager->logoutUser();
 	}

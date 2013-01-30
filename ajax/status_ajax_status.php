@@ -32,7 +32,7 @@ foreach ($xml->c as $c)
 
 $condorStatus = new CondorManager($condorStatusArray, 15, $_SESSION['current_page']['page_number_status']);
 $condorStatus->drawCondorStatusTable();
-$condorStatus->drawPageNavigation("ajax/status_ajax_status.php","#output_box_condor_status","page_number_status")
+$condorStatus->drawPageNavigation("ajax/status_ajax_status.php","#output_box_condor_status","page_number_status");
 
 echo "<div id='status_selector'></div>";
 include "../lib/error_tracking.php";

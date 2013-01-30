@@ -32,7 +32,7 @@ if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 	case "all_q_cluster":
 
 		//poracunan all Queue s clustri
-		condor_generic('condor_q -xml -attributes ClusterID,ProcID,Owner,JobStartDate,CommittedTime,JobStatus,JobPrio,Size,CoreSize,CMD',$condorAllQClusterOutput);
+		condor_generic('condor_q -xml -attributes ClusterID,ProcID,Webuser,JobStartDate,CommittedTime,JobStatus,JobPrio,Size,CoreSize,CMD',$condorAllQClusterOutput);
 		$stringAllQClusterOutput = convertString($condorAllQClusterOutput);
 
 		$xmlAllQCluster = simplexml_load_string($stringAllQClusterOutput);
@@ -88,7 +88,7 @@ if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 	case "user_q":
 
 		//poracunan samo user Queue
-		condor_generic('condor_q -xml -attributes ClusterID,ProcID,Owner,JobStartDate,CommittedTime,JobStatus,JobPrio,Size,CoreSize,CMD submitter '.$_SESSION['username'],$condorUserQOutput);
+		condor_generic('condor_q -xml -attributes ClusterID,ProcID,Webuser,JobStartDate,CommittedTime,JobStatus,JobPrio,Size,CoreSize,CMD submitter '.$_SESSION['username'],$condorUserQOutput);
 		$stringUserQOutput = convertString($condorUserQOutput);
 
 		$xmlUserQ = simplexml_load_string($stringUserQOutput);
@@ -122,7 +122,7 @@ if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 	default:
 
 		//poracunan celoten Queue
-		condor_generic('condor_q -xml -attributes ClusterID,ProcID,Owner,JobStartDate,CommittedTime,JobStatus,JobPrio,Size,CoreSize,CMD',$codnorAllQOutput);
+		condor_generic('condor_q -xml -attributes ClusterID,ProcID,Webuser,JobStartDate,CommittedTime,JobStatus,JobPrio,Size,CoreSize,CMD',$codnorAllQOutput);
 		$stringAllQOutput = convertString($codnorAllQOutput);
 
 		$xmlAllQ = simplexml_load_string($stringAllQOutput);
@@ -208,7 +208,6 @@ if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 	</div>";
 
 }
-
 echo "<div id='control_panel_ajax_condor_manager'></div>";
 include "../lib/error_tracking.php";
 ?>

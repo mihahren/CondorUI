@@ -348,6 +348,8 @@ class UserManager
 				$_SESSION['email'] = $this->email;
 				$_SESSION['daysleft'] = $this->daysleft;
 				$_SESSION['isadmin'] = $this->isadmin;
+				
+				return true;
 			}
 			else
 			{
@@ -357,6 +359,8 @@ class UserManager
 				unset($_SESSION['password']);
 				unset($_SESSION['email']);
 				unset($_SESSION['daysleft']);
+				
+				return false;
 			}
 		}
 		else
@@ -367,6 +371,8 @@ class UserManager
 			unset($_SESSION['password']);
 			unset($_SESSION['email']);
 			unset($_SESSION['daysleft']);
+			
+			return false;
 		}
 	}
 
@@ -416,7 +422,7 @@ class FileManager
 	{
 		$this->localRoot = $lroot;
 		$this->root = $lroot.$_SESSION['login_id']."/";
-		$this->makeDir($this->root);
+		$this->makeDir($this->root, $out);
     }
 
 	// destructor unici session in zapre povezavo z bazo
@@ -464,11 +470,21 @@ class FileManager
 	}
 
 	// ustvari directory
-	public function makeDir($directory)
+	private function makeDir($directory, &$output)
 	{
-		if (!is_dir($Dir = $directory))
+		if (!preg_match("/[^a-z0-9_.-/\]/i", $directory))
 		{
-			mkdir($Dir, 0777, true);
+			if (!is_dir($Dir = $directory))
+			{
+				mkdir($Dir, 0775, true);
+				return true;
+			}
+			return 0;
+		}
+		else
+		{
+			$output = "Ime mape lahko vsebuje samo številke, črke in znake _ . -";
+			return false;
 		}
 	}
 
@@ -557,15 +573,15 @@ class FileManager
 		$dirPath = pathinfo($submitFile);
 	
 		$readFile = fopen($submitFile,"r");
-		$writeFile = fopen($submitFile.".out","w");
+		$writeFile = fopen($submitFile.".temp","w");
 		
-		fwrite($writeFile, "+Owner=\"".$username."\"".PHP_EOL);
+		fwrite($writeFile, "+Webuser=\"".$username."\"".PHP_EOL);
 		
 		while(!feof($readFile))
 		{
 			$line = fgets($readFile);
 			
-			if (strpos($line, "+Owner") !== false)
+			if (strpos($line, "+Owner") !== false || strpos($line, "+Webuser") !== false)
 			{
 				$line = "";
 			}
@@ -577,7 +593,7 @@ class FileManager
 		fclose($writeFile);
 		
 		unlink($submitFile);
-		rename($submitFile.".out", $submitFile);
+		rename($submitFile.".temp", $submitFile);
 	}
 
 	// submitaj file v condor
@@ -776,7 +792,7 @@ class FileManager
 			
 			if (count($scanDir) == 0)
 			{
-				echo "<tr><td colspan='4'>Mapa je prazna.</td></tr>";
+				echo "<tr><td colspan='5'>Mapa je prazna.</td></tr>";
 			}
 		
 			// zadnja vrstica za zakljucek tabele
@@ -786,11 +802,11 @@ class FileManager
 	//ustvari ida submit file
 	public function createIdaSubmitFile($ida_acc_name, $ida_end_time, $ida_pga, $ida_per, $ida_xdamp, $username, &$output)
 	{
-		$this->makeDir($this->root."idacurves");
+		$this->makeDir($this->root."idacurves", $output[0]);
 		$file = fopen($this->root."idacurves/ida.sub","w+");
 	
 			//string za vpisat v submit datoteko
-			$string="+Owner = \"".$username."\"
+			$string="+Webuser = \"".$username."\"
 			universe = vanilla
 			requirements = OpSys == \"LINUX\"
 			should_transfer_files = YES
@@ -818,22 +834,45 @@ class FileManager
 	
 		fclose($file);
 		
-		$output = "Datoteka ida.sub uspesno ustvarjena. Nahaja se v idacurves mapi.";
+		$output[1] = "Datoteka ida.sub uspesno ustvarjena. Nahaja se v idacurves mapi.";
 	}
 	
 	//skopira potrebne ida file za submitat
 	public function copyIdaFiles($ida_acc_name)
 	{
-		copy($this->localRoot.'acc-performance-test/generate-ida-sub.rb', $this->root.'idacurves/generate-ida-sub.rb');
-		copy($this->localRoot.'acc-performance-test/ida.sh', $this->root.'idacurves/ida.sh');
-		copy($this->localRoot.'acc-performance-test/ida_template.tcl', $this->root.'idacurves/ida_template.tcl');
-		copy($this->localRoot.'acc-performance-test/OpenSees_1_6_0_IKPIR', $this->root.'idacurves/OpenSees_1_6_0_IKPIR');
-		copy($this->localRoot.'acc-performance-test/SDOF_Spectra.tcl', $this->root.'idacurves/SDOF_Spectra.tcl');
+		$this->makeDir($this->root."idacurves", $out);
+		copy($this->localRoot.'ida_curves/generate-ida-sub.rb', $this->root.'idacurves/generate-ida-sub.rb');
+		copy($this->localRoot.'ida_curves/ida.sh', $this->root.'idacurves/ida.sh');
+		copy($this->localRoot.'ida_curves/ida_template.tcl', $this->root.'idacurves/ida_template.tcl');
+		copy($this->localRoot.'ida_curves/OpenSees_1_6_0_IKPIR', $this->root.'idacurves/OpenSees_1_6_0_IKPIR');
+		copy($this->localRoot.'ida_curves/SDOF_Spectra.tcl', $this->root.'idacurves/SDOF_Spectra.tcl');
 		
 		foreach ($ida_acc_name as $value)
 		{
-			copy($this->localRoot.'acc-performance-test/acc/'.$value.'.acc', $this->root.'idacurves/'.$value.'.acc');
-			copy($this->localRoot.'acc-performance-test/acc/'.$value.'.AEi', $this->root.'idacurves/'.$value.'.AEi');
+			copy($this->localRoot.'acceleration/'.$value.'.acc', $this->root.'idacurves/'.$value.'.acc');
+			copy($this->localRoot.'acceleration/'.$value.'.AEi', $this->root.'idacurves/'.$value.'.AEi');
+		}
+	}
+	
+	// ustvari directory za uporabo izven tega razreda
+	public function makeOutsideDir($directory, &$output)
+	{
+		if (!preg_match("/[^a-z0-9_.-\/]/i", $this->root.$directory))
+		{
+			if (!is_dir($this->root.$directory))
+			{
+				mkdir($this->root.$directory, 0775, true);
+				$output = "Mapa uspešno ustvarjena.";
+				return true;
+			}
+			
+			$output = "Mapa že obstaja.";
+			return 0;
+		}
+		else
+		{
+			$output = "Ime mape lahko vsebuje samo številke, črke in znake _ . - /";
+			return false;
 		}
 	}
 }
@@ -1136,7 +1175,7 @@ class CondorManager
 					for ($i=$this->minPage;$i<$this->maxPage;$i++)
 					{
 						echo "<tr>";
-							echo "<td>".$this->condorArray[$i]['Owner']."</td>";
+							echo "<td>".$this->condorArray[$i]['Webuser']."</td>";
 							echo "<td>".$this->condorArray[$i]['Total_cluster']."</td>";
 							echo "<td>".$this->condorArray[$i]['Total']."</td>";
 						echo "</tr>";
@@ -1177,7 +1216,7 @@ class CondorManager
 					{
 						echo "<tr>";
 							echo "<td>".$this->condorArray[$i]['ClusterID'].".".$this->condorArray[$i]['ProcID']."</td>";
-							echo "<td>".$this->condorArray[$i]['Owner']."</td>";
+							echo "<td>".$this->condorArray[$i]['Webuser']."</td>";
 							echo "<td>".date("d/m - H:i",$this->condorArray[$i]['JobStartDate'])."</td>";
 							echo "<td>".date("H:i:s",$this->condorArray[$i]['CommittedTime']-60*60)."</td>";
 							switch ($this->condorArray[$i]['JobStatus'])
@@ -1214,7 +1253,7 @@ class CondorManager
 							echo "<td>".$this->condorArray[$i]['CoreSize']."</td>";
 							echo "<td>".$this->condorArray[$i]['CMD']."</td>";
 							
-							if (($this->condorArray[$i]['Owner'] == $user_name) || ($is_admin >= 1))
+							if (($this->condorArray[$i]['Webuser'] == $user_name) || ($is_admin >= 1))
 								echo "<td style='text-align: center;'><a class='mouse_hover'
 								onclick=\"\$.ajax({
 									url: '".$ajax_Page."',
@@ -1262,7 +1301,7 @@ class CondorManager
 					{
 						echo "<tr>";
 							echo "<td>".$this->condorArray[$i]['ClusterID']."</td>";
-							echo "<td>".$this->condorArray[$i]['Owner']."</td>";
+							echo "<td>".$this->condorArray[$i]['Webuser']."</td>";
 							echo "<td>".date("d/m - H:i",$this->condorArray[$i]['JobStartDate'])."</td>";
 							echo "<td>".date("H:i:s",$this->condorArray[$i]['CommittedTime']-60*60)."</td>";
 							switch ($this->condorArray[$i]['JobStatus'])
@@ -1299,7 +1338,7 @@ class CondorManager
 							echo "<td>".$this->condorArray[$i]['CoreSize']."</td>";
 							echo "<td>".$this->condorArray[$i]['CMD']."</td>";
 							
-							if (($this->condorArray[$i]['Owner'] == $user_name) || ($is_admin >= 1))
+							if (($this->condorArray[$i]['Webuser'] == $user_name) || ($is_admin >= 1))
 								echo "<td style='text-align: center;'><a class='mouse_hover'
 								onclick=\"\$.ajax({
 									url: '".$ajax_Page."',

@@ -68,6 +68,6 @@ $condorStatusTotal = new CondorManager($tempArray, 15, $_SESSION['current_page']
 $condorStatusTotal->drawCondorStatusTotalTable();
 $condorStatusTotal->drawPageNavigation("ajax/status_ajax_status_total.php","#output_box_condor_status_total","page_number_total");
 
-echo "<div id='status_selector'></div>";
+echo "<div id='status_total_selector'></div>";
 include "../lib/error_tracking.php";
 ?>

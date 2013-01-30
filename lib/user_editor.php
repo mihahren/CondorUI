@@ -102,7 +102,7 @@ if (($_SERVER['REQUEST_METHOD'] == "POST") && isset($_POST['delete_entry_edit_us
 				</select>
 			</div>
 			<div class="span3">
-				<input class="btn btn-warning span12" name='delete_entry_edit_user' type='submit' value='Brisi' style="margin-bottom:10px" />
+				<input class="btn btn-danger span12" name='delete_entry_edit_user' type='submit' value='Briši' style="margin-bottom:10px" />
 			</div>
 		</div>
 <?php
@@ -112,5 +112,5 @@ if (($_SERVER['REQUEST_METHOD'] == "POST") && isset($_POST['delete_entry_edit_us
 	<input class="input-block-level" name="edit_username" type="text" maxlength="100" placeholder="New Username" />
 	<input class="input-block-level" name="edit_password" type="password" maxlength="150" placeholder="New Password" />
 	<input class="input-block-level" name="edit_email" type="email" maxlength="100" placeholder="New Email" />
-	<button class="btn btn-primary" type="submit" name="submit_entry_edit_user">Spremeni podatke</button>
+	<button class="btn btn-inverse" type="submit" name="submit_entry_edit_user">Spremeni podatke</button>
 </form>

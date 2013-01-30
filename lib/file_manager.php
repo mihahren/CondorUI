@@ -89,9 +89,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 		{
 			for ($i=0; $i<(count($_POST['submit_file'])); $i++)
 			{
-				$fileManager->submitFile($_POST['submit_file'][$i], $_SESSION['username'], $out);
+				$fileManager->submitFile($_POST['submit_file'][$i], $_SESSION['username'], $submitOut);
 		
-				foreach ($out as $key => $value)
+				foreach ($submitOut as $key => $value)
 				{
 					$_SESSION['custom_error']['submits'][$i][$key] = $value;
 				}
@@ -99,9 +99,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 		}
 		else
 		{
-			$fileManager->submitFile($_POST['submit_file'], $_SESSION['username'], $out);
+			$fileManager->submitFile($_POST['submit_file'], $_SESSION['username'], $submitOut);
 		
-			foreach ($out as $key => $value)
+			foreach ($submitOut as $key => $value)
 			{
 				$_SESSION['custom_error']['submits'][$key] = $value;
 			}
@@ -126,17 +126,24 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 			$_SESSION['custom_error']['submit_delete'] = $removeOut;
 		}
 	}
+	
+	//ustvari nove mape za file manager
+	if (isset($_POST['new_folder_desktop']))
+	{
+		$fileManager->makeOutsideDir($_POST['new_folder_path'].$_POST['new_folder_name'], $newFolderOut);
+		$_SESSION['custom_error']['new_folder'] = $newFolderOut;
+	}
+				
+	if (isset($_POST['new_folder_mobile']))
+	{
+		$fileManager->makeOutsideDir($_POST['new_folder_path'].$_POST['new_folder_name'], $newFolderOut);
+		$_SESSION['custom_error']['new_folder'] = $newFolderOut;
+	}
 }
 
 if ($_SERVER['REQUEST_METHOD'] != "POST")
 {
-	unset($_POST['upload_file']);
-	unset($_FILES['file']);
-	unset($_POST['upload_path']);
-	unset($_POST['unzip_file']);
-	unset($_POST['delete_file']);
-	unset($_POST['create_submit_file']);
-	unset($_POST['submit_file']);
-	unset($_POST['delete_submited_file']);
+	unset($_POST);
+	unset($_FILES);
 }
 ?>

@@ -22,13 +22,20 @@ include_once "lib/classes.php";
 	</head>
 	<body>
 		<!-- header, ki vsebuje glavo z login, logout menujem ter odsek za prikazovanje sporocil -->
-		<?php include_once "lib/header.php";?>
+		<?php include "lib/header.php";?>
 
 		<!-- content panel, ki prikazuje glavni del aplikacije -->
 		<div class="container">
+		
+			<div class="row-fluid">
+				<div class="span12">
+					<h1>Registracija</h1>
+				</div>
+			</div>
+		
 			<div class="row">
 				<div class="span4">
-					<?php include_once "lib/register.php";?>
+					<?php include "lib/register.php";?>
 				</div>
 				<div class="span8">
 				
@@ -37,6 +44,6 @@ include_once "lib/classes.php";
 		</div>
 		
 		<!-- footer, ki vsebuje small print in error funkcijo -->
-		<?php include_once "lib/footer.php";?>
+		<?php include "lib/footer.php";?>
 	</body>
 </html>

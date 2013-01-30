@@ -46,6 +46,12 @@ include_once "lib/stats_variables.php";
 		case "access":
 		case "admin":
 ?>
+			<div class="row-fluid">
+				<div class="span12">
+					<h1>Profil</h1>
+				</div>
+			</div>
+			
 			<div class="row">
 				<div class="span4">
 					<?php include "lib/user_editor.php"; ?>

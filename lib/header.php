@@ -52,7 +52,7 @@
 						</p>
 						<ul class="nav pull-right visible-desktop"><li class="divider-vertical"></li></ul>
 						<p class="navbar-text pull-right visible-desktop">
-							PRIJAVLJENI: <a id="profile_button" class="navbar-link" href="profile.php"> <?php echo $_SESSION['username']; ?></a> (<?php echo $_SESSION['daysleft']; ?>)
+							PRIJAVLJENI: <a id="profile_button" class="navbar-link" href="profile.php"> <?php echo $_SESSION['username']; ?></a> (<?php echo round($_SESSION['daysleft']/86400, 1); ?>)
 						</p>
 						<!-- vidno v tablet/mobile nacinu -->
 						<div style="margin-right:-15px;margin-left:-15px;">
@@ -60,10 +60,10 @@
 								<a id="logout_button" class="navbar-link">ODJAVI</a>
 							</p>
 							<p class="navbar-text pull-left hidden-desktop" style="font-size:120%;">
-								PRIJAVLJENI: <a id="profile_button" class="navbar-link" href="profile.php"> <?php echo $_SESSION['username']; ?></a> (<?php echo $_SESSION['daysleft']; ?>)
+								PRIJAVLJENI: <a id="profile_button" class="navbar-link" href="profile.php"> <?php echo $_SESSION['username']; ?></a> (<?php echo round($_SESSION['daysleft']/86400, 1); ?>)
 							</p>
-							<input type="hidden" name="logout" value="logout" />
 						</div>
+						<input type="hidden" name="logout" value="logout" />
 					</form>
 <?php
 					}
@@ -76,7 +76,7 @@
 						<a class="register_button" href="signup.php">Registriraj</a>
 					</p>
 					<ul class="nav pull-right visible-desktop"><li class="divider-vertical"></li></ul>
-					<form id="login_form" class="navbar-form pull-right visible-desktop" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">
+					<form id="login_form_desktop" class="navbar-form pull-right visible-desktop" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">
 						<div class="input-prepend input-append">
 							<input type="text" name="username" placeholder="Username" style="width:100px">
 							<input type="password" name="password" placeholder="Password" style="width:100px">
@@ -84,7 +84,7 @@
 						</div>
 					</form>
 					<!-- vidno v tablet/mobile nacinu -->
-					<form id="login_form" class="navbar-form hidden-desktop" style="padding-top:5px;padding-bottom:10px;padding-left:0px" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">
+					<form id="login_form_mobile" class="navbar-form hidden-desktop" style="padding-top:5px;padding-bottom:10px;padding-left:0px" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">
 						<input type="text" name="username" placeholder="Username">
 						<input type="password" name="password" placeholder="Password">
 						<button type="submit" class="btn" style="width:220px">Prijavi</button>
@@ -95,12 +95,12 @@
 <?php
 					}
 ?>
-					<div id='error_prompt_desktop'></div>
+					<div id='error_prompt_desktop' style="display:none"></div>
 					<div id='logo'><img src="img/large_logo.png"></img></div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div style="padding:10px;"></div>
-	<div class="container"><div  style="margin-top:-20px;" id="error_prompt_mobile"></div></div>
+	<div class="container"><div  style="margin-top:-20px;display:none" id="error_prompt_mobile"></div></div>
 </div>

@@ -3,7 +3,6 @@ var refreshIntervalId;
 
 //funkcija za hendlanje error sporocil
 function errorHandlerMobile(){
-	$("#error_prompt_mobile").hide();
 	
 	if(document.getElementById("custom_error_mobile"))
 	{	
@@ -16,7 +15,6 @@ function errorHandlerMobile(){
 
 
 function errorHandlerDesktop(){
-	$("#error_prompt_desktop").hide();
 	
 	if(document.getElementById("custom_error_desktop"))
 	{	
@@ -78,28 +76,31 @@ function submitFileAjax(formID, phpPostFile, resultDivID, info){
 }
 
 //funkcija za sprozitev avtomatskega refresha
-/*function refreshCondor(){
-	if(document.getElementById("status_selector"))
+function refreshCondor(){
+	if(document.getElementById("computers_selector"))
 	{
 		refreshIntervalId = setInterval(function(){
-			submitAjax("ajax/advanced_ajax_content.php", "#output_box");
+			submitAjax("ajax/status_ajax_computers.php", "#output_box_condor_computers");
+			submitAjax("ajax/status_ajax_q.php", "#output_box_condor_q");
+			submitAjax("ajax/status_ajax_status.php", "#output_box_condor_status");
+			submitAjax("ajax/status_ajax_status_total.php", "#output_box_condor_status_total");
 		},5000);
 	}
-	else if(document.getElementById("queue_selector"))
+	else if(document.getElementById("control_panel_ajax_condor_manager"))
 	{
 		refreshIntervalId = setInterval(function(){
-			submitAjax("ajax/advanced_ajax_content.php", "#output_box");
+			submitAjax("ajax/control_panel_ajax_condor_manager.php", "#output_box_control_panel");
 		},5000);
 	}
-}*/
+}
 
 //funkcije za pavzo refresha, ko je alert na zaslonu
-/*function stopRefresh(){
+function stopRefresh(){
 	if ($('#error_prompt_mobile').is(":visible") || $('#error_prompt_desktop').is(":visible"))
 	{
 		clearInterval(refreshIntervalId);
 	}
-}*/
+}
 
 //funkcija za spremembo barve gumbov v control panel
 function refreshButtons(){
@@ -134,8 +135,8 @@ $(document).ready(function (){
 	errorHandlerMobile()
 	errorHandlerDesktop();
 	refreshButtons();
-	//refreshCondor();
-	//stopRefresh();
+	refreshCondor();
+	stopRefresh();
 	
 	//izvede vsakic po zakljucenem ajax dogodku
 	$(document).ajaxComplete(function() {
@@ -143,8 +144,8 @@ $(document).ready(function (){
 		errorHandlerMobile();
 		errorHandlerDesktop();
 		refreshButtons();
-		//refreshCondor();
-		//stopRefresh();
+		refreshCondor();
+		stopRefresh();
 	});
 	
 	//navigiranje control panel predela	
@@ -184,6 +185,15 @@ $(document).ready(function (){
 		
 	$(document).on("change", "#ctr_pnl_file_upload", function (){
 		submitFileAjax("#ctr_pnl_file_form", "ajax/control_panel_ajax_file_manager.php", "#output_box_control_panel", "NULL");
+	});
+	
+	//control panel new folder form submit	
+	$(document).on("click", "#new_folder_button_desktop", function (){
+		submitFormAjax("#new_folder_form_desktop", "ajax/control_panel_ajax_file_manager.php", "#output_box_control_panel");
+	});
+	
+	$(document).on("click", "#new_folder_button_mobile", function (){
+		submitFormAjax("#new_folder_form_mobile", "ajax/control_panel_ajax_file_manager.php", "#output_box_control_panel");
 	});
 	
 	//control panel zip file form submit

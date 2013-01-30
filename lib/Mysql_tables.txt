@@ -30,8 +30,3 @@ CREATE TABLE stats (
 	submit_proc int unsigned NOT NULL DEFAULT '0',
 	FOREIGN KEY (userid) REFERENCES users(userid)
 );
-
-CREATE TABLE condor_stats (
-	statid int UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	username varchar(20) NOT NULL,
-);

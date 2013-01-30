@@ -12,7 +12,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 }
 
 //array za pridobitev podatkov
-condor_generic('condor_q -xml -attributes ClusterID,Owner',$codnorOutput);
+condor_generic('condor_q -xml -attributes ClusterID,Webuser',$codnorOutput);
 $stringOutput = convertString($codnorOutput);
 
 $xml = simplexml_load_string($stringOutput);
@@ -33,11 +33,11 @@ foreach ($xml->c as $c)
 //for zanka, ki grupira vse elemente z isto arhitekturo/operacijskim istemom
 if (!empty($condorArray))
 {
-	$tempArray[0]['Owner'] = $condorArray[0]['Owner'];
+	$tempArray[0]['Webuser'] = $condorArray[0]['Webuser'];
 	$tempArray[0]['Total'] = 0;
 	$tempArray[0]['Total_cluster'] = 1;
 	$prevID = $condorArray[0]['ClusterID'];
-	$tempNames[0] = $tempArray[0]['Owner'];
+	$tempNames[0] = $tempArray[0]['Webuser'];
 	$iter = 0;
 }
 
@@ -45,7 +45,7 @@ for ($i=0;$i<count($condorArray);$i++)
 {
 	foreach ($tempNames as $key => $value)
 	{
-		if (($condorArray[$i]['Owner']) == $value)
+		if (($condorArray[$i]['Webuser']) == $value)
 		{
 			$iter = $key;
 			break;
@@ -60,8 +60,8 @@ for ($i=0;$i<count($condorArray);$i++)
 
 	if ($prevID != $condorArray[$i]['ClusterID'])
 	{
-		$tempArray[$iter]['Owner'] = $condorArray[$i]['Owner'];
-		$tempNames[$iter] = $tempArray[$iter]['Owner'];
+		$tempArray[$iter]['Webuser'] = $condorArray[$i]['Webuser'];
+		$tempNames[$iter] = $tempArray[$iter]['Webuser'];
 
 		$tempArray[$iter]['Total_cluster']++;
 	
@@ -75,6 +75,6 @@ $condorStatusQ = new CondorManager($tempArray, 15, $_SESSION['current_page']['pa
 $condorStatusQ->drawCondorStatusQTable();
 $condorStatusQ->drawPageNavigation("ajax/status_ajax_q.php","#output_box_condor_q","page_number_status_q");
 
-echo "<div id='computers_selector'></div>";
+echo "<div id='status_q_selector'></div>";
 include "../lib/error_tracking.php";
 ?>
