@@ -178,6 +178,15 @@ $(document).ready(function (){
 		submitCmMenuAjax("ajax/control_panel_ajax_condor_manager.php", "#output_box_control_panel", "user_q");
 	});
 	
+	//navigiranje tour predela
+	$(document).on("click", "#tour_fm", function (){
+		submitAjax("ajax/control_panel_ajax_file_manager.php", "#output_box_control_panel");
+	});
+	
+	$(document).on("click", "#tour_ida", function (){
+		submitAjax("ajax/control_panel_ajax_ida.php", "#output_box_control_panel");
+	});
+	
 	//control panel file form submit
 	$(document).on("click", "#ctr_pnl_file_button", function (){
 		$("#ctr_pnl_file_upload").click();
@@ -219,7 +228,7 @@ $(document).ready(function (){
 	});
 	
 	//nadaljuje z refreshanjem po zaprtju 
-	/*$(document).on("click", "#alert_button_mobile", function (){
+	$(document).on("click", "#alert_button_mobile", function (){
 		if (!$('#mobile_alert').is(":visible"))
 		{
 			refreshCondor();
@@ -231,7 +240,7 @@ $(document).ready(function (){
 		{
 			refreshCondor();
 		}
-	});*/
+	});
 
 	//upravljanje z login predelom
 	$(document).on("click", "#logout_button", function (){

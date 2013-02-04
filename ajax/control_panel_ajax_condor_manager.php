@@ -88,7 +88,7 @@ if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 	case "user_q":
 
 		//poracunan samo user Queue
-		condor_generic('condor_q -xml -attributes ClusterID,ProcID,Webuser,JobStartDate,CommittedTime,JobStatus,JobPrio,Size,CoreSize,CMD submitter '.$_SESSION['username'],$condorUserQOutput);
+		condor_generic('condor_q -xml -attributes ClusterID,ProcID,Webuser,JobStartDate,CommittedTime,JobStatus,JobPrio,Size,CoreSize,CMD',$condorUserQOutput);
 		$stringUserQOutput = convertString($condorUserQOutput);
 
 		$xmlUserQ = simplexml_load_string($stringUserQOutput);
@@ -115,7 +115,20 @@ if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 	
 			$iter++;
 		}
-	
+		
+		$iter = 0;
+		$tempCondorUserQArray = $condorUserQArray;
+		$condorUserQArray = array();
+		
+		foreach ($tempCondorUserQArray as $value)
+		{
+			if ($value['Webuser'] == $_SESSION['username'])
+			{
+				$condorUserQArray[$iter] = $value;
+				$iter++;
+			}
+		}
+		
 		break;
 	
 	case "all_q":

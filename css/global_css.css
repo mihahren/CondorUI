@@ -189,7 +189,7 @@ z-index:-1;
 position:absolute;
 min-height:600px;
 width:100%;
-background: url('../img/supercomputer_hero.jpg') no-repeat center bottom;
+background: url('../img/hero.png') no-repeat center bottom;
 background-size:cover;
 }
 
@@ -231,7 +231,12 @@ margin-bottom:20px;
 max-width:200px;
 }
 
-/* STATUS.PHP */
+/* TOUR.PHP */
+
+.img-polaroid{
+margin-right:20px;
+margin-bottom:20px;
+}
 
 /* CONTROL_PANEL.PHP */
 
