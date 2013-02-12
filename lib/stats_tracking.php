@@ -16,7 +16,7 @@ if($_SERVER['REQUEST_METHOD'] != "POST")
 	$_SESSION['stats']['submit_proc'] = 0;
 
 	//stats od submitanih datotek
-	$flattenedArray = flattenArray($_SESSION['custom_error']['submits']);
+	$flattenedArray = flattenArray($_SESSION['custom_error']);
 
 	foreach ($flattenedArray as $value)
 	{

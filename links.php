@@ -31,30 +31,45 @@ include_once "lib/access_control.php";
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div class="span3 margin-correction">
-					<a href="http://www3.fgg.uni-lj.si"><img src="img/ul_fgg_logo.jpg"></img></a>
-				</div>
-				<div class="span3 margin-correction">
-					<a href="http://www.uni-lj.si/o_univerzi_v_ljubljani.aspx"><img src="img/ul_logo.jpg"></img></a>
-				</div>
-				<div class="span3 margin-correction">
-					<a href="http://php.net/"><img src="img/php_logo.jpg"></img></a>
+				<div class="span12 margin-correction">
+					<a href="http://www3.fgg.uni-lj.si"><img style="width:120px;vertical-align:middle;margin-right:50px;" src="img/ul_fgg_logo.jpg"></img></a>
+					<a href="http://www3.fgg.uni-lj.si">UL Fakulteta za gradbeništvo in geodezijo</a>
 				</div>
 			</div>
 			<div class="row-fluid">
-				<div class="span3 margin-correction">
-					<a href="http://research.cs.wisc.edu/htcondor/"><img src="img/htcondor_logo.jpg"></img></a>
+				<div class="span12 margin-correction">
+					<a href="http://www.uni-lj.si/o_univerzi_v_ljubljani.aspx"><img style="width:120px;vertical-align:middle;margin-right:50px;" src="img/ul_logo.jpg"></img></a>
+					<a href="http://www.uni-lj.si/o_univerzi_v_ljubljani.aspx">Univerza v Ljubljani</a>
 				</div>
-				<div class="span3 margin-correction">
-					<a href="http://www.mysql.com/"><img src="img/mysql_logo.jpg"></img></a>
+			</div>
+			<div class="row-fluid">
+				<div class="span12 margin-correction">
+					<a href="http://php.net/"><img style="width:120px;vertical-align:middle;margin-right:50px;" src="img/php_logo.jpg"></img></a>
+					<a href="http://php.net/">PHP: Hypertext Preprocesor</a>
 				</div>
-				<div class="span3 margin-correction">
-					<a href="http://www.pchart.net"><img src="img/pchart_logo.jpg"></img></a>
+			</div>
+			<div class="row-fluid">
+				<div class="span12 margin-correction">
+					<a href="http://research.cs.wisc.edu/htcondor/"><img style="width:120px;vertical-align:middle;margin-right:50px;" src="img/htcondor_logo.jpg"></img></a>
+					<a href="http://research.cs.wisc.edu/htcondor/">HTCondor</a>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span12 margin-correction">
+					<a href="http://www.mysql.com/"><img style="width:120px;vertical-align:middle;margin-right:50px;" src="img/mysql_logo.jpg"></img></a>
+					<a href="http://www.mysql.com/">MySQL</a>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span12 margin-correction">
+					<a href="http://www.pchart.net"><img style="width:120px;vertical-align:middle;margin-right:50px;" src="img/pchart_logo.jpg"></img></a>
+					<a href="http://www.pchart.net">pChart</a>
 				</div>
 			</div>	
 			<div class="row-fluid">
-				<div class="span3 margin-correction">
-					<a href="http://jquery.com/"><img src="img/jquery_logo.jpg"></img></a>
+				<div class="span12 margin-correction">
+					<a href="http://jquery.com/"><img style="width:120px;vertical-align:middle;margin-right:50px;" src="img/jquery_logo.jpg"></img></a>
+					<a href="http://jquery.com/">jQuery</a>
 				</div>
 			</div>
 		</div>
