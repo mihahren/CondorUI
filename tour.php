@@ -7,7 +7,7 @@ include_once "lib/access_control.php";
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Index</title>
+		<title>CondorUI - Predstavitev</title>
 		<!-- jQuery -->
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 		<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
@@ -35,7 +35,7 @@ include_once "lib/access_control.php";
 					<a href="status.php"><img class="img-polaroid" src="img/promo_2.jpg" /></a>
 				</div>
 				<div class="span6">
-					<p align="justify"><b>Status</b> je obsežna stran, katere primarni namen je pregled trenutnega stanja HTCondor sistema. Razdeljena je na pet področij, ki so logično porazdeljeni glede na posredovaneo informacijo. To so delovanje naprav, aktivnost v zadnjih sedmih dneh, stanje naprav, skupno število trenutnih HTCondor vnosov in stanje naprav na ravni arhitekture strojne opreme.</p>
+					<p align="justify"><b>Stanje</b> je obsežna stran, katere primarni namen je pregled trenutnega stanja HTCondor sistema. Razdeljena je na pet področij, ki so logično porazdeljeni glede na posredovano informacijo. To so delovanje naprav, aktivnost v zadnjih sedmih dneh, stanje naprav, skupno število trenutnih HTCondor vnosov in stanje naprav na ravni arhitekture strojne opreme.</p>
 				</div>
 			</div>
 			<div class="row-fluid">

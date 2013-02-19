@@ -12,7 +12,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 }
 
 // prva tabela s statusom posameznih racunalnikov
-condor_generic('condor_status -xml -attributes Name,OpSys,Arch,State,Activity,LoadAvg,Memory',$codnorOutput);
+condor_generic('condor_status -xml -attributes Name,OpSys,Arch,State,Activity,LoadAvg,Memory,SlotID,Machine',$codnorOutput);
 $stringOutput = convertString($codnorOutput);
 
 $xml = simplexml_load_string($stringOutput);
@@ -24,15 +24,27 @@ foreach ($xml->c as $c)
 {
 	foreach ($c->a as $a)
 	{
-		$condorStatusArray[$iter][(string)$a['n']] = (string)($a->Children());
+		$condorStatusArray[$iter][(string)$a['n']] = (string)($a->children());
 	}
 
 	$iter++;
 }
 
-$condorStatus = new CondorManager($condorStatusArray, 15, $_SESSION['current_page']['page_number_status']);
+// sortiraj po racunalnikih, slotih
+foreach ($condorStatusArray as $key => $row) {
+    $computer[$key]  = $row['Machine'];
+    $slot[$key] = $row['SlotID'];
+}
+array_multisort($computer, SORT_ASC, $slot, SORT_ASC, $condorStatusArray);
+
+$condorStatus = new CondorManager($condorStatusArray, 10, $_SESSION['current_page']['page_number_status']);
 $condorStatus->drawCondorStatusTable();
-$condorStatus->drawPageNavigation("ajax/status_ajax_status.php","#output_box_condor_status","page_number_status");
+
+echo "<div style='height:30px;width:30px'></div>";
+echo "<div style='position:absolute;left:15px;bottom:10px;width:100%;'>";
+	$condorStatus->drawPageNavigation("ajax/status_ajax_status.php","#output_box_condor_status","page_number_status");
+echo "</div>";
+echo "<div class='countdown_number'></div>";
 
 echo "<div id='status_selector'></div>";
 include "../lib/error_tracking.php";

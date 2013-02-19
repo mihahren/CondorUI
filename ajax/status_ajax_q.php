@@ -30,7 +30,7 @@ foreach ($xml->c as $c)
 	$iter++;
 }
 
-//for zanka, ki grupira vse elemente z isto arhitekturo/operacijskim istemom
+//for zanka, ki grupira vse elemente z isto arhitekturo/operacijskim sistemom
 if (!empty($condorArray))
 {
 	$tempArray[0]['Webuser'] = $condorArray[0]['Webuser'];
@@ -71,9 +71,13 @@ for ($i=0;$i<count($condorArray);$i++)
 
 
 //izpise seznam
-$condorStatusQ = new CondorManager($tempArray, 15, $_SESSION['current_page']['page_number_status_q']);
+$condorStatusQ = new CondorManager($tempArray, 5, $_SESSION['current_page']['page_number_status_q']);
 $condorStatusQ->drawCondorStatusQTable();
-$condorStatusQ->drawPageNavigation("ajax/status_ajax_q.php","#output_box_condor_q","page_number_status_q");
+
+echo "<div style='height:30px;width:30px'></div>";
+echo "<div style='position:absolute;left:15px;bottom:10px'>";
+	$condorStatusQ->drawPageNavigation("ajax/status_ajax_q.php","#output_box_condor_q","page_number_status_q");
+echo "</div>";
 
 echo "<div id='status_q_selector'></div>";
 include "../lib/error_tracking.php";

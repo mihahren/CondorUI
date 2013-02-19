@@ -8,7 +8,7 @@ include_once "lib/classes.php";
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Index</title>
+		<title>CondorUI - Admin</title>
 		<!-- jQuery -->
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 		<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
@@ -82,7 +82,7 @@ include_once "lib/classes.php";
 			</div>
 			<div class="row">
 				<div class="span4"></div>
-				<div class="span6">
+				<div class="span8">
 					<div class="generic_box" style="background-color:#f5f5f5">
 						<?php include "lib/charts/chart_pages.php"; ?>
 						<img src="lib/charts/chart_pages.png" style="max-width:100%;" />

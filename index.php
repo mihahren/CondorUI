@@ -29,7 +29,7 @@ include_once "lib/access_control.php";
 			<div id="hero-text">
 				<h1><b>HTCONDOR</b></h1>
 				<h1><b>VMESNIK</b></h1>
-				<h2>za visoko-propustno okolje na UL FGG</h2>
+				<h2>za visoko-prepustno okolje na UL FGG</h2>
 				<div style="height:190px"></div>
 				<a class="btn btn-large btn-success" type="button" href="tour.php">Predstavitev</a>
 			</div>

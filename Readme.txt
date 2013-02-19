@@ -37,7 +37,8 @@ CREATE TABLE users (
 	email varchar(100) NOT NULL,
 	isadmin int(1),
 	registertime varchar(100) NOT NULL,
-	activetime varchar(100) NOT NULL
+	activetime varchar(100) NOT NULL,
+	errorstatus int(1) DEFAULT '1'
 );
 
 CREATE TABLE stats (
@@ -56,6 +57,14 @@ CREATE TABLE stats (
 username, password in host za bazo podatkov se poda. ko se ustvari nov UserManager objekt. Lahko se tudi postavi privzete vrednosti v classes.php
 
 Za vnos uporabnikov v condor_users bazo je priporocljivo uporabiti signup.php, ki se nahaja v mapi razno. Vnosi lahko potekajo tudi rocno, vendar je potrebno paziti, saj so passwordi hashani s PASSWORD() funkcijo vgrajeno v MySQL.
+
+INSERT INTO users VALUES (NULL,'admin',PASSWORD('admin'),'admin@localhost',1,0,0,1);
+
+/////////////
+/// RAZNO ///
+/////////////
+
+spremeni podatke v lib/computers.txt.
 
 /////////////////
 /// BOOTSTRAP ///

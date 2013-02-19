@@ -14,7 +14,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 //array s skupnim stevilom racunalnikov
 condor_generic('condor_status -xml -attributes OpSys,Arch,State',$codnorOutput);
 $stringOutput = convertString($codnorOutput);
-
+position:relative;
 $xml = simplexml_load_string($stringOutput);
 
 $condorStatusArray = array();
@@ -64,9 +64,13 @@ for ($i=0;$i<count($condorStatusArray);$i++)
 		$tempArray[$iter]['Unclaimed']++;
 }
 
-$condorStatusTotal = new CondorManager($tempArray, 15, $_SESSION['current_page']['page_number_total']);
+$condorStatusTotal = new CondorManager($tempArray, 5, $_SESSION['current_page']['page_number_total']);
 $condorStatusTotal->drawCondorStatusTotalTable();
-$condorStatusTotal->drawPageNavigation("ajax/status_ajax_status_total.php","#output_box_condor_status_total","page_number_total");
+
+echo "<div style='height:30px;width:30px'></div>";
+echo "<div style='position:absolute;left:15px;bottom:10px'>";
+	$condorStatusTotal->drawPageNavigation("ajax/status_ajax_status_total.php","#output_box_condor_status_total","page_number_total");
+echo "</div>";
 
 echo "<div id='status_total_selector'></div>";
 include "../lib/error_tracking.php";

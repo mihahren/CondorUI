@@ -8,7 +8,7 @@ include_once "lib/classes.php";
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Index</title>
+		<title>CondorUI - Registracija</title>
 		<!-- jQuery -->
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 		<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>

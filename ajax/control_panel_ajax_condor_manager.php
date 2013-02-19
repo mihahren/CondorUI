@@ -32,7 +32,7 @@ if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 	case "all_q_cluster":
 
 		//poracunan all Queue s clustri
-		condor_generic('condor_q -xml -attributes ClusterID,ProcID,Webuser,JobStartDate,CommittedTime,JobStatus,JobPrio,Size,CoreSize,CMD',$condorAllQClusterOutput);
+		condor_generic('condor_q -xml -attributes ClusterID,ProcID,Webuser,JobStartDate,EnteredCurrentStatus,JobStatus,JobPrio,Size,CoreSize,CMD',$condorAllQClusterOutput);
 		$stringAllQClusterOutput = convertString($condorAllQClusterOutput);
 
 		$xmlAllQCluster = simplexml_load_string($stringAllQClusterOutput);
@@ -88,7 +88,7 @@ if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 	case "user_q":
 
 		//poracunan samo user Queue
-		condor_generic('condor_q -xml -attributes ClusterID,ProcID,Webuser,JobStartDate,CommittedTime,JobStatus,JobPrio,Size,CoreSize,CMD',$condorUserQOutput);
+		condor_generic('condor_q -xml -attributes ClusterID,ProcID,Webuser,JobStartDate,EnteredCurrentStatus,JobStatus,JobPrio,Size,CoreSize,CMD',$condorUserQOutput);
 		$stringUserQOutput = convertString($condorUserQOutput);
 
 		$xmlUserQ = simplexml_load_string($stringUserQOutput);
@@ -135,7 +135,7 @@ if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 	default:
 
 		//poracunan celoten Queue
-		condor_generic('condor_q -xml -attributes ClusterID,ProcID,Webuser,JobStartDate,CommittedTime,JobStatus,JobPrio,Size,CoreSize,CMD',$codnorAllQOutput);
+		condor_generic('condor_q -xml -attributes ClusterID,ProcID,Webuser,JobStartDate,EnteredCurrentStatus,JobStatus,JobPrio,Size,CoreSize,CMD',$codnorAllQOutput);
 		$stringAllQOutput = convertString($codnorAllQOutput);
 
 		$xmlAllQ = simplexml_load_string($stringAllQOutput);
@@ -190,17 +190,18 @@ if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 
 	//tabbatle izgled
 	echo "<div id='condor_manager_tab' class='tabbable' >
-		<ul class='nav nav-tabs' style='margin-bottom:-1px'>
+		<ul class='nav nav-tabs' style='margin-bottom:-1px;'>
 			<li id='button_all_q' class='".$active_control['all_q']."'><a href='#tab_all_q' data-toggle='tab'>Celotna vrsta</a></li>
 			<li id='button_all_q_cluster' class='".$active_control['all_q_cluster']."'><a href='#tab_all_q_cluster' data-toggle='tab'>Celotna vrsta (samo gruče)</a></li>
 			<li id='button_user_q' class='".$active_control['user_q']."'><a href='#tab_user_q' data-toggle='tab'>Uporabniška vrsta</a></li>
 		</ul>
-		<div id='condor_manager_box' class='tab-content'>
+		<div id='condor_manager_box' class='tab-content' style='position:relative;'>
 			<div class='tab-pane ".$active_control['all_q']."' id='tab_all_q'>";
 
 				$condorAllQ = new CondorManager($condorAllQArray, 15, $_SESSION['current_page']['page_number_condor_all_q']);
 				$condorAllQ->drawCondorQTable("ajax/control_panel_ajax_condor_manager.php", "#output_box_control_panel", $_SESSION['username'], $_SESSION['isadmin']);
 				$condorAllQ->drawPageNavigation("ajax/control_panel_ajax_condor_manager.php", "#output_box_control_panel", "page_number_condor_all_q");
+				echo "<div class='countdown_number'></div>";
 
 			echo "</div>
 			<div class='tab-pane ".$active_control['all_q_cluster']."' id='tab_all_q_cluster'>";
@@ -208,6 +209,7 @@ if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 				$condorAllQCluster = new CondorManager($condorAllQClusterCorrection, 15, $_SESSION['current_page']['page_number_condor_all_q_cluster']);
 				$condorAllQCluster->drawCondorQClusterTable("ajax/control_panel_ajax_condor_manager.php", "#output_box_control_panel", $_SESSION['username'], $_SESSION['isadmin']);
 				$condorAllQCluster->drawPageNavigation("ajax/control_panel_ajax_condor_manager.php", "#output_box_control_panel", "page_number_condor_all_q_cluster");
+				echo "<div class='countdown_number'></div>";
 
 			echo "</div>
 			<div class='tab-pane ".$active_control['user_q']."' id='tab_user_q'>";
@@ -215,6 +217,7 @@ if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 				$condorUserQ = new CondorManager($condorUserQArray, 15, $_SESSION['current_page']['page_number_condor_user_q']);
 				$condorUserQ->drawCondorQTable("ajax/control_panel_ajax_condor_manager.php", "#output_box_control_panel", $_SESSION['username'], $_SESSION['isadmin']);
 				$condorUserQ->drawPageNavigation("ajax/control_panel_ajax_condor_manager.php", "#output_box_control_panel", "page_number_condor_user_q");
+				echo "<div class='countdown_number'></div>";
 
 			echo "</div>
 		</div>

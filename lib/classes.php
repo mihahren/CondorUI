@@ -16,6 +16,7 @@ class UserManager
 	private $activetime = "";
 	private $dayspassed = "";
 	private $daysleft = "";
+	private $errorstatus = "";
 
 	public $accesscontrol = "login";
 
@@ -82,6 +83,7 @@ class UserManager
 			$this->registertime = mysql_result($result,0,"registertime");
 			$this->activetime = mysql_result($result,0,"activetime");
 			$this->dayspassed = time() - $this->registertime;
+			$this->errorstatus = mysql_result($result,0,"errorstatus");
 
 			if ($this->activetime == 0)
 			{
@@ -200,7 +202,7 @@ class UserManager
 		// registracija
 		if (empty($result_array[0]) && empty($result_array[1]) && empty($result_array[2]))
 		{
-			$query = "INSERT INTO users VALUES (NULL,'$user_name',PASSWORD('$password'),'$email','$is_admin','$register_time','$active_time')";
+			$query = "INSERT INTO users VALUES (NULL,'$user_name',PASSWORD('$password'),'$email','$is_admin','$register_time','$active_time','0')";
 			$result = mysql_query($query, $this->dblink);
 			if ($result)
 			{
@@ -348,6 +350,7 @@ class UserManager
 				$_SESSION['email'] = $this->email;
 				$_SESSION['daysleft'] = $this->daysleft;
 				$_SESSION['isadmin'] = $this->isadmin;
+				$_SESSION['errorstatus'] = $this->errorstatus;
 				
 				return true;
 			}
@@ -403,6 +406,14 @@ class UserManager
 	}
 
 	// izpise vse uporabnike v tabeli
+	public function changeErrorStatus($status, $userid, &$output)
+	{
+		$query = "UPDATE users SET errorstatus = '".$status."' WHERE userid = '".$userid."'";
+		$result = mysql_query($query, $this->dblink);
+		$output = "Uspešno spremenjeno!";
+	}
+	
+	// izpise vse uporabnike v tabeli
 	public function displayUsers()
 	{
 		echo "ni dokončano";
@@ -422,7 +433,7 @@ class FileManager
 	{
 		$this->localRoot = $lroot;
 		$this->root = $lroot.$_SESSION['login_id']."/";
-		$this->makeDir($this->root, $out);
+		mkdir($this->root, 0775, true);
     }
 
 	// destructor unici session in zapre povezavo z bazo
@@ -467,25 +478,6 @@ class FileManager
 		}
 
 		return $dir;
-	}
-
-	// ustvari directory
-	private function makeDir($directory, &$output)
-	{
-		if (!preg_match("/[^a-z0-9_.-/\]/i", $directory))
-		{
-			if (!is_dir($Dir = $directory))
-			{
-				mkdir($Dir, 0775, true);
-				return true;
-			}
-			return 0;
-		}
-		else
-		{
-			$output = "Ime mape lahko vsebuje samo številke, črke in znake _ . -";
-			return false;
-		}
 	}
 
 	// uploada file
@@ -802,7 +794,7 @@ class FileManager
 	//ustvari ida submit file
 	public function createIdaSubmitFile($ida_acc_name, $ida_end_time, $ida_pga, $ida_per, $ida_xdamp, $username, &$output)
 	{
-		$this->makeDir($this->root."idacurves", $output[0]);
+		$this->makeOutsideDir("idacurves", $output[0]);
 		$file = fopen($this->root."idacurves/ida.sub","w+");
 	
 			//string za vpisat v submit datoteko
@@ -837,20 +829,90 @@ class FileManager
 		$output[1] = "Datoteka ida.sub uspesno ustvarjena. Nahaja se v idacurves mapi.";
 	}
 	
-	//skopira potrebne ida file za submitat
-	public function copyIdaFiles($ida_acc_name)
+	//ustvari ida submit file za zip datoteko
+	public function readArgFile($ida_acc_name, $folder_name, &$output)
 	{
-		$this->makeDir($this->root."idacurves", $out);
-		copy($this->localRoot.'ida_curves/generate-ida-sub.rb', $this->root.'idacurves/generate-ida-sub.rb');
-		copy($this->localRoot.'ida_curves/ida.sh', $this->root.'idacurves/ida.sh');
-		copy($this->localRoot.'ida_curves/ida_template.tcl', $this->root.'idacurves/ida_template.tcl');
-		copy($this->localRoot.'ida_curves/OpenSees_1_6_0_IKPIR', $this->root.'idacurves/OpenSees_1_6_0_IKPIR');
-		copy($this->localRoot.'ida_curves/SDOF_Spectra.tcl', $this->root.'idacurves/SDOF_Spectra.tcl');
+		$argArray = array();
+	
+		//prebere vrstice iz .arg datoteke
+		$readFile = fopen($this->root.$folder_name."/".$ida_acc_name.".arg","r");
+			$iter = 0;
+
+			while(!feof($readFile))
+			{
+				$line = fgets($readFile);
+
+				if (!empty($line))
+				{
+					$argArray[$iter] = splitString($line," ");
+					
+					foreach ($argArray[$iter] as $key => $value)
+						$argArray[$iter][$key] = preg_replace("/[\n\r]/","",$value);
+						
+					$iter++;
+				}
+			}
+		fclose($readFile);
+		
+		return $argArray;
+	}
+	
+	//ustvari ida submit file za zip datoteko
+	public function createIdaZipSubmitFile($ida_acc_name, $folder_name, $username, &$output)
+	{
+		$file = fopen($this->root.$folder_name."/ida.sub","w+");
+	
+			//string za vpisat v submit datoteko
+			$string="+Webuser = \"".$username."\"
+			universe = vanilla
+			requirements = OpSys == \"LINUX\"
+			should_transfer_files = YES
+			when_to_transfer_output = ON_EXIT
+			
+			executable = ida.sh
+			error = ida.err
+			log = ida.log
+			output = ida.out
+			
+			";
+			
+			for ($i=0;$i<count($ida_acc_name);$i++)
+			{
+				$string .= "arguments = ".$ida_acc_name[$i][0]." ".$ida_acc_name[$i][1]." ".$ida_acc_name[$i][2]." ".$ida_acc_name[$i][3]." ".$ida_acc_name[$i][4]." ".$ida_acc_name[$i][2]."_".$ida_acc_name[$i][3]."_".$ida_acc_name[$i][4]."
+				transfer_input_files = OpenSees_1_6_0_IKPIR, ida_template.tcl, SDOF_Spectra.tcl, ".$ida_acc_name[$i][2].".acc, ".$ida_acc_name[$i][2].".AEi
+				queue
+				
+				";
+			}
+
+			$trimmedString=str_replace("\t","",$string);
+			
+			fwrite($file,$trimmedString);
+	
+		fclose($file);
+		
+		$output = "Datoteka ida.sub uspesno ustvarjena. Nahaja se v idacurves mapi.";
+	}
+	
+	//skopira potrebne ida file za submitat
+	public function copyIdaFiles($ida_acc_name, $folder_name)
+	{
+		$this->makeOutsideDir($folder_name, $out);
+		copy($this->localRoot.'ida_curves/generate-ida-sub.rb', $this->root.$folder_name.'/generate-ida-sub.rb');
+		copy($this->localRoot.'ida_curves/ida.sh', $this->root.$folder_name.'/ida.sh');
+		copy($this->localRoot.'ida_curves/ida_template.tcl', $this->root.$folder_name.'/ida_template.tcl');
+		copy($this->localRoot.'ida_curves/OpenSees_1_6_0_IKPIR', $this->root.$folder_name.'/OpenSees_1_6_0_IKPIR');
+		copy($this->localRoot.'ida_curves/SDOF_Spectra.tcl', $this->root.$folder_name.'/SDOF_Spectra.tcl');
+		chmod($this->root.$folder_name.'/generate-ida-sub.rb', 0755);
+		chmod($this->root.$folder_name.'/ida.sh', 0755);
+		chmod($this->root.$folder_name.'/ida_template.tcl', 0755);
+		chmod($this->root.$folder_name.'/OpenSees_1_6_0_IKPIR', 0755);
+		chmod($this->root.$folder_name.'/SDOF_Spectra.tcl', 0755);
 		
 		foreach ($ida_acc_name as $value)
 		{
-			copy($this->localRoot.'acceleration/'.$value.'.acc', $this->root.'idacurves/'.$value.'.acc');
-			copy($this->localRoot.'acceleration/'.$value.'.AEi', $this->root.'idacurves/'.$value.'.AEi');
+			copy($this->localRoot.'acceleration/'.$value.'.acc', $this->root.$folder_name.'/'.$value.'.acc');
+			copy($this->localRoot.'acceleration/'.$value.'.AEi', $this->root.$folder_name.'/'.$value.'.AEi');
 		}
 	}
 	
@@ -1052,11 +1114,11 @@ class CondorManager
 				<thead>
 					<tr>
 						<th>Ime</th>
-						<th>Op. sistem</th>
-						<th>Arhitektura</th>
+						<th>Op. sis.</th>
+						<th>Arhit.</th>
 						<th>Stanje</th>
-						<th>Aktivnost</th>
-						<th>Obremenitev</th>
+						<th>Aktiv.</th>
+						<th>Obrem.</th>
 						<th>Spomin</th>";
 					echo "</tr>
 				</thead>
@@ -1093,9 +1155,9 @@ class CondorManager
 			echo "<table class='table table-condensed'>
 				<thead>
 					<tr>
-						<th>Arhitektura</th>
+						<th>Arhit.</th>
 						<th>Skupaj</th>
-						<th>Zasedeni</th>
+						<th>Zased.</th>
 						<th>Prosti</th>";
 					echo "</tr>
 				</thead>
@@ -1139,7 +1201,7 @@ class CondorManager
 					for ($i=$this->minPage;$i<$this->maxPage;$i++)
 					{
 						echo "<tr>";
-							echo "<td>".$this->condorArray[$i]['Name']."</td>";
+							echo "<td>".$this->condorArray[$i]['Machine']."</td>";
 							if ($this->condorArray[$i]['Status'])
 								echo "<td><img src='img/green_tick.png'/></td>";
 							else
@@ -1166,7 +1228,7 @@ class CondorManager
 					<tr>
 						<th>Lastnik</th>
 						<th>Predložene dat.</th>
-						<th>Vsa opravila</th>";
+						<th>Opravila</th>";
 					echo "</tr>
 				</thead>
 				<tbody>";
@@ -1203,7 +1265,7 @@ class CondorManager
 						<th>Predloženo</th>
 						<th>Čas teka</th>
 						<th>Stanje</th>
-						<th>Prioriteta</th>
+						<th>Prior.</th>
 						<th>Velikost</th>
 						<th>Ime</th>
 						<th>Zbriši</th>";
@@ -1216,9 +1278,12 @@ class CondorManager
 					{
 						echo "<tr>";
 							echo "<td>".$this->condorArray[$i]['ClusterID'].".".$this->condorArray[$i]['ProcID']."</td>";
-							echo "<td>".$this->condorArray[$i]['Webuser']."</td>";
+							if (!empty($this->condorArray[$i]['Webuser']))
+								echo "<td>".$this->condorArray[$i]['Webuser']."</td>";
+							else
+								echo "<td>zunanji</td>";
 							echo "<td>".date("d/m - H:i",$this->condorArray[$i]['JobStartDate'])."</td>";
-							echo "<td>".date("H:i:s",$this->condorArray[$i]['CommittedTime']-60*60)."</td>";
+							echo "<td>".date("H:i:s",time()-$this->condorArray[$i]['EnteredCurrentStatus']-3600)."</td>";
 							switch ($this->condorArray[$i]['JobStatus'])
 							{
 							case 0:
@@ -1288,7 +1353,7 @@ class CondorManager
 						<th>Predloženo</th>
 						<th>Čas teka</th>
 						<th>Stanje</th>
-						<th>Prioriteta</th>
+						<th>Prior.</th>
 						<th>Velikost</th>
 						<th>Ime</th>
 						<th>Zbriši</th>";
@@ -1301,9 +1366,12 @@ class CondorManager
 					{
 						echo "<tr>";
 							echo "<td>".$this->condorArray[$i]['ClusterID']."</td>";
-							echo "<td>".$this->condorArray[$i]['Webuser']."</td>";
+							if (!empty($this->condorArray[$i]['Webuser']))
+								echo "<td>".$this->condorArray[$i]['Webuser']."</td>";
+							else
+								echo "<td>zunanji</td>";
 							echo "<td>".date("d/m - H:i",$this->condorArray[$i]['JobStartDate'])."</td>";
-							echo "<td>".date("H:i:s",$this->condorArray[$i]['CommittedTime']-60*60)."</td>";
+							echo "<td>".date("H:i:s",time()-$this->condorArray[$i]['EnteredCurrentStatus']-3600)."</td>";
 							switch ($this->condorArray[$i]['JobStatus'])
 							{
 							case 0:
@@ -1359,7 +1427,7 @@ class CondorManager
 	// izpis navigacije strani
 	public function drawPageNavigation($ajax_Page, $output_ID, $page_index)
 	{
-		echo "<div id='pagination_global' class='pagination pagination-small' style='margin-bottom:0px'>
+		echo "<div id='pagination_global' class='pagination pagination-small'>
 			<ul>";
 			
 				echo "<li onclick=\"\$.ajax({url:'".$ajax_Page."',

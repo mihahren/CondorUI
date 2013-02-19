@@ -7,7 +7,7 @@ include_once "lib/access_control.php";
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Status</title>
+		<title>CondorUI - Stanje</title>
 		<!-- jQuery -->
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 		<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
@@ -27,52 +27,42 @@ include_once "lib/access_control.php";
 		<div id="content_panel" class="container">
 			<div class="row-fluid">
 				<div class="span12">
-					<h1>Status</h1>
+					<h1>Stanje</h1>
+				</div>
+			</div>				
+			<div class="row-fluid">
+				<div class="span4">
+					<h3>Delovanje naprav</h3>
+					<div id="output_box_condor_computers" class="generic_box" style="min-height:368px">
+						<?php echo "<script type='text/javascript'>submitAjax('ajax/status_ajax_computers.php', '#output_box_condor_computers');</script>"; ?>
+					</div>
+				</div>
+				<div class="span8">
+					<h3>Stanje naprav</h3>
+					<div id="output_box_condor_status" class="generic_box" style="min-height:368px">
+						<?php echo "<script type='text/javascript'>submitAjax('ajax/status_ajax_status.php', '#output_box_condor_status');</script>"; ?>
+					</div>
 				</div>
 			</div>
 			<div class="row-fluid">
 				<div class="span4">
-					<div class="row-fluid">
-						<div class="span12">
-							<h3>Delovanje naprav</h3>
-							<div id="output_box_condor_computers" class="generic_box">
-								<?php echo "<script type='text/javascript'>submitAjax('ajax/status_ajax_computers.php', '#output_box_condor_computers');</script>"; ?>
-							</div>
-						</div>
-					</div>
-					<div class="row-fluid">
-						<div class="span12">
-							<h3>Aktivnost zadnjih 7 dni</h3>
-							<div id="output_box_condor_graph" class="generic_box" style="background-color:#f5f5f5">
-								<?php include_once "lib/charts/chart_condor_7_days.php"; ?>
-								<img src="lib/charts/chart_condor_7_days.png" style="max-width:100%;" />
-							</div>					
-						</div>
+					<h3>Aktivnost zadnjih 7 dni</h3>
+					<div id="output_box_condor_graph" class="generic_box" style="background-color:#f5f5f5">
+						<?php include_once "lib/charts/chart_condor_7_days.php"; ?>
+						<img src="lib/charts/chart_condor_7_days.png" style="max-width:100%;" />
+					</div>					
+				</div>
+				<div class="span4">
+					<h3>Skupno vnosov</h3>
+					<div id="output_box_condor_q" class="generic_box" style="min-height:224px">
+						<?php echo "<script type='text/javascript'>submitAjax('ajax/status_ajax_q.php', '#output_box_condor_q');</script>"; ?>
 					</div>
 				</div>
-				<div class="span8">
-					<div class="row-fluid">
-						<div class="span12">
-							<h3>Stanje naprav</h3>
-							<div id="output_box_condor_status" class="generic_box">
-								<?php echo "<script type='text/javascript'>submitAjax('ajax/status_ajax_status.php', '#output_box_condor_status');</script>"; ?>
-							</div>
-						</div>
-					</div>
-					<div class="row-fluid">
-						<div class="span6">
-							<h3>Skupno vnosov</h3>
-							<div id="output_box_condor_q" class="generic_box">
-								<?php echo "<script type='text/javascript'>submitAjax('ajax/status_ajax_q.php', '#output_box_condor_q');</script>"; ?>
-							</div>
-						</div>
-						<div class="span6">
-							<h3>Skupno stanje naprav</h3>
-							<div id="output_box_condor_status_total" class="generic_box">
-								<?php echo "<script type='text/javascript'>submitAjax('ajax/status_ajax_status_total.php', '#output_box_condor_status_total');</script>"; ?>
-							</div>
-						</div>
-					</div>
+				<div class="span4">
+					<h3>Skupno stanje naprav</h3>
+					<div id="output_box_condor_status_total" class="generic_box" style="min-height:224px">
+						<?php echo "<script type='text/javascript'>submitAjax('ajax/status_ajax_status_total.php', '#output_box_condor_status_total');</script>"; ?>
+					</div>				
 				</div>
 			</div>
 		</div>

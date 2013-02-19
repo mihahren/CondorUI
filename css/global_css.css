@@ -11,6 +11,7 @@ padding: 15px 15px 15px;
 margin: 0 auto 20px;
 background-color: #fff;
 border: 1px solid #e5e5e5;
+position:relative;
 -webkit-border-radius: 5px;
    -moz-border-radius: 5px;
         border-radius: 5px;
@@ -65,8 +66,12 @@ color: #8895a6;
 text-shadow: 1px 1px 1px #B0C0D6;
 }
 
+#pagination_global{
+margin-bottom:0px;
+}
+
 #pagination_global a{
-min-width:14px;
+width:9px;
 text-align:center;
 color:#a10010;
 }
@@ -76,6 +81,22 @@ color:#a10010;
 color:gray;
 }
 
+.countdown_number{
+position:absolute;
+font-size:13px;
+color:gray;
+right:15px;
+bottom:10px;
+z-index:1;
+}
+
+.countdown_number:hover{
+cursor:pointer;
+}
+
+.countdown_number:active{
+color:#a10010;
+}
 
 /* HEADER.PHP */
 
@@ -238,6 +259,8 @@ margin-right:20px;
 margin-bottom:20px;
 }
 
+/* STATUS.PHP */
+
 /* CONTROL_PANEL.PHP */
 
 .ctr_pnl_menu_btn{
@@ -257,11 +280,14 @@ color:#a10010;
 }
 
 #condor_manager_tab li a{
+position:relative;
 color:#a10010;
+z-index:2;
 }
 
 #condor_manager_tab li.active a{
 color:gray;
+position:relative;
 }
 
 #condor_manager_box{
@@ -313,8 +339,8 @@ border:1px solid white;
 .custom-popover {
   position: absolute;
   top: 34px;
-  left: 0px;
-  z-index: 1010;
+  right: 0px;
+  z-index: 5;
   width: 400px;
   padding: 1px;
   text-align: left;
@@ -419,7 +445,7 @@ border:1px solid white;
 
 .custom-popover.bottom .arrow {
   top: -11px;
-  left: 10%;
+  right: 10%;
   margin-left: -11px;
   border-bottom-color: #a10010;
   border-bottom-color: rgba(161, 0, 16, 0.25);

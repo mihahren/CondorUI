@@ -7,7 +7,7 @@ include_once "lib/access_control.php";
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Index</title>
+		<title>CondorUI - Nadzorna plošča</title>
 		<!-- jQuery -->
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 		<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
@@ -58,6 +58,7 @@ include_once "lib/access_control.php";
 						<ul class="nav nav-tabs nav-stacked">
 							<li class="ctr_pnl_menu_btn" ><a id="zip_upload_button">Prenos ZIP datoteke</a></li>
 							<li class="ctr_pnl_menu_btn" ><a id="ida_curves_button">IDA krivulje</a></li>
+							<li class="ctr_pnl_menu_btn" ><a id="ida_curves_zip_button">IDA krivulje - ZIP</a></li>
 						</ul>
 					</div>
 					<div class="span9">
@@ -78,6 +79,11 @@ include_once "lib/access_control.php";
 							case "ida":
 							
 								echo "<script type='text/javascript'>submitAjax('ajax/control_panel_ajax_ida.php', '#output_box_control_panel');</script>";
+								break;
+								
+							case "ida-zip":
+							
+								echo "<script type='text/javascript'>submitAjax('ajax/control_panel_ajax_ida_zip.php', '#output_box_control_panel');</script>";
 								break;
 							
 							case "condor":

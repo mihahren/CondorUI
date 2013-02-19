@@ -40,10 +40,10 @@ $usersData->setSerieDescription("array_last_7d_abscissa","Dan");
 $usersData->setSerieOnAxis("array_last_7d", 0);
 
 //ustvari image class
-$myImage = new pImage(337, 200, $usersData);
-$myImage->setGraphArea(37,30, 332,175);
+$myImage = new pImage(337, 224, $usersData);
+$myImage->setGraphArea(37,30, 332,199);
 $myImage->setFontProperties(array("FontName" => "lib/charts/pChart2.1.3/fonts/GeosansLight.ttf", "FontSize" => 11));
-$myImage->drawFilledRectangle(0,0,350,200,array("R"=>245,"G"=>245,"B"=>245,"Alpha"=>100));
+$myImage->drawFilledRectangle(0,0,350,224,array("R"=>245,"G"=>245,"B"=>245,"Alpha"=>100));
 //$myImage->drawGradientArea(0,0,700,250,DIRECTION_VERTICAL,array("StartR"=>220,"StartG"=>220,"StartB"=>220,"EndR"=>255,"EndG"=>255,"EndB"=>255,"Alpha"=>100));
 //$myImage->drawRectangle(0,0,699,249,array("R"=>200,"G"=>200,"B"=>200));
 //$myImage->drawLegend(320,100,array("R" => 220, "G" => 220, "B" => 220,"FontR" => 0, "FontG" => 64, "FontB" => 255,"BorderR" => 80, "BorderG" => 80, "BorderB" => 80,"FontSize" => 12, "Family" => LEGEND_FAMILY_CIRCLE));

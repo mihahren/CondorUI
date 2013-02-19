@@ -16,7 +16,7 @@
 						echo "<li ".echoActiveClassIfRequestMatches('index')."><a id='collapse_link_index' href='index.php'>CondorUI</a></li>";
 						echo "<li ".echoActiveClassIfRequestMatches('tour')."><a id='collapse_link_tour' href='tour.php'>Predstavitev</a></li>";
 						echo "<li ".echoActiveClassIfRequestMatches('links')."><a id='collapse_link_links' href='links.php'>Povezave</a></li>";
-						echo "<li ".echoActiveClassIfRequestMatches('status')."><a id='collapse_link_status' href='status.php'>Status</a></li>";
+						echo "<li ".echoActiveClassIfRequestMatches('status')."><a id='collapse_link_status' href='status.php'>Stanje</a></li>";
 						
 						// izpise samo, ce ima dostop admin ali access
 						if ($_SESSION['access'] == "admin" || $_SESSION['access'] == "access")
@@ -31,16 +31,7 @@
 						}
 						
 					echo "</ul>";
-			
-					$alert_index = " active";
-					//spremenljivka za ohranjanje statusa toggle opozorila gumba
-					if($_SESSION['alert_popup'] == "default")
-						$alert_index = "";
-					else
-						$alert_index = " active";
-				
-					echo "<button id='alert_button' class='btn".$alert_index."' data-toggle='button'>Opozorila</button>";
-		
+
 					// logout obrazec
 					if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 					{
@@ -95,12 +86,12 @@
 <?php
 					}
 ?>
-					<div id='error_prompt_desktop' style="display:none"></div>
+					<div id='error_prompt_desktop' style="display:none;z-index:5;position:relative"></div>
 					<div id='logo'><img src="img/large_logo.png"></img></div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div style="padding:10px;"></div>
-	<div class="container"><div  style="margin-top:-20px;display:none" id="error_prompt_mobile"></div></div>
+	<div class="container"><div  style="margin-top:-20px;display:none;z-index:5;position:relative" id="error_prompt_mobile"></div></div>
 </div>

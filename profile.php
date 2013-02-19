@@ -9,7 +9,7 @@ include_once "lib/stats_variables.php";
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Index</title>
+		<title>CondorUI - Profil</title>
 		<!-- jQuery -->
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 		<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
@@ -61,6 +61,14 @@ include_once "lib/stats_variables.php";
 						<?php include "lib/charts/chart_pages_user.php"; ?>
 						<img src="lib/charts/chart_pages_user.png" style="max-width:100%;" />
 					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="span4">
+					<?php include "lib/user_options.php"; ?>
+				</div>
+				<div class="span6">
 				</div>
 			</div>
 <?php

@@ -9,10 +9,11 @@ CREATE TABLE users (
 	email varchar(100) NOT NULL,
 	isadmin int(1),
 	registertime varchar(100) NOT NULL,
-	activetime varchar(100) NOT NULL
+	activetime varchar(100) NOT NULL,
+	errorstatus int(1) DEFAULT '1'
 );
 
-INSERT INTO users VALUES (NULL,'admin',PASSWORD('admin'),'admin@localhost',1,0,0);
+INSERT INTO users VALUES (NULL,'admin',PASSWORD('admin'),'admin@localhost',1,0,0,1);
 
 DELETE FROM users WHERE userid = 1;
 

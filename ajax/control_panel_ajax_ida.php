@@ -12,7 +12,7 @@ if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 
 	if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['ida_acc_name']))
 	{	
-		$fileManager->copyIdaFiles($_POST['ida_acc_name']);
+		$fileManager->copyIdaFiles($_POST['ida_acc_name'], "idacurves");
 		
 		$fileManager->createIdaSubmitFile($_POST['ida_acc_name'], $_POST['ida_end_time'], $_POST['ida_pga'], $_POST['ida_per'], $_POST['ida_xdamp'], $_SESSION['username'], $out1);
 		$_SESSION['custom_error']['ida_curves'][0] = $out1;

@@ -3,19 +3,7 @@ include_once "functions.php";
 include_once "access_control.php";
 
 //preveri, kaksno stanje mora imet alert toggle gumb
-if (($_SERVER['REQUEST_METHOD'] == "POST") && isset($_POST['alert_popup']))
-{
-	if ($_POST['alert_popup'] == "toggled")
-	{
-		$_SESSION['alert_popup'] = "toggled";
-	}
-	elseif ($_POST['alert_popup'] == "default")
-	{
-		$_SESSION['alert_popup'] = "default";
-	}
-}
-
-if ((!isset($_SESSION['alert_popup']) || ($_SESSION['alert_popup'] == "toggled")) && (!empty($_SESSION['custom_error'])))
+if (($_SESSION['errorstatus'] == 1) && (!empty($_SESSION['custom_error'])))
 {
 	//obdelava errorjev
 	$uniqueArray = array_unique(flattenArray($_SESSION['custom_error']));
@@ -48,6 +36,5 @@ if ((!isset($_SESSION['alert_popup']) || ($_SESSION['alert_popup'] == "toggled")
 if($_SERVER['REQUEST_METHOD'] != "POST")
 {
 	unset($_SESSION['custom_error']);
-	unset($_POST['alert_popup']);
 }
 ?>

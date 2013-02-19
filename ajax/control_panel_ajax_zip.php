@@ -4,12 +4,12 @@ include_once "../lib/classes.php";
 include_once "../lib/access_control.php";
 include_once "../lib/file_manager.php";
 
-$fileManager = new FileManager("../files/");
-
 $_SESSION['cp_menu'] = "zip";
 
 if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 {
+	$fileManager = new FileManager("../files/");
+
 	if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_FILES['file']))
 	{
 		for ($i=0; $i<count($_FILES['file']['name']); $i++)

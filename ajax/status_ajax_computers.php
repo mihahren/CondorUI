@@ -12,7 +12,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 }
 
 //array za izpis racunalnikov
-condor_generic('condor_status -xml -attributes Name',$codnorOutput);
+condor_generic('condor_status -xml -attributes Machine',$codnorOutput);
 $stringOutput = convertString($codnorOutput);
 
 $xml = simplexml_load_string($stringOutput);
@@ -24,8 +24,9 @@ foreach ($xml->c as $c)
 {
 	foreach ($c->a as $a)
 	{
-		$line = (string)($a->Children());
-		$condorArray[$iter][(string)$a['n']] = substr(strstr(trim($line), '@'), 1);
+		//$line = (string)($a->Children());
+		//$condorArray[$iter][(string)$a['n']] = substr(strstr(trim($line), '@'), 1);
+		$condorArray[$iter][(string)$a['n']] = (string)($a->children());
 	}
 
 	$iter++;
@@ -42,7 +43,7 @@ while(!feof($readFile))
 
 	if (!empty($line))
 	{
-		$computerArray[$iter]['Name'] = trim($line);
+		$computerArray[$iter]['Machine'] = trim($line);
 		$iter++;
 	}
 }
@@ -56,7 +57,7 @@ for ($i=0;$i<count($computerArray);$i++)
 
 	for ($j=0;$j<count($condorArray);$j++)
 	{
-		if ($computerArray[$i]['Name'] == $condorArray[$j]['Name'])
+		if ($computerArray[$i]['Machine'] == $condorArray[$j]['Machine'])
 		{
 			$computerArray[$i]['Status'] = true;
 			break;
@@ -65,9 +66,13 @@ for ($i=0;$i<count($computerArray);$i++)
 }
 
 //izpise seznam
-$condorStatus = new CondorManager($computerArray, 15, $_SESSION['current_page']['page_number_computers']);
+$condorStatus = new CondorManager($computerArray, 10, $_SESSION['current_page']['page_number_computers']);
 $condorStatus->drawCondorComputersTable();
-$condorStatus->drawPageNavigation("ajax/status_ajax_computers.php","#output_box_condor_computers","page_number_computers");
+
+echo "<div style='height:30px;width:30px'></div>";
+echo "<div style='position:absolute;left:15px;bottom:10px'>";
+	$condorStatus->drawPageNavigation("ajax/status_ajax_computers.php","#output_box_condor_computers","page_number_computers");
+echo "</div>";
 
 echo "<div id='computers_selector'></div>";
 include "../lib/error_tracking.php";
