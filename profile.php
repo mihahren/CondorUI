@@ -33,13 +33,13 @@ include_once "lib/stats_variables.php";
 		{
 		case "no_access":
 
-			echo "<div class='hero-unit'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
+			echo "<div class='hero-unit'>Prosim vpišite svoje uporabniško ime in geslo!</div>";
 			$_SESSION['custom_error']['profile_login'] = "Napacni podatki!";
 			break;
 
 		case "time_out":
 
-			echo "<div class='hero-unit'>Prosim vpisite drugo uporabnisko ime in geslo!</div>";
+			echo "<div class='hero-unit'>Prosim vpišite drugo uporabniško ime in geslo!</div>";
 			$_SESSION['custom_error']['profile_login'] = "Vas trial cas je potekel!";
 			break;
 			
@@ -76,7 +76,7 @@ include_once "lib/stats_variables.php";
 
 		default:
 
-			echo "<div class='hero-unit'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
+			echo "<div class='hero-unit'>Prosim vpišite svoje uporabniško ime in geslo!</div>";
 			break;
 		}
 ?>

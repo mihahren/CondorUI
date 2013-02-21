@@ -1169,8 +1169,14 @@ class CondorManager
 						echo "<tr>";
 							echo "<td>".$this->condorArray[$i]['Arch']."</td>";
 							echo "<td>".$this->condorArray[$i]['Total']."</td>";
-							echo "<td>".$this->condorArray[$i]['Claimed']."</td>";
-							echo "<td>".$this->condorArray[$i]['Unclaimed']."</td>";
+							if (!empty($this->condorArray[$i]['Claimed']))
+								echo "<td>".$this->condorArray[$i]['Claimed']."</td>";
+							else
+								echo "<td>0</td>";
+							if (!empty($this->condorArray[$i]['Unclaimed']))
+								echo "<td>".$this->condorArray[$i]['Unclaimed']."</td>";
+							else
+								echo "<td>0</td>";
 						echo "</tr>";
 					}
 						
@@ -1237,7 +1243,10 @@ class CondorManager
 					for ($i=$this->minPage;$i<$this->maxPage;$i++)
 					{
 						echo "<tr>";
-							echo "<td>".$this->condorArray[$i]['Webuser']."</td>";
+							if (!empty($this->condorArray[$i]['Webuser']))
+								echo "<td>".$this->condorArray[$i]['Webuser']."</td>";
+							else
+								echo "<td>zunanji</td>";
 							echo "<td>".$this->condorArray[$i]['Total_cluster']."</td>";
 							echo "<td>".$this->condorArray[$i]['Total']."</td>";
 						echo "</tr>";

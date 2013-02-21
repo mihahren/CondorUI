@@ -30,7 +30,7 @@ foreach ($xml->c as $c)
 	$iter++;
 }
 
-//for zanka, ki grupira vse elemente z isto arhitekturo/operacijskim sistemom
+//for zanka, ki grupira vse vnose istega uporabnika
 if (!empty($condorArray))
 {
 	$tempArray[0]['Webuser'] = $condorArray[0]['Webuser'];

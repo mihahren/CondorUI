@@ -1,9 +1,10 @@
 <?php
 include_once "functions.php";
 include_once "access_control.php";
+echo $_SESSION['errorstatus'];
 
 //preveri, kaksno stanje mora imet alert toggle gumb
-if (($_SESSION['errorstatus'] == 1) && (!empty($_SESSION['custom_error'])))
+if (($_SESSION['errorstatus'] != 0 || !isset($_SESSION['errorstatus'])) && (!empty($_SESSION['custom_error'])))
 {
 	//obdelava errorjev
 	$uniqueArray = array_unique(flattenArray($_SESSION['custom_error']));

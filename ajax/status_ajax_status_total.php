@@ -14,7 +14,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 //array s skupnim stevilom racunalnikov
 condor_generic('condor_status -xml -attributes OpSys,Arch,State',$codnorOutput);
 $stringOutput = convertString($codnorOutput);
-position:relative;
+
 $xml = simplexml_load_string($stringOutput);
 
 $condorStatusArray = array();
@@ -31,11 +31,7 @@ foreach ($xml->c as $c)
 }
 
 //for zanka, ki grupira vse elemente z isto arhitekturo/operacijskim sistemom
-$tempArray[0]['Arch'] = $condorStatusArray[0]['Arch']."/".$condorStatusArray[0]['OpSys'];
-$tempArch[0] = $tempArray[0]['Arch'];
-$tempArray[0]['Total'] = 0;
-$tempArray[0]['Claimed'] = 0;
-$tempArray[0]['Unclaimed'] = 0;
+$tempArch[0] = $condorStatusArray[0]['Arch']."/".$condorStatusArray[0]['OpSys'];
 $iter = 0;
 
 for ($i=0;$i<count($condorStatusArray);$i++)
