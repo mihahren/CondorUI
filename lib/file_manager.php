@@ -69,15 +69,15 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 			for ($i=0; $i<(count($_POST['delete_file'])); $i++)
 			{
 				$fullFileName = pathinfo($_POST['delete_file'][$i]);
-				$fileManager->removeFile($_POST['delete_file'][$i]);
-				$_SESSION['custom_error']['file_delete'] = $fullFileName['basename']." uspesno izbrisan.";
+				$fileManager->removeFile($_POST['delete_file'][$i], $remove_out);
+				$_SESSION['custom_error']['file_delete'][$i] = $remove_out;
 			}
 		}
 		else
 		{
 			$fullFileName = pathinfo($_POST['delete_file']);
-			$fileManager->removeFile($_POST['delete_file']);
-			$_SESSION['custom_error']['file_delete'] = $fullFileName['basename']." uspesno izbrisan.";
+			$fileManager->removeFile($_POST['delete_file'], $remove_out);
+			$_SESSION['custom_error']['file_delete'] = $remove_out;
 		}
 	}
 	

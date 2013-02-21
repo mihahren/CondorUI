@@ -541,21 +541,24 @@ class FileManager
 	}
 
 	// zbrise file
-	public function removeFile($file)
+	public function removeFile($file, &$output)
 	{
 		if (is_dir($this->root.$file))
 		{
 			$scanDir = $this->scanDir($file);
-			foreach ($scanDir as $value)
+			foreach ($scanDir as $key => $value)
 			{
-				$this->removeFile($file."/".$value);
+				$this->removeFile($file."/".$value, $out);
 			}
 			
 			rmdir($this->root.$file);
+			$output[0] = "Uspešno izbrisano.";
+			$output[1] = $out;
 		}
 		else
 		{
 			unlink($this->root.$file);
+			$output[0] = "Uspešno izbrisano.";
 		}
 	}
 	
@@ -826,7 +829,7 @@ class FileManager
 	
 		fclose($file);
 		
-		$output[1] = "Datoteka ida.sub uspesno ustvarjena. Nahaja se v idacurves mapi.";
+		$output[1] = "Datoteka ida.sub uspešno ustvarjena. Nahaja se v idacurves mapi.";
 	}
 	
 	//ustvari ida submit file za zip datoteko
@@ -891,7 +894,7 @@ class FileManager
 	
 		fclose($file);
 		
-		$output = "Datoteka ida.sub uspesno ustvarjena. Nahaja se v idacurves mapi.";
+		$output = "Datoteka ida.sub uspešno ustvarjena. Nahaja se v idacurves mapi.";
 	}
 	
 	//skopira potrebne ida file za submitat
