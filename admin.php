@@ -33,19 +33,19 @@ include_once "lib/classes.php";
 		{
 		case "no_access":
 
-			echo "<div class='hero-unit'>Prosim vpisite svoje uporabnisko ime in geslo!</div>";
+			echo "<div class='hero-unit'>Prosim vpišite svoje uporabniško ime in geslo!</div>";
 			$_SESSION['custom_error']['admin_login'] = "Napačni podatki!";
 			break;
 
 		case "time_out":
 
-			echo "<div class='hero-unit'>Prosim vpisite drugo uporabnisko ime in geslo!</div>";
-			$_SESSION['custom_error']['admin_login'] = "Vas trial cas je potekel!";
+			echo "<div class='hero-unit'>Prosim vpišite drugo uporabniško ime in geslo!</div>";
+			$_SESSION['custom_error']['admin_login'] = "Vaš trial čas je potekel!";
 			break;
 
 		case "access":
 
-			echo "<div class='hero-unit'>Prosim vpisite uporabnisko ime in geslo z administratorskimi pravicami!</div>";
+			echo "<div class='hero-unit'>Prosim vpišite uporabniško ime in geslo z administratorskimi pravicami!</div>";
 			$_SESSION['custom_error']['admin_login'] = "Račun nima dostopa do te strani!";
 			break;
 			

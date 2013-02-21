@@ -101,4 +101,15 @@ http://www.elated.com/articles/understanding-permissions/
 1 : execute only
 0 : no permissions
 
+//za zagovor //potrebno se dbuser = CondorUI, dbpass = CondorUI v classes.php
+
+admin.php
+control_panel.php
+
+ajax/status_ajax_status_total.php
+ajax/status_ajax_q.php
+
+lib/classes.php
+lib/error_tracking.php
+lib/charts/chart_pages_user.php
 
