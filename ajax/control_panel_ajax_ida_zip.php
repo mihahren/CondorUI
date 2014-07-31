@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 include_once "../lib/functions.php";
 include_once "../lib/classes.php";
 include_once "../lib/access_control.php";
@@ -69,7 +70,7 @@ if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 
 	<div class='generic_box'>
 		<p>
-			Samodejno prenese in razpakira zip datoteko v mapo z enakim imenom ter predloži ustvarjeno submit datoteko. Potrebno je poskrbeti, da:
+			<span>Samodejno prenese in razpakira zip datoteko v mapo z enakim imenom ter predloži ustvarjeno submit datoteko. Potrebno je poskrbeti, da:</span>
 			<ul>
 				<li>Mapa z istim imenom, kot je zip datoteka, še ne obstaja.</li>
 				<li>Submit datoteka se ustvari samodejno.</li>

@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 include_once "lib/functions.php";
 include_once "lib/access_control.php";
 include_once "lib/stats_variables.php";

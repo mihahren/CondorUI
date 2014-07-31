@@ -552,13 +552,13 @@ class FileManager
 			}
 			
 			rmdir($this->root.$file);
-			$output[0] = "Uspe≈°no izbrisano.";
+			$output[0] = "Uspeöno izbrisano.";
 			$output[1] = $out;
 		}
 		else
 		{
 			unlink($this->root.$file);
-			$output[0] = "Uspe≈°no izbrisano.";
+			$output[0] = "Uspeöno izbrisano.";
 		}
 	}
 	
@@ -602,11 +602,11 @@ class FileManager
 				
 				if(!file_exists($this->root.$value))
 				{
-					$output[$key] = "Datoteka ".$file_name['basename']." veƒç ne obstaja!";
+					$output[$key] = "Datoteka ".$file_name['basename']." veË ne obstaja!";
 				}
 				elseif(preg_match("/[^a-z0-9_.-]/i", $file_name['basename']))
 				{
-					$output[$key] = "Ime submitane datoteke lahko vsebuje samo ≈°tevilke, ƒçrke in znake _ . -";
+					$output[$key] = "Ime submitane datoteke lahko vsebuje samo ötevilke, Ërke in znake _ . -";
 				}
 				else
 				{
@@ -622,7 +622,7 @@ class FileManager
 			
 			if(!file_exists($this->root.$files))
 			{
-				$output['submit'] = "Datoteka ".$file_name['basename']." veƒç ne obstaja!";
+				$output['submit'] = "Datoteka ".$file_name['basename']." veË ne obstaja!";
 			}
 			elseif(preg_match("/[^a-z0-9_.-]/i", $file_name['basename']))
 			{
@@ -716,7 +716,7 @@ class FileManager
 				if(in_array($fullFileName['extension'], $fileNameArray))
 				{
 					echo "<tr>
-						<td><i class='icon-file'></i> <a href='/CondorUI".ltrim($this->root, ".").$directory.$fullFileName['basename']."'>".$fullFileName['basename']."</a></td>
+						<td><i class='icon-file'></i> <a href='".substr($_SERVER['REQUEST_URI'], 0, -41).ltrim($this->root, ".").$directory.$fullFileName['basename']."'>".$fullFileName['basename']."</a></td>
 						<td>".$fullFileName['extension']."</td>
 						<td></td>
 						<td style='text-align: center;'><a class='mouse_hover' onclick=\"\$.ajax({
@@ -743,7 +743,7 @@ class FileManager
 				if($fullFileName['extension'] == "zip")
 				{
 					echo "<tr>
-						<td><i class='icon-file'></i> <a href='/CondorUI".ltrim($this->root, ".").$directory.$fullFileName['basename']."'>".$fullFileName['basename']."</a></td>
+						<td><i class='icon-file'></i> <a href='".substr($_SERVER['REQUEST_URI'], 0, -41).ltrim($this->root, ".").$directory.$fullFileName['basename']."'>".$fullFileName['basename']."</a></td>
 						<td>".$fullFileName['extension']."</td>
 						<td style='text-align: center;'><a class='mouse_hover' onclick=\"\$.ajax({
 							url: '".$php_post_file."',
@@ -771,7 +771,7 @@ class FileManager
 				if(!is_dir($this->root.$directory.$scanDir[$i]) && !in_array($fullFileName['extension'],$fileNameArray))
 				{
 					echo "<tr>
-						<td><i class='icon-file'></i> <a href='/CondorUI".ltrim($this->root, ".").$directory.$fullFileName['basename']."'>".$fullFileName['basename']."</a></td>
+						<td><i class='icon-file'></i> <a href='".substr($_SERVER['REQUEST_URI'], 0, -41).ltrim($this->root, ".").$directory.$fullFileName['basename']."'>".$fullFileName['basename']."</a></td>
 						<td>".$fullFileName['extension']."</td>
 						<td></td>
 						<td></td>

@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 include_once "../lib/functions.php";
 include_once "../lib/classes.php";
 include_once "../lib/access_control.php";
@@ -49,12 +50,11 @@ if ($_SESSION['access'] == "access" || $_SESSION['access'] == "admin")
 			<input type="hidden" name="unzip_file" value="false" />
 			<input type="file" name="file[]" id="ctr_pnl_file_upload" multiple/><br />
 		</form>
-	</div>
 
 <?php
 }
 
-echo "<div id='control_panel_ajax_file_manager'></div>";
+echo "</div><div id='control_panel_ajax_file_manager'></div>";
 include "../lib/stats_tracking.php";
 include "../lib/error_tracking.php";
 ?>
